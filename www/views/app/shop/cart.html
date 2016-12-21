@@ -1,0 +1,68 @@
+<ion-view view-title="Shopping cart" class="cart-view" cache-view="false">
+  <ion-content>
+    <div ng-if="products.length == 0">
+      <div class="empty-cart">
+        <i class="icon ion-ios-cart-outline"></i>
+        <h3 class="no-products">Your shopping cart is empty</h3>
+      </div>
+    </div>
+    <div ng-if="products.length > 0">
+      <!---->
+      <div class="item item-divider">
+        <div class="row">
+          <div class="col col-50">Total</div>
+          <div class="col col-50 text-right">{{total}}</div>
+        </div>
+      </div>
+      <div ng-repeat="product in products">
+        <div class="products-list">
+          <div class="product-list-item">
+            <div class="row">
+              <span class="product-title">{{product.product.name}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="list">
+          <div class="item cart-list item-thumbnail-left">
+            <div class="row">
+              <div class="col col-25">
+                <img ng-src="{{apiUrl}}{{product.product.images}}" style="width:100%;">
+              </div>
+              <div class="col col-50">
+                <div class="list">
+                  <div class="product-list-item">
+                    <div class="row">
+                      <p class="card-description">{{product.product.description}}</p>
+                    </div>
+                    <div class="row">
+                      <p class="card-description">{{product.product.price}}฿</p>
+                    </div>
+                  </div>
+                </div>
+                <div style="padding-left: 15px; margin-top:-16px;">
+                  <button class="button button-clear button-small button-assertive remove-product-button" ng-click="removeProductFromCart(product)">
+                      Remove
+                </button>
+                </div>
+              </div>
+              <div class="col col-25">
+                <div class="list">
+                  <label class="item item-input input-product-qty">
+                    <input type="number" ng-model="product.qty" ng-change="calculate(product)" placeholder="Last Name"/>
+                  </label>
+                </div>
+                <span class="product-price">฿{{product.amount}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <div class="row padding">
+        <button class="button button-block button-energized checkout-btn" ng-click="getUserAndContinue()">
+          Continue to Checkout
+        </button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,22 @@
+.cart-list {
+    padding: 0px 5px 5px 5px;
+    height: 6rem;
+}
+
+.margin-top-16 {
+    margin-top: 16px;
+}
+
+.margin-top-8 {
+    margin-top: 8px;
+}
+
+.input-product-qty {
+    margin-top: -8px;
+    border-color: white;
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
