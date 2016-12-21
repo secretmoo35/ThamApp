@@ -2,20 +2,6 @@
 <ion-view view-title="Settings" class="settings-view">
   <ion-content>
     <div class="list">
-      <div class="item item-divider title">
-        Account
-      </div>
-      <a class="item item-icon-left settings-option">
-        <i class="icon ion-ios-cart-outline"></i>
-        Credits & Referral
-      </a>
-      <a class="item item-icon-left settings-option">
-        <i class="icon ion-social-usd-outline"></i>
-        Payment
-      </a>
-      <div class="item item-divider title">
-        More
-      </div>
       <a class="item item-icon-left settings-option" ng-click="showTerms()">
         <i class="icon ion-ios-information-outline"></i>
         Terms of Service
@@ -28,7 +14,7 @@
         <i class="icon ion-ios-help-outline"></i>
         Help
       </a>
-      <a class="item item-icon-left settings-option" ui-sref="auth.welcome">
+      <a class="item item-icon-left settings-option" ng-click="signout()">
         <i class="icon ion-ios-close-outline"></i>
         Sign Out
       </a>

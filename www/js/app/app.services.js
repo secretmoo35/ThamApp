@@ -1,7 +1,7 @@
 angular.module('your_app_name.app.services', [])
 
-  .service('AuthService', function () {
-
+  .service('AuthService', function ($q, $http, config) {
+    var apiUrl = config.apiUrl;
     this.saveUser = function (user) {
       window.localStorage.your_app_name_user = JSON.stringify(user);
     };
@@ -14,7 +14,46 @@ angular.module('your_app_name.app.services', [])
 
     this.getUser = function () {
       return (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
-    }
+    };
+
+    this.signout = function () {
+      window.localStorage.removeItem('user');
+      return true;
+    };
+
+    this.login = function (user) {
+
+      var dfd = $q.defer();
+
+      $http.post(apiUrl + 'api/auth/signin', user).success(function (res) {
+
+        window.localStorage.user = JSON.stringify(res);
+        dfd.resolve(res);
+
+      }).error(function (err) {
+        dfd.reject(err);
+      });
+
+      return dfd.promise;
+
+    };
+
+    this.signup = function (user) {
+
+      var dfd = $q.defer();
+
+      $http.post(apiUrl + 'api/auth/signup', user).success(function (res) {
+
+        window.localStorage.user = JSON.stringify(res);
+        dfd.resolve(res);
+
+      }).error(function (err) {
+        dfd.reject(err);
+      });
+
+      return dfd.promise;
+
+    };
 
   })
 
@@ -192,23 +231,9 @@ angular.module('your_app_name.app.services', [])
       window.localStorage.ionTheme1_cart = JSON.stringify(new_cart_products);
     };
 
+    this.getCompleteOrder = function (_id) {
 
-    this.saveOrder = function (order) {
-      var dfd = $q.defer();
-      var header = {
-        'Access-Control-Request-Method': 'POST'
-      }
-      $http.post('http://localhost:3000/api/orders', order, { header: header }).then(function (res) {
-
-        dfd.resolve(res);
-
-      },function (err) {
-        dfd.reject(err);
-      });
-
-      return dfd.promise;
-
-    };
+    }
 
   })
 
@@ -216,23 +241,22 @@ angular.module('your_app_name.app.services', [])
 
     var apiUrl = config.apiUrl;
 
-    this.login = function (user) {
-
+    this.saveOrder = function (order) {
       var dfd = $q.defer();
+      var header = {
+        'Access-Control-Request-Method': 'POST'
+      }
+      $http.post(apiUrl + 'api/orders', order, { header: header }).then(function (res) {
 
-      $http.post(apiUrl + 'api/auth/signin', user).success(function (res) {
+        dfd.resolve(res.data);
+        window.localStorage.removeItem('ionTheme1_cart');
 
-        window.localStorage.user = JSON.stringify(res);
-        dfd.resolve(res);
-
-      }).error(function (err) {
-
+      }, function (err) {
+        dfd.reject(err);
       });
 
       return dfd.promise;
 
-    }
+    };
 
-  })
-
-  ;
+  });

@@ -13,14 +13,14 @@
 
   <ion-side-menu side="left">
     <ion-content has-bouncing="false" scroll="false" class="menu-outer left-menu">
-      <div multi-bg="['img/menu-bg.jpeg']">
+      <div multi-bg="['img/menu-bg.jpg']">
         <div class="row menu-top-options">
           <div class="col col-top">
             <ion-list>
-              <!--<ion-item ui-sref-active="active" class="item-icon-left" menu-close ui-sref="app.feed">
-                <i class="menu-icon icon ion-ios-world"></i>
-                <h2 class="menu-text">Feed</h2>
-              </ion-item>-->
+              <ion-item ng-if="!loggedUser" ui-sref-active="active" class="item-icon-left" menu-close ui-sref="auth.login">
+                <i class="menu-icon icon ion-log-in"></i>
+                <h2 class="menu-text">Login</h2>
+              </ion-item>
               <ion-item ui-sref-active="active" class="item-icon-left" menu-close ui-sref="app.shop.home">
                 <i class="menu-icon icon ion-bag"></i>
                 <h2 class="menu-text">Shop</h2>
@@ -29,30 +29,34 @@
                 <i class="menu-icon icon ion-ios-cart"></i>
                 <h2 class="menu-text">Shopping cart</h2>
               </ion-item>
+              <!--<ion-item ui-sref-active="active" class="item-icon-left" menu-close ui-sref="app.history">
+                <i class="menu-icon icon ion-android-time"></i>
+                <h2 class="menu-text">History</h2>
+              </ion-item>-->
             </ion-list>
           </div>
         </div>
         <div class="row menu-bottom-options">
           <div class="col col-bottom">
             <ion-list>
-              <ion-item class="user-item" menu-close ui-sref="app.profile.posts({userId:loggedUser._id})">
+              <ion-item class="user-item" ng-if="loggedUser" menu-close ui-sref="app.profile.posts()">
                 <!-- We need a wrapper with width set for the preload image directive -->
                 <div class="user-image-outer">
                   <pre-img ratio="_1_1" helper-class="rounded-image">
-                    <img class="user-image" ng-src="{{loggedUser.picture}}" spinner-on-load>
-                	</pre-img>
+                    <img class="user-image" ng-src="{{apiUrl}}{{loggedUser.profileImageURL}}" spinner-on-load>
+                  </pre-img>
                 </div>
-                <h2 class="menu-text">{{loggedUser.name}}</h2>
-                <div class="user-inbox">
+                <h2 class="menu-text">{{loggedUser.displayName}}</h2>
+                <!--<div class="user-inbox">
                   <i class="menu-icon icon ion-ios-filing"></i>
                   <span class="inbox-unread">13</span>
-                </div>
+                </div>-->
               </ion-item>
-              <ion-item class="full-width-item" menu-close ui-sref="app.shop.sale">
+              <!--<ion-item class="full-width-item" menu-close ui-sref="app.shop.sale">
                 <button class="button button-full button-positive">
                   Season Sale!
                 </button>
-              </ion-item>
+              </ion-item>-->
             </ion-list>
           </div>
         </div>

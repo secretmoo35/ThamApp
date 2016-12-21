@@ -1,5 +1,7 @@
 <ion-view view-title="Shop" class="shop-popular-view">
   <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
+    </ion-refresher>
     <div class="row shop-products-narrow-cards-outer">
       <div ng-repeat="product in products" class="col col-50 shop-product-narrow-card" ui-sref="app.product-detail({productId: product._id})">
         <div class="list card">

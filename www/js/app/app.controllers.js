@@ -1,67 +1,58 @@
 angular.module('your_app_name.app.controllers', [])
 
 
-  .controller('AppCtrl', function ($scope, AuthService) {
+  .controller('AppCtrl', function ($scope, AuthService, config, $ionicSideMenuDelegate) {
 
+    $scope.apiUrl = config.apiUrl;
     //this will represent our logged user
-    var user = {
-      about: "Design Lead of Project Fi. Love adventures, green tea, and the color pink.",
-      name: "Brynn Evans",
-      picture: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg",
-      _id: 0,
-      followers: 345,
-      following: 58
-    };
 
-    //save our logged user on the localStorage
-    AuthService.saveUser(user);
-    $scope.loggedUser = user;
+    $scope.$watch(function () {
+      return $ionicSideMenuDelegate.isOpenLeft();
+    },
+      function (isOpen) {
+        if (isOpen) {
+          console.log("open");
+          $scope.loggedUser = AuthService.getUser();
+        }
+      });
+
+
   })
 
-
-  .controller('ProfileCtrl', function ($scope, $stateParams, PostService, $ionicHistory, $state, $ionicScrollDelegate) {
-
+  .controller('ProfileCtrl', function ($scope, $stateParams, PostService, AuthService, $ionicHistory, $state, $ionicScrollDelegate, config) {
+    $scope.apiUrl = config.apiUrl;
+    $scope.loggedUser = AuthService.getUser();
+    $scope.tabs = 'H';
     $scope.$on('$ionicView.afterEnter', function () {
       $ionicScrollDelegate.$getByHandle('profile-scroll').resize();
     });
 
-    var userId = $stateParams.userId;
-
-    $scope.myProfile = $scope.loggedUser._id == userId;
-    $scope.posts = [];
-    $scope.likes = [];
+    $scope.myProfile = $scope.loggedUser;
     $scope.user = {};
-
-    PostService.getUserPosts(userId).then(function (data) {
-      $scope.posts = data;
-    });
-
-    PostService.getUserDetails(userId).then(function (data) {
-      $scope.user = data;
-    });
-
-    PostService.getUserLikes(userId).then(function (data) {
-      $scope.likes = data;
-    });
-
-    $scope.getUserLikes = function (userId) {
-      //we need to do this in order to prevent the back to change
-      $ionicHistory.currentView($ionicHistory.backView());
-      $ionicHistory.nextViewOptions({ disableAnimate: true });
-
-      $state.go('app.profile.likes', { userId: userId });
+    $scope.getHistory = function (H) {
+      $scope.tabs = H;
     };
 
-    $scope.getUserPosts = function (userId) {
-      //we need to do this in order to prevent the back to change
-      $ionicHistory.currentView($ionicHistory.backView());
-      $ionicHistory.nextViewOptions({ disableAnimate: true });
-
-      $state.go('app.profile.posts', { userId: userId });
+    $scope.getProfile = function (P) {
+      $scope.tabs = P;
     };
 
+    $scope.items = [{
+      title: '1',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+    }];
+
+    $scope.toggleItem = function (item) {
+      if ($scope.isItemShown(item)) {
+        $scope.shownItem = null;
+      } else {
+        $scope.shownItem = item;
+      }
+    };
+    $scope.isItemShown = function (item) {
+      return $scope.shownItem === item;
+    };
   })
-
 
   .controller('ProductCtrl', function ($scope, $stateParams, ShopService, $ionicPopup, $ionicLoading, config) {
     var productId = $stateParams.productId;
@@ -110,7 +101,6 @@ angular.module('your_app_name.app.controllers', [])
       });
     };
   })
-
 
   .controller('PostCardCtrl', function ($scope, PostService, $ionicPopup, $state) {
     var commentsPopup = {};
@@ -178,7 +168,6 @@ angular.module('your_app_name.app.controllers', [])
 
   })
 
-
   .controller('ShopCtrl', function ($scope, ShopService, config) {
     $scope.apiUrl = config.apiUrl;
     $scope.products = [];
@@ -188,13 +177,13 @@ angular.module('your_app_name.app.controllers', [])
       $scope.products = products;
     });
 
-
-
-    ShopService.getProducts().then(function (products) {
-      $scope.popular_products = products.slice(0, 2);
-    });
+    $scope.getNewData = function () {
+      ShopService.getProducts().then(function (products) {
+        $scope.products = products;
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    }
   })
-
 
   .controller('ShoppingCartCtrl', function ($scope, $state, ShopService, AuthService, $ionicActionSheet, _, config) {
     $scope.apiUrl = config.apiUrl;
@@ -235,56 +224,84 @@ angular.module('your_app_name.app.controllers', [])
     $scope.getUserAndContinue = function () {
       var user = AuthService.getUser();
       if (user) {
-        // $state.go('app.confirm');
-        $scope.order = {
-          shipping: {}
-        };
-        $scope.order.docno = '2';
-        $scope.order.docdate = new Date();
-        $scope.order.items = ShopService.getCartProducts();
-        $scope.order.user = AuthService.getUser();
-        $scope.order.shipping.firstname = '$scope.authentication.user.firstName';
-        $scope.order.shipping.lastname = '$scope.authentication.user.lastName';
-        $scope.order.shipping.address = '$scope.authentication.user.address.address';
-        $scope.order.shipping.postcode = '$scope.authentication.user.address.postcode';
-        $scope.order.shipping.subdistrict = '$scope.authentication.user.address.subdistrict';
-        $scope.order.shipping.province = ' $scope.authentication.user.address.province';
-        $scope.order.shipping.district = '$scope.authentication.user.address.district';
-        $scope.order.shipping.tel = '$scope.authentication.user.address.tel';
-        $scope.order.shipping.email = 'test@email.com';
-        $scope.order.amount = 500;
-        ShopService.saveOrder($scope.order).then(function (res) {
-          console.log(res);
-        }, function (err) {
-          alert(err.data.message);
-        });
+        $state.go('app.checkout');
       } else {
         $state.go('app.shipping-address');
       }
-    }
+    };
 
   })
 
-
-  .controller('CheckoutCtrl', function ($scope, $state, CheckoutService) {
+  .controller('CheckoutCtrl', function ($scope, $state, $stateParams, CheckoutService, ShopService, AuthService, config) {
     //$scope.paymentDetails;
+    $scope.apiUrl = config.apiUrl;
+    var user = AuthService.getUser();
+    if ($stateParams.order) {
+      $scope.completeOrder = JSON.parse($stateParams.order);
+    }
+    $scope.order = {
+      shipping: {},
+      delivery: {
+        deliveryid: '0'
+      },
+      amount: 0
+    };
+    $scope.order.items = ShopService.getCartProducts();
+
+    $scope.order.items.forEach(function (item) {
+      $scope.order.amount += item.amount;
+    });
+
+    $scope.state = true;
     $scope.step = '1';
     $scope.choice = true;
     $scope.authentication = {}
     $scope.gotoForm = function (num) {
 
       if (num === '3') {
-        CheckoutService.login($scope.authentication).then(function (res) {
-          $state.go('app.confirm');
+        AuthService.login($scope.authentication).then(function (res) {
+          $state.go('app.checkout');
           $scope.step = num;
         }, function (err) {
           alert(JSON.stringify(err));
         })
+      } else if (num === '2') {
+        $scope.step = num;
+      } else {
+        $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+        $scope.authentication.address.tel = $scope.authentication.username;
+        $scope.authentication.password = 'Usr#P@ssw0rd';
+        AuthService.signup($scope.authentication).then(function (res) {
+          $scope.state = false;
+          $state.go('app.checkout');
+        }, function (err) {
+          alert(JSON.stringify(err));
+        });
       }
-    }
+    };
+
+    $scope.confirm = function () {
+
+      $scope.order.docno = (+ new Date());
+      $scope.order.docdate = new Date();
+      $scope.order.user = AuthService.getUser();
+      $scope.order.shipping = $scope.order.user.address;
+      $scope.order.shipping.firstname = $scope.order.user.firstName;
+      $scope.order.shipping.lastname = $scope.order.user.lastName;
+      $scope.order.platform = 'Mobile';
+      CheckoutService.saveOrder($scope.order).then(function (res) {
+        console.log(res);
+        $state.go('app.complete', {
+          order: JSON.stringify(res)
+        });
+      }, function (err) {
+        alert(err.data.message);
+      });
+    };
+
   })
 
-  .controller('SettingsCtrl', function ($scope, $ionicModal) {
+  .controller('SettingsCtrl', function ($scope, $state, $ionicModal, AuthService) {
 
     $ionicModal.fromTemplateUrl('views/app/legal/terms-of-service.html', {
       scope: $scope,
@@ -308,8 +325,9 @@ angular.module('your_app_name.app.controllers', [])
       $scope.privacy_policy_modal.show();
     };
 
-  })
+    $scope.signout = function () {
+      AuthService.signout();
+      $state.go('app.shop.home')
+    }
 
-
-
-  ;
+  });

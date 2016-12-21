@@ -25,7 +25,10 @@ angular.module('your_app_name', [
   })
 
   .constant('config', {
-    apiUrl: 'http://localhost:3000/' //https://thamapp.herokuapp.com/ or http://localhost:3000/
+    apiUrl: 'https://thamapptest.herokuapp.com/'
+    //https://thamapp.herokuapp.com/      for production
+    //https://thamapptest.herokuapp.com/  for heroku test
+    //http://localhost:3000/              for local
   })
 
   .run(function ($ionicPlatform, $rootScope, $ionicHistory, $timeout, $ionicConfig) {
@@ -71,6 +74,7 @@ angular.module('your_app_name', [
       .state('app', {
         url: "/app",
         abstract: true,
+        cache: false,
         templateUrl: "views/app/side-menu.html",
         controller: 'AppCtrl'
       })
@@ -100,7 +104,8 @@ angular.module('your_app_name', [
         url: '/posts',
         views: {
           'profileContent': {
-            templateUrl: 'views/app/profile/profile.posts.html'
+            templateUrl: 'views/app/profile/profile.posts.html',
+            controller: 'ProfileCtrl'
           }
         }
       })
@@ -194,13 +199,16 @@ angular.module('your_app_name', [
         }
       })
 
-      .state('app.confirm', {
-        url: "/confirm",
+      .state('app.complete', {
+        url: "/complete/:order",
+        params: {
+          order: null
+        },
         views: {
           'menuContent': {
-            templateUrl: "views/app/shop/confirm.html",
+            templateUrl: "views/app/shop/complete.html",
             controller: "CheckoutCtrl"
-          }
+          },
         }
       })
 
@@ -213,7 +221,6 @@ angular.module('your_app_name', [
           }
         }
       })
-
 
       //AUTH ROUTES
       .state('auth', {

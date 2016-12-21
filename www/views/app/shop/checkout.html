@@ -4,33 +4,41 @@
       <div class="item item-divider shop-section-title">
         <span class="title-copy">Payment Method</span>
       </div>
-      <a class="item item-icon-left add-new-card" href="#">
-        <i class="icon ion-card"></i>
-        Add new card
-      </a>
+      <ion-list>
+        <ion-radio ng-model="order.delivery.deliveryid" ng-value="'0'">Delivery service</ion-radio>
+        <ion-radio ng-model="order.delivery.deliveryid" ng-value="'1'">Postal services</ion-radio>
+      </ion-list>
       <div class="item item-divider shop-section-title">
         <span class="title-copy">Totals</span>
       </div>
       <div class="item row padding totals">
         <div class="col col-50">
-          <div class="row">Subtotal</div>
-          <div class="row">Tax</div>
-          <div class="row">Shipping</div>
+          <div class="row">Amount</div>
         </div>
         <div class="col col-50 totals-numbers">
-          <div class="row">$135,00 USD</div>
-          <div class="row">$0,00 USD</div>
-          <div class="row">$34,95 USD</div>
+          <div class="row">฿{{order.amount}}</div>
         </div>
       </div>
       <div class="item item-divider shop-section-title">
         <span class="title-copy">Order Total</span>
-        <span class="order-total-value section-action">$180,95 USD</span>
+        <span class="order-total-value section-action">฿{{order.amount}}</span>
       </div>
       <div class="row padding">
-        <button ng-class="{disabled: !paymentDetails}" class="button button-block button-energized submit-order-btn">
-          Place Order
+        <button class="button button-block button-energized checkout-btn" ng-click="confirm()">
+          Checkout
         </button>
+      </div>
+    </div>
+    <div class="list card">
+      <div class="list">
+        <div class="item item-divider">
+          สรุปยอดการสั่งซื้อ
+        </div>
+        <a class="item item-avatar" ng-repeat="item in order.items">
+          <img ng-src="{{apiUrl}}{{item.product.images}}">
+          <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
+          <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
+        </a>
       </div>
     </div>
   </ion-content>
