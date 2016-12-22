@@ -1,4 +1,4 @@
-<ion-view view-title="" class="product-view">
+<ion-view view-title class="product-view">
     <ion-nav-buttons side="left">
         <button class="button button-icon button-clear" ui-sref="app.shop.home">
           <i class="ion-ios-arrow-back color-gray font-30"></i>
@@ -14,7 +14,7 @@
     <ion-content overflow-scroll="true">
         <div class="product-card-content">
             <div class="item item-image">
-                <pre-img ratio="_1_1" helper-class="main-image">
+                <pre-img helper-class="main-image" ratio="_1_1">
                     <img ng-src="{{apiUrl}}{{product.images}}" spinner-on-load>
                 </pre-img>
             </div>
@@ -24,20 +24,16 @@
                 </div>
                 <div class="row">
                     <div class="col-col-33">
-                        <p class="product-price">฿{{product.price}}</p>
+                        <p class="product-price thamma-ore-style">฿{{product.price}}</p>
                     </div>
                 </div>
             </div>
             <div class="row item">
                 <div class="col col-30">
-                    <button class="button button-block button-assertive checkout-btn" ng-click="showAddToCartPopup(product)">
-              ใส่ตะกร้า
-            </button>
+                    <button class="button button-block button-thamma checkout-btn" ng-click="showAddToCartPopup(product)">ใส่ตะกร้า</button>
                 </div>
                 <div class="col col-70">
-                    <button class="button button-block button-energized checkout-btn" ng-click="showAddToCartPopup(product,true)">
-              สั่งซื้อทันที
-            </button>
+                    <button class="button button-block button-energized checkout-btn" ng-click="showAddToCartPopup(product,true)">สั่งซื้อทันที</button>
                 </div>
             </div>
         </div>

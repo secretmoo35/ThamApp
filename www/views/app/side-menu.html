@@ -1,15 +1,14 @@
 <ion-side-menus enable-menu-with-back-views="false">
     <ion-side-menu-content>
-        <ion-nav-bar ng-class="{'profile-color': ('app.profile' | includedByState), 'settings-color': ('app.settings' | includedByState), 'product-color': ('app.product-detail' | includedByState), 'feed-color': ('app.feed' | includedByState), 'shop-color': ('app.shop' | includedByState), 'cart-color': ('app.cart' | includedByState), 'shipping-address-color': ('app.shipping-address' | includedByState), 'checkout-color': ('app.checkout' | includedByState)}"
-            ng-show="!('app.complete' | includedByState)">
+        <ion-nav-bar ng-class="{'profile-color': ('app.profile' | includedByState), 'settings-color': ('app.settings' | includedByState), 'product-color': ('app.product-detail' | includedByState), 'feed-color': ('app.feed' | includedByState), 'shop-color': ('app.shop' | includedByState), 'cart-color': ('app.cart' | includedByState), 'shipping-address-color': ('app.shipping-address' | includedByState), 'checkout-color': ('app.checkout' | includedByState)}" ng-show="!('app.complete' | includedByState)">
             <ion-nav-back-button>
             </ion-nav-back-button>
             <ion-nav-buttons side="left">
-                <button class="button button-icon button-clear ion-navicon" menu-toggle="left" ng-if="!('app.product-detail' | includedByState)">
+                <button class="button button-icon button-clear ion-navicon" ng-if="!('app.product-detail' | includedByState)" menu-toggle="left">
         </button>
             </ion-nav-buttons>
             <ion-nav-buttons side="right">
-                <a class="button button-icon" id="cart" ui-sref="app.cart()">
+                <a class="button button-icon" ui-sref="app.cart()">
                     <i class="icon ion-ios-cart " ng-class="{'color-gray' : ('app.product-detail' | includedByState)}"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
                 </a>
             </ion-nav-buttons>
@@ -18,16 +17,16 @@
     </ion-side-menu-content>
 
     <ion-side-menu side="left">
-        <ion-content has-bouncing="false" scroll="false" class="menu-outer left-menu">
+        <ion-content has-bouncing="false" class="menu-outer left-menu" scroll="false">
             <div multi-bg="['img/menu-bg.jpg']">
                 <div class="row menu-top-options">
                     <div class="col col-top">
                         <ion-list>
-                            <ion-item ng-if="!loggedUser" ui-sref-active="active" class="item-icon-left" menu-close ui-sref="auth.login">
+                            <ion-item class="item-icon-left" ng-if="!loggedUser" ui-sref-active="active" menu-close ui-sref="auth.login">
                                 <i class="menu-icon icon ion-log-in"></i>
                                 <h2 class="menu-text">ลงชื่อเข้าใช้</h2>
                             </ion-item>
-                            <ion-item ui-sref-active="active" class="item-icon-left" menu-close ui-sref="app.shop.home">
+                            <ion-item class="item-icon-left" ui-sref-active="active" menu-close ui-sref="app.shop.home">
                                 <i class="menu-icon icon ion-bag"></i>
                                 <h2 class="menu-text">สินค้า</h2>
                             </ion-item>
@@ -39,7 +38,7 @@
                         <ion-list>
                             <ion-item class="user-item" ng-if="loggedUser" menu-close ui-sref="app.profile.posts()">
                                 <div class="user-image-outer">
-                                    <pre-img ratio="_1_1" helper-class="rounded-image">
+                                    <pre-img helper-class="rounded-image" ratio="_1_1">
                                         <img class="user-image" ng-src="{{apiUrl}}{{loggedUser.profileImageURL}}" spinner-on-load>
                                     </pre-img>
                                 </div>
