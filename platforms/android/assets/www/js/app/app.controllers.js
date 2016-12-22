@@ -21,13 +21,16 @@ angular.module('your_app_name.app.controllers', [])
 
 })
 
-.controller('ProfileCtrl', function($scope, $stateParams, PostService, AuthService, $ionicHistory, $state, $ionicScrollDelegate, config) {
+.controller('ProfileCtrl', function($scope, $stateParams, AuthService, $ionicHistory, $state, $ionicScrollDelegate, config, ShopService) {
+
     $scope.apiUrl = config.apiUrl;
     $scope.loggedUser = AuthService.getUser();
-    $scope.tabs = 'H';
-    $scope.$on('$ionicView.afterEnter', function() {
-        $ionicScrollDelegate.$getByHandle('profile-scroll').resize();
+    ShopService.getCompleteOrder().then(function(res) {
+        $scope.history = res;
+    }, function(err) {
+        alert(JSON.stringify(err));
     });
+    $scope.tabs = 'H';
 
     $scope.myProfile = $scope.loggedUser;
     $scope.user = {};
@@ -39,11 +42,6 @@ angular.module('your_app_name.app.controllers', [])
         $scope.tabs = P;
     };
 
-    $scope.items = [{
-        title: '1',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-    }];
-
     $scope.toggleItem = function(item) {
         if ($scope.isItemShown(item)) {
             $scope.shownItem = null;
@@ -54,6 +52,7 @@ angular.module('your_app_name.app.controllers', [])
     $scope.isItemShown = function(item) {
         return $scope.shownItem === item;
     };
+
 })
 
 .controller('ProductCtrl', function($scope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config) {
@@ -82,7 +81,7 @@ angular.module('your_app_name.app.controllers', [])
             $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
             ShopService.addProductToCart($scope.productGotoCart);
             console.log('Shop now!', $scope.productGotoCart);
-            $state.go('app.cart', { state: 'app.product-detail' });
+            $state.go('app.cart');
         } else {
             var myPopup = $ionicPopup.show({
                 cssClass: 'add-to-cart-popup',
@@ -324,23 +323,12 @@ angular.module('your_app_name.app.controllers', [])
 
 .controller('SettingsCtrl', function($scope, $state, $ionicModal, AuthService) {
 
-    $ionicModal.fromTemplateUrl('views/app/legal/terms-of-service.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.terms_of_service_modal = modal;
-    });
-
     $ionicModal.fromTemplateUrl('views/app/legal/privacy-policy.html', {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function(modal) {
         $scope.privacy_policy_modal = modal;
     });
-
-    $scope.showTerms = function() {
-        $scope.terms_of_service_modal.show();
-    };
 
     $scope.showPrivacyPolicy = function() {
         $scope.privacy_policy_modal.show();

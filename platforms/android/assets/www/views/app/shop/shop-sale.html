@@ -1,0 +1,21 @@
+<ion-view view-title="สินค้า" class="shop-sale-view">
+  <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
+    </ion-refresher>
+    <div class="row shop-products-narrow-cards-outer">
+      <div ng-repeat="product in products" class="col col-50 shop-product-narrow-card" ui-sref="app.product-detail({productId: product._id})">
+        <div class="list card">
+          <div class="item item-image">
+            <pre-img ratio="_1_1" helper-class="main-image">
+              <img ng-src="{{apiUrl}}{{product.images}}" spinner-on-load>
+            </pre-img>
+          </div>
+          <div class="item item-body">
+            <h2 class="card-title">{{product.name}}</h2>
+            <p class="card-description"><b>฿{{product.price}}</b> - {{product.description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

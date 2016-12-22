@@ -2,15 +2,6 @@ angular.module('your_app_name.app.services', [])
 
 .service('AuthService', function($q, $http, config) {
     var apiUrl = config.apiUrl;
-    this.saveUser = function(user) {
-        window.localStorage.your_app_name_user = JSON.stringify(user);
-    };
-
-    this.getLoggedUser = function() {
-
-        return (window.localStorage.your_app_name_user) ?
-            JSON.parse(window.localStorage.your_app_name_user) : null;
-    };
 
     this.getUser = function() {
         return (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
@@ -57,125 +48,125 @@ angular.module('your_app_name.app.services', [])
 
 })
 
-.service('PostService', function($http, $q) {
+// .service('PostService', function($http, $q) {
 
-    this.getPostComments = function(post) {
-        var dfd = $q.defer();
+//     this.getPostComments = function(post) {
+//         var dfd = $q.defer();
 
-        $http.get('database.json').success(function(database) {
-            var comments_users = database.users;
+//         $http.get('database.json').success(function(database) {
+//             var comments_users = database.users;
 
-            // Randomize comments users array
-            comments_users = window.knuthShuffle(comments_users.slice(0, post.comments));
+//             // Randomize comments users array
+//             comments_users = window.knuthShuffle(comments_users.slice(0, post.comments));
 
-            var comments_list = [];
-            // Append comment text to comments list
-            comments_list = _.map(comments_users, function(user) {
-                var comment = {
-                    user: user,
-                    text: database.comments[Math.floor(Math.random() * database.comments.length)].comment
-                };
-                return comment;
-            });
+//             var comments_list = [];
+//             // Append comment text to comments list
+//             comments_list = _.map(comments_users, function(user) {
+//                 var comment = {
+//                     user: user,
+//                     text: database.comments[Math.floor(Math.random() * database.comments.length)].comment
+//                 };
+//                 return comment;
+//             });
 
-            dfd.resolve(comments_list);
-        });
+//             dfd.resolve(comments_list);
+//         });
 
-        return dfd.promise;
-    };
+//         return dfd.promise;
+//     };
 
-    this.getUserDetails = function(userId) {
-        var dfd = $q.defer();
+//     this.getUserDetails = function(userId) {
+//         var dfd = $q.defer();
 
-        $http.get('database.json').success(function(database) {
-            //find the user
-            var user = _.find(database.users, function(user) { return user._id == userId; });
-            dfd.resolve(user);
-        });
+//         $http.get('database.json').success(function(database) {
+//             //find the user
+//             var user = _.find(database.users, function(user) { return user._id == userId; });
+//             dfd.resolve(user);
+//         });
 
-        return dfd.promise;
-    };
+//         return dfd.promise;
+//     };
 
-    this.getUserPosts = function(userId) {
-        var dfd = $q.defer();
+//     this.getUserPosts = function(userId) {
+//         var dfd = $q.defer();
 
-        $http.get('database.json').success(function(database) {
+//         $http.get('database.json').success(function(database) {
 
-            //get user posts
-            var userPosts = _.filter(database.posts, function(post) { return post.userId == userId; });
-            //sort posts by published date
-            var sorted_posts = _.sortBy(userPosts, function(post) { return new Date(post.date); });
+//             //get user posts
+//             var userPosts = _.filter(database.posts, function(post) { return post.userId == userId; });
+//             //sort posts by published date
+//             var sorted_posts = _.sortBy(userPosts, function(post) { return new Date(post.date); });
 
-            //find the user
-            var user = _.find(database.users, function(user) { return user._id == userId; });
+//             //find the user
+//             var user = _.find(database.users, function(user) { return user._id == userId; });
 
-            //add user data to posts
-            var posts = _.each(sorted_posts.reverse(), function(post) {
-                post.user = user;
-                return post;
-            });
+//             //add user data to posts
+//             var posts = _.each(sorted_posts.reverse(), function(post) {
+//                 post.user = user;
+//                 return post;
+//             });
 
-            dfd.resolve(posts);
-        });
+//             dfd.resolve(posts);
+//         });
 
-        return dfd.promise;
-    };
+//         return dfd.promise;
+//     };
 
-    this.getUserLikes = function(userId) {
-        var dfd = $q.defer();
+//     this.getUserLikes = function(userId) {
+//         var dfd = $q.defer();
 
-        $http.get('database.json').success(function(database) {
-            //get user likes
-            //we will get all the posts
-            var slicedLikes = database.posts.slice(0, 4);
-            // var sortedLikes =  _.sortBy(database.posts, function(post){ return new Date(post.date); });
-            var sortedLikes = _.sortBy(slicedLikes, function(post) { return new Date(post.date); });
+//         $http.get('database.json').success(function(database) {
+//             //get user likes
+//             //we will get all the posts
+//             var slicedLikes = database.posts.slice(0, 4);
+//             // var sortedLikes =  _.sortBy(database.posts, function(post){ return new Date(post.date); });
+//             var sortedLikes = _.sortBy(slicedLikes, function(post) { return new Date(post.date); });
 
-            //add user data to posts
-            var likes = _.each(sortedLikes.reverse(), function(post) {
-                post.user = _.find(database.users, function(user) { return user._id == post.userId; });
-                return post;
-            });
+//             //add user data to posts
+//             var likes = _.each(sortedLikes.reverse(), function(post) {
+//                 post.user = _.find(database.users, function(user) { return user._id == post.userId; });
+//                 return post;
+//             });
 
-            dfd.resolve(likes);
+//             dfd.resolve(likes);
 
-        });
+//         });
 
-        return dfd.promise;
+//         return dfd.promise;
 
-    };
+//     };
 
-    this.getFeed = function(page) {
+//     this.getFeed = function(page) {
 
-        var pageSize = 5, // set your page size, which is number of records per page
-            skip = pageSize * (page - 1),
-            totalPosts = 1,
-            totalPages = 1,
-            dfd = $q.defer();
+//         var pageSize = 5, // set your page size, which is number of records per page
+//             skip = pageSize * (page - 1),
+//             totalPosts = 1,
+//             totalPages = 1,
+//             dfd = $q.defer();
 
-        $http.get('database.json').success(function(database) {
+//         $http.get('database.json').success(function(database) {
 
-            totalPosts = database.posts.length;
-            totalPages = totalPosts / pageSize;
+//             totalPosts = database.posts.length;
+//             totalPages = totalPosts / pageSize;
 
-            var sortedPosts = _.sortBy(database.posts, function(post) { return new Date(post.date); }),
-                postsToShow = sortedPosts.slice(skip, skip + pageSize);
+//             var sortedPosts = _.sortBy(database.posts, function(post) { return new Date(post.date); }),
+//                 postsToShow = sortedPosts.slice(skip, skip + pageSize);
 
-            //add user data to posts
-            var posts = _.each(postsToShow.reverse(), function(post) {
-                post.user = _.find(database.users, function(user) { return user._id == post.userId; });
-                return post;
-            });
+//             //add user data to posts
+//             var posts = _.each(postsToShow.reverse(), function(post) {
+//                 post.user = _.find(database.users, function(user) { return user._id == post.userId; });
+//                 return post;
+//             });
 
-            dfd.resolve({
-                posts: posts,
-                totalPages: totalPages
-            });
-        });
+//             dfd.resolve({
+//                 posts: posts,
+//                 totalPages: totalPages
+//             });
+//         });
 
-        return dfd.promise;
-    };
-})
+//         return dfd.promise;
+//     };
+// })
 
 .service('ShopService', function($http, $q, _, config) {
 
@@ -244,8 +235,21 @@ angular.module('your_app_name.app.services', [])
         window.localStorage.ionTheme1_cart = JSON.stringify(new_cart_products);
     };
 
-    this.getCompleteOrder = function(_id) {
-
+    this.getCompleteOrder = function() {
+        var dfd = $q.defer();
+        var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
+        var data = [];
+        $http.get(apiUrl + 'api/orders').success(function(database) {
+            database.forEach(function(item) {
+                if (item.user && item.user._id === user._id) {
+                    data.push(item);
+                }
+            });
+            dfd.resolve(data);
+        }).error(function(err) {
+            dfd.reject(err);
+        });;
+        return dfd.promise;
     }
 
 })

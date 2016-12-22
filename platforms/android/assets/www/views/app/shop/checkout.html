@@ -1,0 +1,91 @@
+<ion-view view-title="ข้อมูลการส่งสินค้า" class="checkout-view">
+  <ion-content>
+    <!--address-->
+    <div>
+      <div class="item item-divider shop-section-title">
+        <span class="title-copy">ที่อยู่ที่จะจัดส่ง</span>
+      </div>
+      <ion-toggle toggle-class="toggle-energized" ng-model="status">ใช้ที่อยู่เดิม</ion-toggle>
+      <div class="item" ng-if="status">
+        <p>{{user.address.address}} {{user.address.district}} {{user.address.district}} {{user.address.subdistrict}}</p>
+        <p>{{user.address.province}} {{user.address.postcode}}</p>
+        <p>{{user.address.tel}}</p>
+      </div>
+    </div>
+    <div class="list card" ng-if="!status">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">ชื่อ*</span>
+          <input type="text" ng-model="order.shipping.firstName">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">นามสกุล*</span>
+          <input type="text" ng-model="order.shipping.lastName">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">รหัสไปรษณีย์*</span>
+          <input type="text" ng-model="order.shipping.postcode">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">แขวง/ตำบล*</span>
+          <input type="text" ng-model="order.shipping.subdistrict">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">เขต/อำเภอ*</span>
+          <input type="text" ng-model="order.shipping.district">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">จังหวัด*</span>
+          <input type="text" ng-model="order.shipping.province">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">ที่อยู่*</span>
+          <input type="text" ng-model="order.shipping.address">
+        </label>
+      </div>
+    </div>
+    <!---->
+    <!---->
+    <div class="list">
+      <div class="item item-divider shop-section-title">
+        <span class="title-copy">ประเภทการจัดส่ง</span>
+      </div>
+      <ion-list>
+        <ion-radio ng-model="order.delivery.deliveryid" ng-value="'0'">ส่งโดยคนส่งข้าว</ion-radio>
+        <ion-radio ng-model="order.delivery.deliveryid" ng-value="'1'">ส่งทางไปรษณีย์</ion-radio>
+      </ion-list>
+      <div class="item item-divider shop-section-title">
+        <span class="title-copy">สรุปราคาสั่งซื้อ</span>
+      </div>
+      <div class="item row padding totals">
+        <div class="col col-50">
+          <div class="row">ราคาสินค้า</div>
+        </div>
+        <div class="col col-50 totals-numbers">
+          <div class="row">฿{{order.amount}}</div>
+        </div>
+      </div>
+      <div class="item item-divider shop-section-title">
+        <span class="title-copy">ราคารวม</span>
+        <span class="order-total-value section-action"><h2>฿{{order.amount}}</h2></span>
+      </div>
+      <div class="row padding">
+        <button class="button button-block button-energized checkout-btn" ng-click="confirm(status)" ng-disabled="!status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName)">
+          ดำเนินการต่อ
+        </button>
+      </div>
+    </div>
+    <div class="list card">
+      <div class="list">
+        <div class="item item-divider">
+          สรุปยอดการสั่งซื้อ
+        </div>
+        <a class="item item-avatar" ng-repeat="item in order.items">
+          <img ng-src="{{apiUrl}}{{item.product.images}}">
+          <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
+          <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
+        </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
