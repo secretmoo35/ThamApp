@@ -111,5 +111,27 @@ h2.no-background span:after {
 }
 
 .color-gray {
-    color: #BDBDBD;
+    color: #BDBDBD !important;
+}
+
+.thamma-style {
+    background-color: #1ab394 !important;
+}
+
+.badge-cart {
+    margin-left: -10px !important;
+}
+
+.margin-top--30 {
+    margin-top: -30px;
+}
+
+.badge-assertive {
+    background-color: #F44336 !important;
+    border: none !important;
+}
+
+.cart-btn {
+    padding-left: 15px !important;
+    margin-top: -16px !important;
 }

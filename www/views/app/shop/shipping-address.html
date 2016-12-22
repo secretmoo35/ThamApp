@@ -1,72 +1,76 @@
-<ion-view view-title="Shipping Address" class="shipping-address-view">
+<ion-view view-title="เข้าสู่ระบบเพื่อชำระสินค้า" class="shipping-address-view">
   <ion-content scroll="true">
     <div class="list" ng-if="step === '1'">
       <!--<div class="item item-divider shop-section-title">
         <span class="title-copy">Login for Shopping</span>
       </div>-->
       <ion-list>
-        <ion-radio ng-model="choice" ng-value="true">Continue and signup</ion-radio>
-        <ion-radio ng-model="choice" ng-value="false">Continue and login</ion-radio>
+        <ion-radio ng-model="choice" ng-value="true">ดำเนินการต่อโดยไม่ต้องใช้รหัสผ่าน</ion-radio>
+        <ion-radio ng-model="choice" ng-value="false">ฉันมีบัญชีผู้ใช้อยู่แล้ว</ion-radio>
       </ion-list>
       <div class="margin-top-8" ng-if="choice === true">
         <label class="item item-input">
-          <span class="input-label">Phone Number*</span>
+          <span class="input-label">เบอร์โทร*</span>
           <input type="text" ng-model="authentication.username">
         </label>
         <div class="row padding ">
           <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('2')" ng-disabled="!authentication.username">
-          Continue to Checkout
+          ดำเนินการต่อ
         </button>
         </div>
       </div>
       <div class="list margin-top-8" ng-if="choice === false">
         <label class="item item-input">
-          <span class="input-label">Username</span>
+          <span class="input-label">ชื่อผู้ใช้</span>
           <input type="text" ng-model="authentication.username">
         </label>
         <label class="item item-input">
-          <span class="input-label">Password</span>
+          <span class="input-label">รหัสผ่าน</span>
           <input type="password" ng-model="authentication.password">
         </label>
         <div class="row padding">
           <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('3')" ng-disabled="!authentication.username || !authentication.password">
-          Continue to Checkout
+          ดำเนินการต่อ
         </button>
         </div>
       </div>
     </div>
     <div class="list" ng-if="step === '2'">
       <div class="item item-divider shop-section-title">
-        <span class="title-copy">New Address</span>
+        <span class="title-copy">ที่อยู่ที่จะจัดส่ง</span>
       </div>
       <label class="item item-input item-floating-label">
-        <span class="input-label">First name</span>
-        <input type="text" placeholder="First name*" ng-model="authentication.firstName">
+        <span class="input-label">ชื่อ</span>
+        <input type="text" placeholder="ชื่อ*" ng-model="authentication.firstName">
       </label>
       <label class="item item-input item-floating-label">
-        <span class="input-label">Last name</span>
-        <input type="text" placeholder="Last name*" ng-model="authentication.lastName">
+        <span class="input-label">นามสกุล</span>
+        <input type="text" placeholder="นามสกุล*" ng-model="authentication.lastName">
       </label>
       <label class="item item-input item-floating-label">
-        <span class="input-label">Postcode</span>
-        <input type="text" placeholder="Postcode*" ng-model="authentication.address.postcode">
+        <span class="input-label">รหัสไปรษณีย์</span>
+        <input type="text" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode">
       </label>
       <label class="item item-input item-floating-label">
-        <span class="input-label">District</span>
-        <input type="text" placeholder="District*" ng-model="authentication.address.district">
+        <span class="input-label">แขวง/ตำบล</span>
+        <input type="text" placeholder="แขวง/ตำบล*" ng-model="authentication.address.subdistrict">
       </label>
       <label class="item item-input item-floating-label">
-        <span class="input-label">Province</span>
-        <input type="text" placeholder="Province*" ng-model="authentication.address.province">
+        <span class="input-label">เขต/อำเภอ</span>
+        <input type="text" placeholder="เขต/อำเภอ*" ng-model="authentication.address.district">
       </label>
       <label class="item item-input item-floating-label">
-        <span class="input-label">Address</span>
-        <input type="text" placeholder="Address*" ng-model="authentication.address.address">
+        <span class="input-label">จังหวัด</span>
+        <input type="text" placeholder="จังหวัด*" ng-model="authentication.address.province">
+      </label>
+      <label class="item item-input item-floating-label">
+        <span class="input-label">ที่อยู่</span>
+        <input type="text" placeholder="ที่อยู่*" ng-model="authentication.address.address">
       </label>
       <!--<ion-toggle toggle-class="toggle-energized">Use as my default address</ion-toggle>-->
       <div class="row padding">
         <button class="button button-block button-energized save-address-btn" ng-click="gotoForm()" ng-disabled="!authentication.address.address || !authentication.address.province || !authentication.address.district || !authentication.address.postcode || !authentication.lastName || !authentication.firstName">
-          Save Address
+          ดำเนินการต่อ
         </button>
       </div>
     </div>
