@@ -329,3 +329,8 @@ h2.no-l-background span:after {
 .width-70per {
     width: 70% !important;
 }
+
+.color-icon-status {
+    border-color: #64DD17 !important;
+    color: #64DD17 !important;
+}
