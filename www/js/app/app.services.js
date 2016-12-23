@@ -46,6 +46,23 @@ angular.module('your_app_name.app.services', [])
 
     };
 
+    this.updateProfile = function(user) {
+
+        var dfd = $q.defer();
+
+        var user = user;
+
+        $http.put(apiUrl + 'api/users', user, user).then(function(res) {
+
+            dfd.resolve(res.data);
+
+        }, function(err) {
+            dfd.reject(err.data.message);
+        });
+
+        return dfd.promise;
+    };
+
 })
 
 // .service('PostService', function($http, $q) {

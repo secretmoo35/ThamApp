@@ -91,6 +91,9 @@
                                     <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
                                     <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
                                 </a>
+                                <div class="item item-divider">
+                                    <p>ราคาทั้งหมด {{item.amount}} บาท</p>
+                                </div>
                             </div>
                         </div>
                         <div class="item-expand-footer">
@@ -101,15 +104,15 @@
             </div>
             <div class="split-actions" ng-if="tabs === 'P'">
                 <div class="list">
-                    <a class="item item-icon-left" href="#" ng-disabled="true">
+                    <a class="item item-icon-left" ui-sref="app.edit-profile">
                         <i class="icon ion-person"></i> แก้ไขโปรไฟล์
                     </a>
-                    <a class="item item-icon-left" href="#" ng-disabled="true">
+                    <!-- <a class="item item-icon-left" href="#" ng-disabled="true">
                         <i class="icon ion-ios-reverse-camera"></i> เปลี่ยนรูปโปรไฟล์
                     </a>
                     <a class="item item-icon-left" href="#" ng-disabled="true">
                         <i class="icon ion-unlocked"></i> เปลี่ยนรหัสผ่าน
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </ion-nav-view>

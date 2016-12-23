@@ -225,6 +225,16 @@ angular.module('your_app_name', [
         }
     })
 
+    .state('app.edit-profile', {
+        url: "/edit-profile",
+        views: {
+            'menuContent': {
+                templateUrl: "views/app/profile/edit-profile.html",
+                controller: 'EditProfileCtrl'
+            }
+        }
+    })
+
     //AUTH ROUTES
     .state('auth', {
         url: "/auth",
