@@ -170,6 +170,8 @@ angular.module('your_app_name.app.services', [])
 
     .service('ShopService', function ($http, $q, _, config) {
 
+        window.localStorage.clear(); //# เคลียร์ localStorage ทั้งหมด สำหรับ test อย่างเดียว 20161223 by Moo.
+
         var apiUrl = config.apiUrl;
         this.getProducts = function () {
             var dfd = $q.defer();

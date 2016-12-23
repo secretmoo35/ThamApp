@@ -325,3 +325,7 @@ h2.no-l-background span:after {
     background-color: #1ab394 !important;
     color: #fff;
 }
+
+.width-70per {
+    width: 70% !important;
+}
