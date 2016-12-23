@@ -102,13 +102,15 @@ angular.module('your_app_name.auth.controllers', [])
     };
 })
 
-.controller('EditProfileCtrl', function($scope, $state, AuthService) {
+.controller('EditProfileCtrl', function($scope, $ionicLoading, $state, AuthService) {
     $scope.user = AuthService.getUser();
     $scope.updateProfile = function() {
+        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังบันทึกข้อมูล</p>' });
         AuthService.updateProfile($scope.user).then(function(res) {
-            console.log(res);
+            $ionicLoading.hide();
         }, function(err) {
-            alert(err)
+            $ionicLoading.hide();
+            alert(JSON.stringify(err));
         })
     };
 })

@@ -49,12 +49,11 @@ angular.module('your_app_name.app.services', [])
     this.updateProfile = function(user) {
 
         var dfd = $q.defer();
+        user.platform = 'Mobile';
+        $http.put(apiUrl + 'api/users', user).then(function(res) {
 
-        var user = user;
-
-        $http.put(apiUrl + 'api/users', user, user).then(function(res) {
-
-            dfd.resolve(res.data);
+            window.localStorage.user = JSON.stringify(res.data);
+            dfd.resolve(res);
 
         }, function(err) {
             dfd.reject(err.data.message);
