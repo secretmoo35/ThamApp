@@ -61,8 +61,8 @@ angular.module('your_app_name.auth.controllers', [])
         $scope.loadding();
         AuthService.login($scope.user).then(function() {
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>', duration: 2000 });
-            $timeout(function() { 
-            	$state.go('app.shop.home'); 
+            $timeout(function() {
+                $state.go('app.shop.home');
             }, 2000);
         }, function(err) {
             $ionicLoading.hide();
@@ -71,13 +71,21 @@ angular.module('your_app_name.auth.controllers', [])
     };
 })
 
-.controller('SignUpCtrl', function($scope, $state, AuthService) {
+.controller('SignUpCtrl', function($scope, $ionicLoading, $timeout, $state, AuthService) {
     $scope.user = {
         address: {}
     };
-    $scope.doSignUp = function() {
+    $scope.loadding = function() {
+        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังตรวจสอบข้อมูล</p>', duration: 1000 });
+    };
 
+    $scope.doSignUp = function() {
+        $scope.loadding();
         AuthService.signup($scope.user).then(function(res) {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>', duration: 2000 });
+            $timeout(function() {
+                $state.go('app.shop.home');
+            }, 2000);
             console.log("doing sign up", $scope.user);
             $state.go('app.shop.home');
         }, function(err) {
