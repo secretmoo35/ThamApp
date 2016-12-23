@@ -1,0 +1,25 @@
+<ion-view class="profile-likes" view-title="แก้ไขโปรไฟล์">
+    <ion-content>
+        <div class="form-fields-outer list list-inset">
+            <label class="item item-input">
+                <span class="input-label">ชื่อ</span>
+                <input type="text" name="firstname" ng-model="user.firstName" required>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">นามสกุล</span>
+                <input type="text" name="lastname" ng-model="user.lastName" required>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">อีเมล์</span>
+                <input type="email" name="email" ng-model="user.email" required>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">ชื่อผู้ใช้</span>
+                <input type="text" name="username" ng-model="user.username" required>
+            </label>
+            <button type="submit" class="sign-up button button-energized button-block" ng-click="updateProfile()">
+                ยืนยัน
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

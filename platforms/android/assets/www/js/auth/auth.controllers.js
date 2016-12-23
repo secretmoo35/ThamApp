@@ -102,4 +102,15 @@ angular.module('your_app_name.auth.controllers', [])
     };
 })
 
+.controller('EditProfileCtrl', function($scope, $state, AuthService) {
+    $scope.user = AuthService.getUser();
+    $scope.updateProfile = function() {
+        AuthService.updateProfile($scope.user).then(function(res) {
+            console.log(res);
+        }, function(err) {
+            alert(err)
+        })
+    };
+})
+
 ;
