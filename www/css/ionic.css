@@ -28,7 +28,7 @@
     position: relative;
     width: 100%;
     max-height: 60px;
-    transition: max-height 0.7s ease-out;
+    transition: max-height 0.1s ease-out;
     overflow: hidden;
 }
 
@@ -53,11 +53,15 @@
     transition: max-height 30s ease-out;
 }
 
+.whitesmoke {
+    background-color: whitesmoke;
+}
+
 
 /* DEMO */
 
 .item-expand-footer {
-    color: red;
+    color: #1ab394;
     margin-top: 10px;
 }
 
@@ -109,6 +113,7 @@ h2.no-background-g {
     position: relative;
     overflow: hidden;
 }
+
 h2.no-background span:before {
     right: 70%;
 }
@@ -181,6 +186,7 @@ h2.no-l-background span::after {
     border-top: 3px solid #BDBDBD;
     margin-left: 30px;
 }
+
 h2.no-l-background-g span:before,
 h2.no-l-background-g span::after {
     content: '';
@@ -237,8 +243,8 @@ h2.no-l-background span:after {
     margin-left: -10px !important;
 }
 
-.margin-top--30 {
-    margin-top: -30px;
+.margin-top--40 {
+    margin-top: -40px;
 }
 
 .badge-assertive {
@@ -393,4 +399,8 @@ h2.no-l-background span:after {
 .color-icon-status {
     border-color: #64DD17 !important;
     color: #64DD17 !important;
+}
+
+.thamma-font {
+    color: #19b394 !important;
 }

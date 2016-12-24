@@ -53,18 +53,14 @@
         <ion-nav-view class="profile-sub-views" name="profileContent">
             <div class="split-actions" ng-if="tabs === 'H'">
                 <ion-list>
-                    <ion-item ng-repeat="item in history" ng-click="toggleItem(item)" class="item item-text-wrap">
+                    <ion-item ng-class="isItemShown(item) ? 'whitesmoke' : ''" ng-repeat="item in history" ng-click="toggleItem(item)" class="item item-text-wrap">
                         <div ng-class="isItemShown(item) ? 'item-expand active' : 'item-expand inactive'">
                             <h2>หมายเลขสั่งซื้อ {{item.docno}}</h2>
                             <p>{{item.docdate | date:'dd MMMM yyyy'}}</p>
                             <p>คุณจะได้รับสินค้าภายใน 7 วัน นับจากวันที่สั่งซื้อ</p>
-                            <div class="">
-                                <div class="item item-text-wrap">
-                                    <p>{{item.shipping.firstname}} {{item.shipping.lastname}}</p>
-                                    <p>{{item.shipping.address}} {{item.shipping.district}} {{item.shipping.subdistrict}} {{item.shipping.province}} {{item.shipping.postcode}}</p>
-                                    <p>{{item.shipping.tel}}</p>
-                                </div>
-                            </div>
+                            <p><b>{{item.shipping.firstname}} {{item.shipping.lastname}}</b></p>
+                            <p>{{item.shipping.address}} {{item.shipping.district}} {{item.shipping.subdistrict}} {{item.shipping.province}} {{item.shipping.postcode}}</p>
+                            <p>{{item.shipping.tel}}</p>
                             <div class="row text-center">
                                 <div class="col col-33 padding-0">
                                     <h2 class="no-l-background-g">

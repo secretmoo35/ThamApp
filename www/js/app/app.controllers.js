@@ -117,7 +117,7 @@ angular.module('your_app_name.app.controllers', [])
             });
             myPopup.then(function(res) {
                 if (res) {
-                    $ionicLoading.show({ template: '<ion-spinner icon="ios"></ion-spinner><p style="margin: 5px 0 0 0;">ใส่ตะกร้า</p>', duration: 1000 });
+                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ใส่ตะกร้า</p>', duration: 1000 });
                     $scope.productGotoCart.product = res.product;
                     $scope.productGotoCart.amount = res.product.price * $scope.productGotoCart.qty;
                     $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
@@ -207,8 +207,9 @@ angular.module('your_app_name.app.controllers', [])
 
 })
 
-.controller('CheckoutCtrl', function($scope, $state, $stateParams, CheckoutService, ShopService, AuthService, config) {
+.controller('CheckoutCtrl', function($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading) {
     //$scope.paymentDetails;
+
     $scope.apiUrl = config.apiUrl;
     $scope.status = true;
     $scope.user = AuthService.getUser();
@@ -233,31 +234,62 @@ angular.module('your_app_name.app.controllers', [])
     $scope.choice = true;
     $scope.authentication = {}
     $scope.gotoForm = function(num) {
-
-        if (num === '3') {
+        if (num === '4') {
+            $state.go('app.checkout');
+        } else if (num === '3') {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
             AuthService.login($scope.authentication).then(function(res) {
                 $state.go('app.checkout');
+                $ionicLoading.hide();
                 $scope.step = num;
             }, function(err) {
+                $ionicLoading.hide();
                 alert(JSON.stringify(err));
             })
         } else if (num === '2') {
             $scope.step = num;
         } else {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
             $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
             $scope.authentication.address.tel = $scope.authentication.username;
             $scope.authentication.password = 'Usr#P@ssw0rd';
             AuthService.signup($scope.authentication).then(function(res) {
                 $scope.state = false;
+                $scope.step = '3';
                 $state.go('app.checkout');
+                $ionicLoading.hide();
             }, function(err) {
-                alert(JSON.stringify(err));
+                $ionicLoading.hide();
+                if (err.message === 'Username already exists') {
+                    var myPopup = $ionicPopup.show({
+                        template: '<input type="text" ng-model="authentication.username">',
+                        title: 'มีชื่อผู้ใช้งานนี้แล้ว',
+                        subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
+                        scope: $scope,
+                        buttons: [
+                            { text: 'ยกเลิก' }, {
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    $scope.gotoForm();
+                                }
+                            }
+                        ]
+                    });
+
+                    myPopup.then(function(res) {
+                        console.log('Tapped!', res);
+                    });
+                } else {
+                    alert(JSON.stringify(err));
+                }
+
             });
         }
     };
 
     $scope.confirm = function(status) {
-
+        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
         $scope.order.docno = (+new Date());
         $scope.order.docdate = new Date();
         $scope.order.user = AuthService.getUser();
@@ -270,6 +302,7 @@ angular.module('your_app_name.app.controllers', [])
         }
 
         CheckoutService.saveOrder($scope.order).then(function(res) {
+            $ionicLoading.hide();
             console.log(res);
             $state.go('app.complete', {
                 order: JSON.stringify(res)
