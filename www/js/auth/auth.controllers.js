@@ -104,10 +104,24 @@ angular.module('your_app_name.auth.controllers', [])
 
 .controller('EditProfileCtrl', function($scope, $ionicLoading, $state, AuthService) {
     $scope.user = AuthService.getUser();
+    $scope.passwordDetails = {};
     $scope.updateProfile = function() {
         $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังบันทึกข้อมูล</p>' });
         AuthService.updateProfile($scope.user).then(function(res) {
             $ionicLoading.hide();
+        }, function(err) {
+            $ionicLoading.hide();
+            alert(JSON.stringify(err));
+        })
+    };
+
+    $scope.changePassword = function() {
+        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังบันทึกข้อมูล</p>' });
+        AuthService.changePassword($scope.passwordDetails).then(function(res) {
+            console.log(res);
+            $scope.passwordDetails = {};
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">เปลี่ยนรหัสผ่านสำเร็จ</p>', duration: 1000 });
+            $state.go('app.profile.posts');
         }, function(err) {
             $ionicLoading.hide();
             alert(JSON.stringify(err));

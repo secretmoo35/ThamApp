@@ -55,6 +55,7 @@ angular.module('your_app_name.app.controllers', [])
 })
 
 .controller('ProductCtrl', function($scope, $timeout, $rootScope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config) {
+    
     var productId = $stateParams.productId;
     $scope.apiUrl = config.apiUrl;
 
@@ -90,7 +91,7 @@ angular.module('your_app_name.app.controllers', [])
         $scope.data.productQuantity = 1;
 
         if (now) {
-            $ionicLoading.show({ template: '<ion-spinner icon="ios"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
             $scope.productGotoCart.product = product;
             $scope.productGotoCart.qty = 1;
             $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
@@ -132,6 +133,7 @@ angular.module('your_app_name.app.controllers', [])
         }
 
     };
+    
 })
 
 .controller('ShopCtrl', function($scope, $ionicLoading, $timeout, ShopService, config) {
@@ -250,7 +252,7 @@ angular.module('your_app_name.app.controllers', [])
             $scope.step = num;
         } else {
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-            $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+            // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
             $scope.authentication.address.tel = $scope.authentication.username;
             $scope.authentication.password = 'Usr#P@ssw0rd';
             AuthService.signup($scope.authentication).then(function(res) {
@@ -271,6 +273,7 @@ angular.module('your_app_name.app.controllers', [])
                                 text: '<b>ตกลง</b>',
                                 type: 'button-positive',
                                 onTap: function(e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
                                     $scope.gotoForm();
                                 }
                             }

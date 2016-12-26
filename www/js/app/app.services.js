@@ -62,6 +62,22 @@ angular.module('your_app_name.app.services', [])
         return dfd.promise;
     };
 
+    this.changePassword = function(passwordDetails) {
+
+        var dfd = $q.defer();
+        passwordDetails.platform = 'Mobile';
+        passwordDetails._id = this.getUser()._id;
+        $http.post(apiUrl + 'api/users/password', passwordDetails).then(function(res) {
+
+            dfd.resolve(res);
+
+        }, function(err) {
+            dfd.reject(err.data.message);
+        });
+
+        return dfd.promise;
+    };
+
 })
 
 // .service('PostService', function($http, $q) {

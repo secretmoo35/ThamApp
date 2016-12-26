@@ -64,6 +64,10 @@
                 <span class="input-label">ที่อยู่</span>
                 <input type="text" placeholder="ที่อยู่*" ng-model="authentication.address.address">
             </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">อีเมล์</span>
+                <input type="email" placeholder="อีเมล์*" ng-model="authentication.email">
+            </label>
             <!--<ion-toggle toggle-class="toggle-energized">Use as my default address</ion-toggle>-->
             <div class="row padding">
                 <button class="button button-block button-energized save-address-btn" ng-click="gotoForm()" ng-disabled="!authentication.address.address || !authentication.address.province || !authentication.address.district || !authentication.address.postcode || !authentication.lastName || !authentication.firstName">

@@ -99,20 +99,20 @@
                 </ion-list>
             </div>
             <div class="split-actions" ng-if="tabs === 'P'">
-                <div class="text-center">
+                <!-- <div class="text-center">
                     <img src="img/undercon.jpg" alt="undercon">
-                </div>
-                <!-- <div class="list">
-                    <a class="item item-icon-left" ui-sref="app.edit-profile">
-                        <i class="icon ion-person"></i> แก้ไขโปรไฟล์
-                    </a>
-                    <a class="item item-icon-left" href="#" ng-disabled="true">
-                        <i class="icon ion-ios-reverse-camera"></i> เปลี่ยนรูปโปรไฟล์
-                    </a>
-                    <a class="item item-icon-left" href="#" ng-disabled="true">
-                        <i class="icon ion-unlocked"></i> เปลี่ยนรหัสผ่าน
-                    </a>
                 </div> -->
+                <div class="list">
+                    <a class="item item-icon-left" ui-sref="app.edit-profile">
+                        <i class="icon ion-ios-person-outline"></i> แก้ไขโปรไฟล์
+                    </a>
+ <!--                    <a class="item item-icon-left" href="#" ng-disabled="true">
+                        <i class="icon ion-ios-reverse-camera"></i> เปลี่ยนรูปโปรไฟล์
+                    </a> -->
+                    <a class="item item-icon-left" ui-sref="app.change-password" ng-disabled="true">
+                        <i class="icon ion-ios-unlocked-outline"></i> เปลี่ยนรหัสผ่าน
+                    </a>
+                </div>
             </div>
         </ion-nav-view>
     </ion-content>

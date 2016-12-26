@@ -235,6 +235,16 @@ angular.module('your_app_name', [
         }
     })
 
+    .state('app.change-password', {
+        url: "/change-password",
+        views: {
+            'menuContent': {
+                templateUrl: "views/app/profile/change-password.html",
+                controller: 'EditProfileCtrl'
+            }
+        }
+    })
+
     //AUTH ROUTES
     .state('auth', {
         url: "/auth",
