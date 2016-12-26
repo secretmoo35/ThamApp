@@ -5,6 +5,7 @@ angular.module('underscore', [])
 
 angular.module('your_app_name', [
     'ionic',
+    'ngCordova',
     'your_app_name.common.directives',
     'your_app_name.app.controllers',
     'your_app_name.auth.controllers',

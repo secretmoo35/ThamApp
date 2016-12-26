@@ -20,19 +20,29 @@ angular.module('your_app_name.app.controllers', [])
 
 })
 
-.controller('ProfileCtrl', function($scope, $stateParams, AuthService, $ionicHistory, $state, $ionicScrollDelegate, config, ShopService) {
+.controller('ProfileCtrl', function($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer) {
 
     $scope.apiUrl = config.apiUrl;
+
     $scope.loggedUser = AuthService.getUser();
+
     ShopService.getCompleteOrder().then(function(res) {
         $scope.history = res;
     }, function(err) {
         alert(JSON.stringify(err));
     });
+
     $scope.tabs = 'H';
 
     $scope.myProfile = $scope.loggedUser;
     $scope.user = {};
+    var options = {
+        maximumImagesCount: 1,
+        width: 800,
+        height: 800,
+        quality: 80
+    };
+
     $scope.getHistory = function(H) {
         $scope.tabs = H;
     };
@@ -48,14 +58,47 @@ angular.module('your_app_name.app.controllers', [])
             $scope.shownItem = item;
         }
     };
+
     $scope.isItemShown = function(item) {
         return $scope.shownItem === item;
     };
 
+    $scope.changeImageProfile = function() {
+        var optionsImg = {
+            maximumImagesCount: 1,
+            width: 128,
+            height: 128,
+            quality: 80
+        };
+
+        var options = {
+            fileKey: "newProfilePicture",
+            httpMethod: "POST",
+            mimeType: "image/jpeg",
+            chunkedMode: true
+        };
+
+        $cordovaImagePicker.getPictures(optionsImg)
+            .then(function(results) {
+                var user = AuthService.getUser();
+                $cordovaFileTransfer.upload($scope.apiUrl + 'api/users/picture', results[0], options).then(function(result) {
+                    $scope.loggedUser = AuthService.updateUser(result.response);
+                    $ionicLoading.hide();
+                }, function(err) {
+                    $ionicLoading.hide();
+                    alert("ERROR: " + JSON.stringify(err));
+                }, function(progress) {
+                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังอัพโหลดรูปภาพ</p>' });
+                });
+            }, function(error) {
+                alert("ERROR: " + JSON.stringify(error));
+            });
+    }
+
 })
 
 .controller('ProductCtrl', function($scope, $timeout, $rootScope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config) {
-    
+
     var productId = $stateParams.productId;
     $scope.apiUrl = config.apiUrl;
 
@@ -133,7 +176,7 @@ angular.module('your_app_name.app.controllers', [])
         }
 
     };
-    
+
 })
 
 .controller('ShopCtrl', function($scope, $ionicLoading, $timeout, ShopService, config) {

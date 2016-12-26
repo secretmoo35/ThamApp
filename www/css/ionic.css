@@ -405,7 +405,9 @@ h2.no-l-background span:after {
     color: #19b394 !important;
 }
 
+
 /*ionic fix android actionsheet*/
+
 .platform-android .action-sheet-backdrop {
     -webkit-transition: background-color 150ms ease-in-out;
     transition: background-color 150ms ease-in-out;
@@ -535,4 +537,19 @@ h2.no-l-background span:after {
     display: block;
 }
 
+
 /*ionic fix android actionsheet*/
+
+.height-100per {
+    height: 100% !important;
+}
+.bg-gray {
+    background-color: #e2e2e2 !important;
+}
+.icon-image{
+    color: #aaaaaa !important;
+}
+
+.position-absolute{
+  position: absolute;
+}

@@ -7,9 +7,18 @@ angular.module('your_app_name.app.services', [])
         return (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
     };
 
+    this.updateUser = function(newUser){
+
+        window.localStorage.user = newUser;
+        return JSON.parse(window.localStorage.user);
+
+    };
+
     this.signout = function() {
+
         window.localStorage.removeItem('user');
         return true;
+
     };
 
     this.login = function(user) {
@@ -46,11 +55,11 @@ angular.module('your_app_name.app.services', [])
 
     };
 
-    this.updateProfile = function(user) {
+    this.updateProfile = function(data) {
 
         var dfd = $q.defer();
-        user.platform = 'Mobile';
-        $http.put(apiUrl + 'api/users', user).then(function(res) {
+        var user = this.getUser();
+        $http.put(apiUrl + 'api/users', data, user).then(function(res) {
 
             window.localStorage.user = JSON.stringify(res.data);
             dfd.resolve(res);
@@ -60,14 +69,14 @@ angular.module('your_app_name.app.services', [])
         });
 
         return dfd.promise;
+
     };
 
     this.changePassword = function(passwordDetails) {
 
         var dfd = $q.defer();
-        passwordDetails.platform = 'Mobile';
-        passwordDetails._id = this.getUser()._id;
-        $http.post(apiUrl + 'api/users/password', passwordDetails).then(function(res) {
+        var user = this.getUser();
+        $http.post(apiUrl + 'api/users/password', passwordDetails, user).then(function(res) {
 
             dfd.resolve(res);
 
@@ -76,6 +85,7 @@ angular.module('your_app_name.app.services', [])
         });
 
         return dfd.promise;
+
     };
 
 })
@@ -292,16 +302,14 @@ angular.module('your_app_name.app.services', [])
 
 })
 
-.service('CheckoutService', function($http, $q, _, config) {
+.service('CheckoutService', function($http, $q, _, config, AuthService) {
 
     var apiUrl = config.apiUrl;
 
     this.saveOrder = function(order) {
         var dfd = $q.defer();
-        var header = {
-            'Access-Control-Request-Method': 'POST'
-        }
-        $http.post(apiUrl + 'api/orders', order, { header: header }).then(function(res) {
+        var user = AuthService.getUser();
+        $http.post(apiUrl + 'api/orders', order, user).then(function(res) {
 
             dfd.resolve(res.data);
             window.localStorage.removeItem('ionTheme1_cart');

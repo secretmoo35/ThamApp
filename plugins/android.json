@@ -27,7 +27,23 @@
         },
         "cordova-plugin-email-composer": {
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        },
+        "cordova-plugin-image-picker": {
+            "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        }
+    }
 }
