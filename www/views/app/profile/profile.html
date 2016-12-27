@@ -70,13 +70,13 @@
                                     </h2>
                                 </div>
                                 <div class="col col-33 padding-0">
-                                    <h2 class="no-background">
-                                        <span><i class="icon ion-android-car font-30 color-gray "></i></span>
+                                    <h2 class="{{item.deliverystatus === 'accept' ? 'no-background-g' : 'no-background'}}">
+                                        <span><i class="icon ion-android-car font-30 {{item.deliverystatus === 'accept' ? 'color-icon-status' : 'color-gray' }}"></i></span>
                                     </h2>
                                 </div>
                                 <div class="col col-33 padding-0">
-                                    <h2 class="no-r-background">
-                                        <span><i class="icon ion-checkmark-circled font-30 color-gray "></i></span>
+                                    <h2 class="{{item.deliverystatus === 'complete' ? 'no-r-background-g' : 'no-r-background'}}">
+                                        <span><i class="icon ion-checkmark-circled font-30 {{item.deliverystatus === 'complete' ? 'color-icon-status' : 'color-gray' }}"></i></span>
                                     </h2>
                                 </div>
                             </div>
