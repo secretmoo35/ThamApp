@@ -4,7 +4,7 @@
             <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
         </a>
     </ion-nav-buttons>
-    <ion-content>
+    <ion-content scroll="true">
         <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
         </ion-refresher>
         <div class="row shop-products-narrow-cards-outer">

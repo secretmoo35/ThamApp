@@ -21,12 +21,12 @@ angular.module('your_app_name', [
 // as you see, we're disabling jsScrolling to achieve this.
 .config(function($ionicConfigProvider) {
     if (ionic.Platform.isAndroid()) {
-        $ionicConfigProvider.scrolling.jsScrolling(false);
+        $ionicConfigProvider.scrolling.jsScrolling(true);
     }
 })
 
 .constant('config', {
-    apiUrl: 'https://thamapp.herokuapp.com/'
+    apiUrl: 'https://thamapptest.herokuapp.com/'
         //https://thamapp.herokuapp.com/      for production
         //https://thamapptest.herokuapp.com/  for heroku test
         //http://localhost:3000/              for local
