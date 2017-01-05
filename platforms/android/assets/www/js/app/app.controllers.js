@@ -206,6 +206,15 @@ angular.module('your_app_name.app.controllers', [])
     $scope.apiUrl = config.apiUrl;
     $scope.products = ShopService.getCartProducts();
 
+    $scope.getTotal = function() {
+        $scope.total = 0;
+        $scope.products.forEach(function(item) {
+            $scope.total += item.amount;
+        });
+    };
+
+    $scope.getTotal();
+
     $scope.removeProductFromCart = function(product) {
         $ionicActionSheet.show({
             destructiveText: 'ลบสินค้าออกจากตะกร้า',
@@ -217,19 +226,11 @@ angular.module('your_app_name.app.controllers', [])
                 ShopService.removeProductFromCart(product);
                 $scope.products = ShopService.getCartProducts();
                 $rootScope.shakeitCart();
+                $scope.getTotal();
                 return true;
             }
         });
     };
-
-    $scope.getTotal = function() {
-        $scope.total = 0;
-        $scope.products.forEach(function(item) {
-            $scope.total += item.amount;
-        });
-    };
-
-    $scope.getTotal();
 
     $scope.calculate = function(product) {
         product.amount = product.qty * product.product.price;
