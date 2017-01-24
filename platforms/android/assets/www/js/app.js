@@ -21,7 +21,7 @@ angular.module('your_app_name', [
 // as you see, we're disabling jsScrolling to achieve this.
 .config(function($ionicConfigProvider) {
     if (ionic.Platform.isAndroid()) {
-        $ionicConfigProvider.scrolling.jsScrolling(false);
+        $ionicConfigProvider.scrolling.jsScrolling(true);
     }
 })
 
