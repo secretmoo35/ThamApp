@@ -1,21 +1,55 @@
-<ion-view view-title="สินค้า" class="shop-popular-view">
+<ion-view view-title="ประวัติการสั่งซื้อ" class="shop-popular-view">
   <ion-content>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
     </ion-refresher>
     <div class="row shop-products-narrow-cards-outer">
-      <div ng-repeat="product in products" class="col col-50 shop-product-narrow-card" ui-sref="app.product-detail({productId: product._id})">
-        <div class="list card">
-          <div class="item item-image">
-            <pre-img ratio="_1_1" helper-class="main-image">
-              <img ng-src="{{apiUrl}}{{product.images}}" spinner-on-load>
-            </pre-img>
+      <ion-list>
+        <ion-item ng-class="isItemShown(item) ? 'whitesmoke' : ''" ng-repeat="item in history" ng-click="toggleItem(item)" class="item item-text-wrap">
+          <div ng-class="isItemShown(item) ? 'item-expand active' : 'item-expand inactive'">
+            <h2>หมายเลขสั่งซื้อ {{item.docno}}</h2>
+            <p>{{item.docdate | date:'dd MMMM yyyy'}}</p>
+            <p>คุณจะได้รับสินค้าภายใน 7 วัน นับจากวันที่สั่งซื้อ</p>
+            <p><b>{{item.shipping.firstname}} {{item.shipping.lastname}}</b></p>
+            <p>{{item.shipping.address}} {{item.shipping.district}} {{item.shipping.subdistrict}} {{item.shipping.province}}
+              {{item.shipping.postcode}}</p>
+            <p>{{item.shipping.tel}}</p>
+            <div class="row text-center">
+              <div class="col col-33 padding-0">
+                <h2 class="no-l-background-g">
+                  <span><i class="icon ion-cube font-30 color-icon-status"></i></span>
+                </h2>
+              </div>
+              <div class="col col-33 padding-0">
+                <h2 class="{{item.deliverystatus === 'accept' ? 'no-background-g' : 'no-background'}}">
+                  <span><i class="icon ion-android-car font-30 {{item.deliverystatus === 'accept' ? 'color-icon-status' : 'color-gray' }}"></i></span>
+                </h2>
+              </div>
+              <div class="col col-33 padding-0">
+                <h2 class="{{item.deliverystatus === 'complete' ? 'no-r-background-g' : 'no-r-background'}}">
+                  <span><i class="icon ion-checkmark-circled font-30 {{item.deliverystatus === 'complete' ? 'color-icon-status' : 'color-gray' }}"></i></span>
+                </h2>
+              </div>
+            </div>
+            <div class="list">
+              <div class="item item-divider">
+                <p>ประวัติการสั่งซื้อ</p>
+              </div>
+              <a class="item item-avatar" ng-repeat="item in item.items">
+                <img ng-src="{{item.product.images}}">
+                <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
+                <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
+              </a>
+              <div class="item item-divider">
+                <p>ราคาทั้งหมด {{item.amount}} บาท</p>
+              </div>
+            </div>
           </div>
-          <div class="item item-body">
-            <h2 class="card-title">{{product.name}}</h2>
-            <p class="card-description"><b>฿{{product.price}}</b> - {{product.description}}</p>
+          <div class="item-expand-footer">
+            <i ng-class="isItemShown(item) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i> {{ isItemShown(item)
+            ? 'ปิด' : 'เปิด' }}
           </div>
-        </div>
-      </div>
+        </ion-item>
+      </ion-list>
     </div>
   </ion-content>
 </ion-view>

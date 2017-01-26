@@ -26,7 +26,7 @@ angular.module('your_app_name', [
 })
 
 .constant('config', {
-    apiUrl: 'https://thamapp.herokuapp.com/'
+    apiUrl: 'https://thamapptest.herokuapp.com/'
         //https://thamapp.herokuapp.com/      for production
         //https://thamapptest.herokuapp.com/  for heroku test
         //http://localhost:3000/              for local
@@ -155,7 +155,7 @@ angular.module('your_app_name', [
         views: {
             'shop-popular': {
                 templateUrl: "views/app/shop/shop-popular.html",
-                controller: 'ShopCtrl'
+                controller: 'ProfileCtrl'
             }
         }
     })
