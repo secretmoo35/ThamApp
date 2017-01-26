@@ -195,6 +195,7 @@ angular.module('your_app_name', [
 
     .state('app.checkout', {
         url: "/checkout",
+        cache: false,
         views: {
             'menuContent': {
                 templateUrl: "views/app/shop/checkout.html",

@@ -274,15 +274,27 @@ angular.module('your_app_name.app.controllers', [])
     };
     $scope.order.items = ShopService.getCartProducts();
 
-    $scope.order.items.forEach(function(item) {
-        $scope.order.amount += item.amount;
-        $scope.order.totalamount = $scope.order.amount;
-    });
+    // $scope.order.items.forEach(function(item) {
+    //     $scope.order.amount += item.amount;
+    //     $scope.order.totalamount = $scope.order.amount;
+    // });
 
     $scope.state = true;
     $scope.step = '1';
     $scope.choice = true;
     $scope.authentication = {}
+
+    $scope.calculate = function() {
+        $scope.order.amount = 0;
+        $scope.order.totalamount = 0;
+        $scope.order.items.forEach(function(item) {
+            $scope.order.amount += item.amount;
+            $scope.order.totalamount = $scope.order.amount;
+        });
+    };
+
+    $scope.calculate();
+
     $scope.gotoForm = function(num) {
         if (num === '4') {
             $state.go('app.checkout');
