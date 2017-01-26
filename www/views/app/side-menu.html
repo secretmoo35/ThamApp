@@ -39,7 +39,7 @@
                             <ion-item class="user-item" ng-if="loggedUser" menu-close ui-sref="app.profile.posts()">
                                 <div class="user-image-outer">
                                     <pre-img helper-class="rounded-image" ratio="_1_1">
-                                        <img class="user-image" ng-src="{{apiUrl}}{{loggedUser.profileImageURL}}" spinner-on-load>
+                                        <img class="user-image" ng-src="{{loggedUser.profileImageURL}}" spinner-on-load>
                                     </pre-img>
                                 </div>
                                 <h2 class="menu-text">{{loggedUser.displayName}}</h2>

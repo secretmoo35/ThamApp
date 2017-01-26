@@ -253,7 +253,7 @@ angular.module('your_app_name.app.controllers', [])
 
 })
 
-.controller('CheckoutCtrl', function($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading) {
+.controller('CheckoutCtrl', function($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation) {
     //$scope.paymentDetails;
 
     $scope.apiUrl = config.apiUrl;
@@ -267,7 +267,10 @@ angular.module('your_app_name.app.controllers', [])
         delivery: {
             deliveryid: '0'
         },
-        amount: 0
+        amount: 0,
+        totalamount: 0
+
+
     };
     $scope.order.items = ShopService.getCartProducts();
 
@@ -298,7 +301,7 @@ angular.module('your_app_name.app.controllers', [])
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
             // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
             $scope.authentication.address.tel = $scope.authentication.username;
-            $scope.authentication.password = 'Usr#P@ssw0rd';
+            $scope.authentication.password = 'Usr#Pass1234';
             AuthService.signup($scope.authentication).then(function(res) {
                 $scope.state = false;
                 $scope.step = '3';
@@ -341,22 +344,62 @@ angular.module('your_app_name.app.controllers', [])
         $scope.order.docdate = new Date();
         $scope.order.user = AuthService.getUser();
         $scope.order.platform = 'Mobile';
+        $scope.order.historystatus = [{
+            status: 'confirmed',
+            datestatus: new Date()
+        }];
 
-        if (status) {
-            $scope.order.shipping = $scope.order.user.address;
-            $scope.order.shipping.firstname = $scope.order.user.firstName;
-            $scope.order.shipping.lastname = $scope.order.user.lastName;
-        }
+        var posOptions = {
+            timeout: 10000,
+            enableHighAccuracy: true
+        };
 
-        CheckoutService.saveOrder($scope.order).then(function(res) {
-            $ionicLoading.hide();
-            console.log(res);
-            $state.go('app.complete', {
-                order: JSON.stringify(res)
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function(position) {
+
+
+                $ionicLoading.hide();
+
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+
+                $scope.order.shipping.sharelocation.latitude = lat;
+                $scope.order.shipping.sharelocation.longitude = lng;
+
+                // getMap(Latitude, Longitude);
+                if (status) {
+                    $scope.order.shipping = $scope.order.user.address;
+                    $scope.order.shipping.firstname = $scope.order.user.firstName;
+                    $scope.order.shipping.lastname = $scope.order.user.lastName;
+                }
+
+                CheckoutService.saveOrder($scope.order).then(function(res) {
+                    $ionicLoading.hide();
+                    console.log(res);
+                    $state.go('app.complete', {
+                        order: JSON.stringify(res)
+                    });
+                }, function(err) {
+                    alert(err.data.message);
+                });
+
+
+            }, function(err) {
+
+                $ionicLoading.hide();
+
+                if (error.code == PositionError.PERMISSION_DENIED) {
+                    alert("Permission denied. check setting");
+                } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
+                    alert("Cannot get position. May be problem with network or can't get a satellite fix.");
+                } else if (error.code == PositionError.TIMEOUT) {
+                    alert("Geolocation is timed out.");
+                } else {
+                    alert(error.message);
+                }
             });
-        }, function(err) {
-            alert(err.data.message);
-        });
+
     };
 
 })
