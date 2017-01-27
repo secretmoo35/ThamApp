@@ -10,18 +10,24 @@
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         },
+<<<<<<< HEAD
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         },
+=======
+>>>>>>> 611046b7b8f2d425acd61cc1096b666c7914f8f0
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         },
+<<<<<<< HEAD
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         },
+=======
+>>>>>>> 611046b7b8f2d425acd61cc1096b666c7914f8f0
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         },
@@ -44,5 +50,16 @@
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
         }
     },
+<<<<<<< HEAD
     "dependent_plugins": {}
+=======
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        }
+    }
+>>>>>>> 611046b7b8f2d425acd61cc1096b666c7914f8f0
 }
