@@ -109,6 +109,7 @@ angular.module('your_app_name.auth.controllers', [])
         $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังบันทึกข้อมูล</p>' });
         AuthService.updateProfile($scope.user).then(function(res) {
             $ionicLoading.hide();
+             $state.go('app.shop.sale');
         }, function(err) {
             $ionicLoading.hide();
             alert(JSON.stringify(err));

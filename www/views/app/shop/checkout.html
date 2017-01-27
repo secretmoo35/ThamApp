@@ -1,4 +1,4 @@
-<ion-view view-title="ข้อมูลการส่งสินค้า" class="checkout-view">
+<ion-view view-title="ข้อมูลการส่งสินค้า" class="checkout-view" ng-init="calculate()">
   <ion-content>
     <!--address-->
     <div>
@@ -81,7 +81,7 @@
           สรุปยอดการสั่งซื้อ
         </div>
         <a class="item item-avatar" ng-repeat="item in order.items">
-          <img ng-src="{{apiUrl}}{{item.product.images}}">
+          <img ng-src="{{item.product.images}}">
           <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
           <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
         </a>
