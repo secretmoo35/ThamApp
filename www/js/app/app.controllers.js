@@ -179,7 +179,8 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ShopCtrl', function ($scope, $ionicLoading, $timeout, ShopService, config) {
+    .controller('ShopCtrl', function ($scope, $rootScope, $ionicLoading, $timeout, ShopService, config, AuthService, $state) {
+        $rootScope.user = AuthService.getUser();
         $scope.apiUrl = config.apiUrl;
         $scope.products = [];
         $scope.popular_products = [];
@@ -199,18 +200,38 @@ angular.module('your_app_name.app.controllers', [])
                 $scope.$broadcast('scroll.refreshComplete');
             });
         }
+
+        $scope.signout = function () {
+            AuthService.signout();
+            $state.go('app.shop.home')
+        }
     })
 
     .controller('ShoppingCartCtrl', function ($scope, $rootScope, $state, $stateParams, ShopService, AuthService, $ionicActionSheet, _, config) {
         $scope.state = $stateParams.state;
         $scope.apiUrl = config.apiUrl;
         $scope.products = ShopService.getCartProducts();
+        $rootScope.shakeitCart = function () {
 
+            var cartElem = angular.element(document.getElementsByClassName("ion-ios-cart"));
+            setTimeout(function () {
+                cartElem.addClass('shakeit');
+            }, 1000);
+            setTimeout(function () {
+                cartElem.removeClass('shakeit');
+            }, 2000);
+        }
         $scope.getTotal = function () {
             $scope.total = 0;
+            var alldiscountamount = 0;
+            var alldeliverycost = 0;
+            var subTotal = 0;
             $scope.products.forEach(function (item) {
-                $scope.total += item.amount;
+                alldiscountamount += item.discountamount;
+                alldeliverycost += item.deliverycost;
+                subTotal += item.amount;
             });
+            $scope.total = subTotal + alldeliverycost - alldiscountamount;
         };
 
         $scope.getTotal();
@@ -233,9 +254,10 @@ angular.module('your_app_name.app.controllers', [])
         };
 
         $scope.calculate = function (product) {
+            ShopService.addProductToCart(product, true);
+            $scope.products = ShopService.getCartProducts();
             product.amount = product.qty * product.product.price;
             $scope.getTotal();
-            ShopService.addProductToCart(product, true);
         };
 
         // $scope.getSubtotal = function () {
@@ -267,6 +289,8 @@ angular.module('your_app_name.app.controllers', [])
             delivery: {
                 deliveryid: '0'
             },
+            deliveryamount: 0,
+            discountpromotion: 0,
             amount: 0,
             totalamount: 0
 
@@ -287,10 +311,18 @@ angular.module('your_app_name.app.controllers', [])
         $scope.calculate = function () {
             $scope.order.amount = 0;
             $scope.order.totalamount = 0;
+            $scope.order.deliveryamount = 0;
+            $scope.order.discountpromotion = 0;
+            var allDeliverycost = 0;
+            var allDiscountAmount = 0;
             $scope.order.items.forEach(function (item) {
                 $scope.order.amount += item.amount;
-                $scope.order.totalamount = $scope.order.amount;
+                allDeliverycost += item.deliverycost;
+                allDiscountAmount += item.discountamount;
             });
+            $scope.order.deliveryamount = allDeliverycost;
+            $scope.order.discountpromotion = allDiscountAmount;
+            $scope.order.totalamount = $scope.order.amount + $scope.order.deliveryamount - $scope.order.discountpromotion;
         };
 
         $scope.calculate();
@@ -309,7 +341,18 @@ angular.module('your_app_name.app.controllers', [])
                     alert(JSON.stringify(err));
                 })
             } else if (num === '2') {
-                $scope.step = num;
+                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                $scope.authentication.username = $scope.authentication.username;
+                $scope.authentication.password = 'Usr#Pass1234';
+                AuthService.login($scope.authentication).then(function (success) {
+                    $scope.step = '3';
+                    $state.go('app.checkout');
+                    $ionicLoading.hide();
+                }, function (err) {
+
+                    $scope.step = num;
+                    $ionicLoading.hide();
+                })
             } else {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
                 // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
@@ -383,17 +426,19 @@ angular.module('your_app_name.app.controllers', [])
                     }
 
                     $scope.order.shipping.sharelocation = {};
-                    $scope.order.shipping.sharelocation.latitude = lat;
-                    $scope.order.shipping.sharelocation.longitude = lng;
-
+                    // $scope.order.shipping.sharelocation.latitude = lat;
+                    // $scope.order.shipping.sharelocation.longitude = lng;
+                    // เส้นทางตามถนน
                     var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+                    // alert(fullAddress);
                     $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
-
                         if (response.status.toUpperCase() === 'OK') {
+                            $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                            $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
                             // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + $scope.order.shipping.sharelocation.latitude + ',' + $scope.order.shipping.sharelocation.longitude + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                                alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                                if (distance.rows[0].elements[0].distance.value <= 500) {
+                            $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                if (distance.rows[0].elements[0].distance.value) {
                                     CheckoutService.saveOrder($scope.order).then(function (res) {
                                         $ionicLoading.hide();
                                         console.log(res);
@@ -412,6 +457,8 @@ angular.module('your_app_name.app.controllers', [])
                                     });
                                     confirmPopup.then(function (res) {
                                         if (res) {
+                                            $scope.order.shipping.sharelocation.latitude = lat;
+                                            $scope.order.shipping.sharelocation.longitude = lng;
                                             // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
                                             $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
 
@@ -421,7 +468,7 @@ angular.module('your_app_name.app.controllers', [])
                                                 $scope.data = {}
                                                 // An elaborate, custom popup
                                                 var myPopup1 = $ionicPopup.show({
-                                                    template: '<input type="text" ng-model="data.address">',
+                                                    template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
                                                     title: 'ยืนยันที่อยู่ใหม่',
                                                     subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
                                                     scope: $scope,
@@ -432,23 +479,18 @@ angular.module('your_app_name.app.controllers', [])
                                                             type: 'button-positive',
                                                             onTap: function (e) {
                                                                 if (!$scope.data.address) {
-                                                                    alert(1);
+                                                                    // alert(1);
                                                                     //don't allow the user to close unless he enters address password
                                                                     e.preventDefault();
 
                                                                 } else {
-                                                                    alert(JSON.stringify(results.results[0]));
+                                                                    // alert(JSON.stringify(results.results[0]));
                                                                     //  alert(JSON.stringify(results[0]));
                                                                     $scope.order.shipping.address = $scope.data.address;
-                                                                    alert($scope.data.address);
-                                                                    $scope.order.shipping.postcode = results.results[0].address_components[6].long_name;
-                                                                    alert(results.results[0].address_components[6].long_name);
-                                                                    $scope.order.shipping.subdistrict = results.results[0].address_components[2].long_name;
-                                                                    alert(results.results[0].address_components[2].long_name);
-                                                                    $scope.order.shipping.province = results.results[0].address_components[4].long_name;
-                                                                    alert(results.results[0].address_components[4].long_name);
-                                                                    $scope.order.shipping.district = results.results[0].address_components[3].long_name;
-                                                                    alert(results.results[0].address_components[3].long_name);
+                                                                    $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                                                                    $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                                                                    $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                                                                    $scope.order.shipping.district = results.results[0].address_components[3].short_name;
                                                                     CheckoutService.saveOrder($scope.order).then(function (res) {
                                                                         $ionicLoading.hide();
                                                                         console.log(res);
@@ -468,7 +510,7 @@ angular.module('your_app_name.app.controllers', [])
                                                 var newAdress = results;
 
                                                 myPopup1.then(function (resp) {
-                                                    alert(3);
+                                                    // alert(3);
 
                                                     // postcode: String,
                                                     //     subdistrict: String,
@@ -501,6 +543,7 @@ angular.module('your_app_name.app.controllers', [])
                             });
                         } else {
                             alert('กรุณากรอกที่อยู่ที่ถูกต้อง!');
+                            $ionicLoading.hide();
                         }
                         function successCallback(res) {
                             vm.cart.clear();
