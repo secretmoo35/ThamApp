@@ -553,3 +553,7 @@ h2.no-l-background span:after {
 .position-absolute{
   position: absolute;
 }
+
+.paragraph{
+    text-indent: 2.5em;
+}
