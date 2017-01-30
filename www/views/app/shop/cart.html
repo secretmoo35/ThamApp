@@ -25,7 +25,7 @@
                 <div class="products-list">
                     <div class="product-list-item">
                         <div class="row">
-                            <span class="product-title">{{product.product.name}}</span>
+                            <span class="product-title">{{product.product.name}} ({{product.product.price}}฿)</span>
                         </div>
                     </div>
                 </div>
@@ -33,16 +33,19 @@
                     <div class="item cart-list item-thumbnail-left">
                         <div class="row">
                             <div class="col col-25">
-                                <img ng-src="{{apiUrl}}{{product.product.images}}" style="width:100%;">
+                                <img ng-src="{{product.product.images}}" style="width:100%;">
                             </div>
                             <div class="col col-50">
                                 <div class="list">
                                     <div class="product-list-item">
-                                        <div class="row">
+                                        <!--<div class="row">
                                             <p class="card-description">{{product.product.description}}</p>
+                                        </div>-->
+                                        <div class="row">
+                                            <p class="card-description">ค่าจัดส่ง {{product.deliverycost}}</p>
                                         </div>
                                         <div class="row">
-                                            <p class="card-description">{{product.product.price}}฿</p>
+                                            <p class="card-description">ส่วนลด {{product.discountamount}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -58,7 +61,7 @@
                                         <input type="number" ng-model="product.qty" ng-change="calculate(product)" placeholder="Last Name" />
                                     </label>
                                 </div>
-                                <span class="product-price">฿{{product.amount}}</span>
+                                <span class="product-price">฿{{product.amount + product.deliverycost - product.discountamount}}</span>
                             </div>
                         </div>
                     </div>

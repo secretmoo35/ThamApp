@@ -1,12 +1,12 @@
 <ion-side-menus enable-menu-with-back-views="false">
-    <ion-side-menu-content>
+    <ion-side-menu-content drag-content="false">
         <ion-nav-bar ng-class="{'profile-color': ('app.profile' | includedByState), 'settings-color': ('app.settings' | includedByState), 'product-color': ('app.product-detail' | includedByState), 'feed-color': ('app.feed' | includedByState), 'shop-color': ('app.shop' | includedByState), 'cart-color': ('app.cart' | includedByState), 'shipping-address-color': ('app.shipping-address' | includedByState), 'checkout-color': ('app.checkout' | includedByState)}" ng-show="!('app.complete' | includedByState)">
             <ion-nav-back-button>
             </ion-nav-back-button>
-            <ion-nav-buttons side="left">
+            <!--<ion-nav-buttons side="left">
                 <button class="button button-icon button-clear ion-navicon" ng-if="!('app.product-detail' | includedByState)" menu-toggle="left">
         </button>
-            </ion-nav-buttons>
+            </ion-nav-buttons>-->
             <ion-nav-buttons side="right">
                 <a class="button button-icon" ui-sref="app.cart()">
                     <i class="icon ion-ios-cart " ng-class="{'color-gray' : ('app.product-detail' | includedByState)}"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
@@ -39,7 +39,7 @@
                             <ion-item class="user-item" ng-if="loggedUser" menu-close ui-sref="app.profile.posts()">
                                 <div class="user-image-outer">
                                     <pre-img helper-class="rounded-image" ratio="_1_1">
-                                        <img class="user-image" ng-src="{{apiUrl}}{{loggedUser.profileImageURL}}" spinner-on-load>
+                                        <img class="user-image" ng-src="{{loggedUser.profileImageURL}}" spinner-on-load>
                                     </pre-img>
                                 </div>
                                 <h2 class="menu-text">{{loggedUser.displayName}}</h2>

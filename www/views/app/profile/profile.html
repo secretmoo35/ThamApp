@@ -9,7 +9,7 @@
                                 <!-- We need a wrapper with width set for the preload image directive -->
                                 <div class="user-image-outer">
                                     <pre-img ratio="_1_1" helper-class="rounded-image">
-                                        <img class="user-image height-100per" id="myImage" ng-src="{{apiUrl}}{{loggedUser.profileImageURL}}" spinner-on-load>
+                                        <img class="user-image height-100per" id="myImage" ng-src="{{loggedUser.profileImageURL}}" spinner-on-load>
                                     </pre-img>
                                 </div>
                                 <span class="badge badge-assertive icon-image bg-gray badge-cart position-absolute" ng-click="changeImageProfile()">
@@ -85,7 +85,7 @@
                                     <p>ประวัติการสั่งซื้อ</p>
                                 </div>
                                 <a class="item item-avatar" ng-repeat="item in item.items">
-                                    <img ng-src="{{apiUrl}}{{item.product.images}}">
+                                    <img ng-src="{{item.product.images}}">
                                     <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
                                     <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
                                 </a>

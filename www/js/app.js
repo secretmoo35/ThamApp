@@ -135,7 +135,8 @@ angular.module('your_app_name', [
         abstract: false,
         views: {
             'menuContent': {
-                templateUrl: "views/app/shop/shop.html"
+                templateUrl: "views/app/shop/shop.html",
+                controller: 'ShopCtrl'
             }
         }
     })
@@ -155,7 +156,7 @@ angular.module('your_app_name', [
         views: {
             'shop-popular': {
                 templateUrl: "views/app/shop/shop-popular.html",
-                controller: 'ShopCtrl'
+                controller: 'ProfileCtrl'
             }
         }
     })
@@ -195,6 +196,7 @@ angular.module('your_app_name', [
 
     .state('app.checkout', {
         url: "/checkout",
+        cache: false,
         views: {
             'menuContent': {
                 templateUrl: "views/app/shop/checkout.html",
