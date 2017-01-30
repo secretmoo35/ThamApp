@@ -11,7 +11,8 @@
             <p>คุณจะได้รับสินค้าภายใน 7 วัน นับจากวันที่สั่งซื้อ</p>
             <p><b>{{item.shipping.firstname}} {{item.shipping.lastname}}</b></p>
             <p>{{item.shipping.address}} {{item.shipping.district}} {{item.shipping.subdistrict}} {{item.shipping.province}}
-              {{item.shipping.postcode}}</p>
+              {{item.shipping.postcode}}
+            </p>
             <p>{{item.shipping.tel}}</p>
             <div class="row text-center">
               <div class="col col-33 padding-0">
@@ -20,8 +21,8 @@
                 </h2>
               </div>
               <div class="col col-33 padding-0">
-                <h2 class="{{item.deliverystatus === 'accept' ? 'no-background-g' : 'no-background'}}">
-                  <span><i class="icon ion-android-car font-30 {{item.deliverystatus === 'accept' ? 'color-icon-status' : 'color-gray' }}"></i></span>
+                <h2 class="{{item.deliverystatus === 'accept' ? 'no-background-g' : item.deliverystatus === 'complete' ? 'no-background-g' :'no-background'}}">
+                  <span><i class="icon ion-android-car font-30 {{item.deliverystatus === 'accept' ? 'color-icon-status' :item.deliverystatus === 'complete' ? 'color-icon-status' : 'color-gray' }}"></i></span>
                 </h2>
               </div>
               <div class="col col-33 padding-0">
