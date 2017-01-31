@@ -712,6 +712,7 @@ angular.module('your_app_name.app.controllers', [])
                                 alert(err.data.message);
                             });
                         }
+                    });
 
                         $ionicLoading.hide();
 
