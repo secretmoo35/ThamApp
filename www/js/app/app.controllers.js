@@ -404,7 +404,11 @@ angular.module('your_app_name.app.controllers', [])
                 status: 'confirmed',
                 datestatus: new Date()
             }];
-
+            if (status) {
+                $scope.order.shipping = $scope.order.user.address;
+                $scope.order.shipping.firstname = $scope.order.user.firstName;
+                $scope.order.shipping.lastname = $scope.order.user.lastName;
+            }
             var posOptions = {
                 timeout: 10000,
                 enableHighAccuracy: true
@@ -420,11 +424,7 @@ angular.module('your_app_name.app.controllers', [])
 
 
                     // alert(lat + ' ' + lng);
-                    if (status) {
-                        $scope.order.shipping = $scope.order.user.address;
-                        $scope.order.shipping.firstname = $scope.order.user.firstName;
-                        $scope.order.shipping.lastname = $scope.order.user.lastName;
-                    }
+
 
                     $scope.order.shipping.sharelocation = {};
                     // $scope.order.shipping.sharelocation.latitude = lat;
@@ -714,20 +714,18 @@ angular.module('your_app_name.app.controllers', [])
                         }
                     });
 
-                        $ionicLoading.hide();
+                    $ionicLoading.hide();
 
-                        if (error.code == PositionError.PERMISSION_DENIED) {
-                            alert("Permission denied. check setting");
-                        } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
-                            alert("Cannot get position. May be problem with network or can't get a satellite fix.");
-                        } else if (error.code == PositionError.TIMEOUT) {
-                            alert("Geolocation is timed out.");
-                        } else {
-                            alert(error.message);
-                        }
-                    });
-
-
+                    if (error.code == PositionError.PERMISSION_DENIED) {
+                        alert("Permission denied. check setting");
+                    } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
+                        alert("Cannot get position. May be problem with network or can't get a satellite fix.");
+                    } else if (error.code == PositionError.TIMEOUT) {
+                        alert("Geolocation is timed out.");
+                    } else {
+                        alert(error.message);
+                    }
+                });
 
 
 
@@ -735,9 +733,11 @@ angular.module('your_app_name.app.controllers', [])
 
 
 
-                };
 
-        })
+
+        };
+
+    })
 
     .controller('SettingsCtrl', function ($scope, $state, $ionicModal, AuthService) {
 
