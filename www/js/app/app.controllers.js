@@ -180,7 +180,10 @@ angular.module('your_app_name.app.controllers', [])
     })
 
     .controller('ShopCtrl', function ($scope, $rootScope, $ionicLoading, $timeout, ShopService, config, AuthService, $state) {
-        $rootScope.user = AuthService.getUser();
+        $rootScope.loadUser = function () {
+            $rootScope.user = AuthService.getUser();
+        };
+        $rootScope.loadUser();
         $scope.apiUrl = config.apiUrl;
         $scope.products = [];
         $scope.popular_products = [];
@@ -202,8 +205,9 @@ angular.module('your_app_name.app.controllers', [])
         }
 
         $scope.signout = function () {
+            $rootScope.user = null;
             AuthService.signout();
-            $state.go('app.shop.home')
+            $state.reload('app.shop.home')
         }
     })
 
@@ -739,7 +743,7 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('SettingsCtrl', function ($scope, $state, $ionicModal, AuthService) {
+    .controller('SettingsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope) {
 
         $ionicModal.fromTemplateUrl('views/app/legal/privacy-policy.html', {
             scope: $scope,
