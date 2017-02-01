@@ -179,7 +179,7 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ShopCtrl', function ($scope, $rootScope, $ionicLoading, $timeout, ShopService, config, AuthService, $state) {
+    .controller('ShopCtrl', function ($scope, $rootScope, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window) {
         $rootScope.loadUser = function () {
             $rootScope.user = AuthService.getUser();
         };
@@ -206,8 +206,11 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.signout = function () {
             $rootScope.user = null;
+            $rootScope.loadUser();
             AuthService.signout();
-            $state.reload('app.shop.home')
+            $window.location.reload('app.shop.home');
+            // $location.path('/app/shop/home');
+            // $state.go('app.shop.home')
         }
     })
 
