@@ -37,6 +37,10 @@
                 </div>
             </div>
         </div>
+        <div class="item item-body" ng-if="product.promotions.length > 0">
+            <p class="product-description">โปรโมชั่น</p>            
+            <p class="product-description" ng-repeat="promotion in product.promotions">- {{promotion.description}}</p>
+        </div>
         <div class="item item-body">
             <p class="product-description">{{product.description}}</p>
         </div>
