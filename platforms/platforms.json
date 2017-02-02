@@ -1,3 +1,7 @@
 {
+<<<<<<< HEAD
+    "android": "5.1.1"
+=======
     "android": "6.1.2"
+>>>>>>> df2082ca9d52f502e63bf6ea830d05dcaba0e07e
 }
