@@ -2,7 +2,7 @@
   <ion-content>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
     </ion-refresher>
-    <div class="list">
+    <div class="list" ng-if="user">
       <a class="item item-icon-left" ui-sref="app.edit-profile">
         <i class="icon ion-ios-person-outline"></i> แก้ไขโปรไฟล์
       </a>
@@ -15,6 +15,11 @@
       <a class="item item-icon-left settings-option" ng-click="signout()">
         <i class="icon ion-ios-close-outline"></i> ลงชื่อออก
       </a>
+    </div>
+    <div class="list" ng-if="!user">
+      <!--<a class="item item-icon-left" ui-sref="app.edit-profile">
+        <i class="icon ion-ios-person-outline"></i> เข้าสู่ระบบ
+      </a>-->
     </div>
   </ion-content>
 </ion-view>
