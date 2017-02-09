@@ -290,6 +290,7 @@ angular.module('your_app_name.app.controllers', [])
         $scope.user = AuthService.getUser();
         if ($stateParams.order) {
             $scope.completeOrder = JSON.parse($stateParams.order);
+            alert(JSON.stringify($scope.completeOrder));
         }
         $scope.order = {
             shipping: {},
@@ -430,7 +431,7 @@ angular.module('your_app_name.app.controllers', [])
                     var lng = position.coords.longitude;
 
 
-                    // alert(lat + ' ' + lng);
+                    alert(lat + ' ' + lng);
 
 
                     $scope.order.shipping.sharelocation = {};
@@ -448,8 +449,8 @@ angular.module('your_app_name.app.controllers', [])
                             //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
                             //     if (distance.rows[0].elements[0].distance.value) {
                             CheckoutService.saveOrder($scope.order).then(function (res) {
+                                // alert(JSON.stringify(res));                                
                                 $ionicLoading.hide();
-                                console.log(res);
                                 $state.go('app.complete', {
                                     order: JSON.stringify(res)
                                 });
@@ -558,6 +559,7 @@ angular.module('your_app_name.app.controllers', [])
                             //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
                             //     if (distance.rows[0].elements[0].distance.value) {
                             CheckoutService.saveOrder($scope.order).then(function (res) {
+                                // alert(JSON.stringify(res));                                
                                 $ionicLoading.hide();
                                 console.log(res);
                                 $state.go('app.complete', {
@@ -600,6 +602,7 @@ angular.module('your_app_name.app.controllers', [])
                             //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
                             //     if (distance.rows[0].elements[0].distance.value) {
                             CheckoutService.saveOrder($scope.order).then(function (res) {
+                                alert(JSON.stringify(res));
                                 $ionicLoading.hide();
                                 console.log(res);
                                 $state.go('app.complete', {
@@ -710,6 +713,7 @@ angular.module('your_app_name.app.controllers', [])
                             //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
                             //     if (distance.rows[0].elements[0].distance.value) {
                             CheckoutService.saveOrder($scope.order).then(function (res) {
+                                alert(JSON.stringify(res));                                
                                 $ionicLoading.hide();
                                 console.log(res);
                                 $state.go('app.complete', {
