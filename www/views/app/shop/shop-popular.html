@@ -42,10 +42,13 @@
               <a class="item item-avatar" ng-repeat="item in item.items">
                 <img ng-src="{{item.product.images}}">
                 <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
-                <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
+                <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>                                       
               </a>
               <div class="item item-divider">
-                <p>ราคาทั้งหมด {{item.amount}} บาท</p>
+                <p>ราคารวม {{item.amount}} บาท</p>                
+                <p ng-if="item.deliveryamount > 0">ค่าจัดส่ง {{item.deliveryamount}} บาท</p>              
+                <p ng-if="item.discountpromotion > 0">ส่วนลด {{item.discountpromotion}} บาท</p>     
+                <p>ราคาสุทธิ {{item.totalamount}} บาท</p>
               </div>
             </div>
           </div>
