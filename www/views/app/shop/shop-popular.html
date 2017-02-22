@@ -14,6 +14,10 @@
               {{item.shipping.postcode}}
             </p>
             <p>{{item.shipping.tel}}</p>
+            <br>
+            <p>
+              <b>ช่องทางการชำระเงิน : ชำระเงินปลายทางกับคนส่งข้าว</b>
+            </p>
             <div class="row text-center">
               <div class="col col-33 padding-0">
                 <h2 class="no-l-background-g">
@@ -53,10 +57,10 @@
       </ion-list>
     </div>
     <!--<div class="row shop-products-narrow-cards-outer" >-->
-      <div class="text-center margin-top-20" ng-if="!loggedUser">
-        ไม่มีประวัติการสั่งซื้อ
-      </div>
-      <!--<ion-list>
+    <div class="text-center margin-top-20" ng-if="!loggedUser">
+      ไม่มีประวัติการสั่งซื้อ
+    </div>
+    <!--<ion-list>
         <ion-item ng-class="isItemShown(item) ? 'whitesmoke' : ''" ng-repeat="item in history" ng-click="toggleItem(item)" class="item item-text-wrap">
           <div ng-class="isItemShown(item) ? 'item-expand active' : 'item-expand inactive'">
             <h2>หมายเลขสั่งซื้อ {{item.docno}}</h2>
