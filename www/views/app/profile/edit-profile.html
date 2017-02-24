@@ -1,4 +1,9 @@
 <ion-view class="profile-likes" view-title="แก้ไขโปรไฟล์">
+    <ion-nav-buttons side="left">
+     <button class="button button-icon button-clear" ui-sref="app.shop.sale">
+            <i class="ion-ios-arrow-back color-gray font-30"></i>
+        </button>
+    </ion-nav-buttons>
     <ion-content>
         <div class="form-fields-outer list list-inset">
             <label class="item item-input">
@@ -12,10 +17,6 @@
             <label class="item item-input">
                 <span class="input-label">อีเมล์</span>
                 <input type="email" name="email" ng-model="user.email" required>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">ชื่อผู้ใช้</span>
-                <input type="text" name="username" ng-model="user.username" required>
             </label>
             <button type="submit" class="sign-up button button-energized button-block" ng-click="updateProfile()">
                 ยืนยัน

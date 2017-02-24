@@ -11685,7 +11685,7 @@ progress {
 
 .button.button-dark {
     border-color: transparent;
-    background-color: #b7b7b7;
+    background-color: #1ab394;
     color: #fff;
 }
 
@@ -14159,7 +14159,7 @@ ion-nav-bar.feed-color * .buttons button::before {
     -ms-flex-wrap: none;
     flex-wrap: nowrap;
     padding: 0px 5px;
-    overflow: auto;
+    /*overflow: auto;*/
 }
 
 .shop-products-narrow-cards-outer.shop-product-cards-scroller .shop-product-narrow-card {
@@ -14296,6 +14296,22 @@ ion-nav-bar.cart-color * .buttons button::before {
 }
 
 .cart-view .empty-cart .no-products {
+    color: #aaaaaa;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.cart-view .gohome-cart {
+    text-align: center;
+    margin-top: 0px;
+}
+
+.cart-view .gohome-cart .icon {
+    font-size: 80px;
+    color: rgba(80, 80, 80, 0.5);
+}
+
+.cart-view .gohome-cart .no-products {
     color: #aaaaaa;
     font-size: 16px;
     font-weight: 400;

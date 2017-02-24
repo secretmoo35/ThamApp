@@ -1,26 +1,80 @@
-<ion-view view-title="สินค้า" class="shop-popular-view" cache-view="true" ng-init="readProduct()">
+<ion-view view-title="สินค้า" class="shop-home-view" cache-view="false" ng-init="readProduct()">
     <ion-nav-buttons side="right">
         <a class="button button-icon" ui-sref="app.cart({state : 'app.shop'})">
             <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
         </a>
     </ion-nav-buttons>
-    <ion-content scroll="true">
-        <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
-        </ion-refresher>
-        <div class="row shop-products-narrow-cards-outer">
-            <div ng-repeat="product in products" class="col col-50 shop-product-narrow-card" ui-sref="app.product-detail({productId: product._id})">
-                <div class="list card">
-                    <div class="item item-image">
-                        <pre-img ratio="_1_1" helper-class="main-image">
-                            <img ng-src="{{product.images}}" spinner-on-load>
-                        </pre-img>
-                    </div>
-                    <div class="item item-body">
-                        <h2 class="card-title">{{product.name}}</h2>
-                        <p class="card-description"><b>฿{{product.price}}</b> - {{product.description}}</p>
+    <ion-content on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()" on-swipe-up="onSwipeUp()" on-swipe-down="onSwipeDown()">
+        <!--<ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
+        </ion-refresher>-->
+        <div class="list shop-home-options-list">
+            <a class="item shop-home-option-item" ui-sref="app.shop.all">
+                <div class="row">
+                    <div class="col">
+                        <ion-slide-box show-pager="false" auto-play="true" does-continue="true" slide-interval="10000" on-slide-changed="slideChanged(index)">
+                            <ion-slide ng-repeat="img in images">
+                                <div class="row slide-content">
+                                    <div class="col col-center user-data shop-home-option-image-outer">
+                                        <img class="img-shop img-hospital" ng-src="{{img}}" />
+                                    </div>
+                                </div>
+                            </ion-slide>
+                        </ion-slide-box>
+                        <!--<pre-img ratio="_2_1" helper-class="shop-home-option-image-outer">
+                            <img ng-src="img/sale.png" spinner-on-load>
+                        </pre-img>-->
                     </div>
                 </div>
+                <div class="row option-copy">
+                    <div class="col col-75">
+                        <span>ดูทั้งหมด</span>
+                    </div>
+                    <div class="col col-25 option-icon">
+                        <i class="icon ion-chevron-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div ng-repeat="cate in category" ng-disbled="true">
+            <div class="item item-divider shop-section-title">
+                <span class="title-copy">ประเภทสินค้า : {{cate}}</span>
+                <a class="button button-small button-dark section-action" ui-sref="app.shop.all({cate:cate})">เพิ่มเติม</a>
             </div>
+            <ion-scroll direction="x" class="wide-as-needed" scroll="true" overflow-scroll="{{scroll === true ? 'true': scroll === false ? 'false' : 'true'}}">
+                <div class="row shop-products-narrow-cards-outer shop-product-cards-scroller">
+                    <div ng-repeat="product in products | filter:{category : cate} | limitTo : 4" style="width: 500px;" class="col col-50 shop-product-narrow-card"
+                        ui-sref="app.product-detail({productId: product._id})">
+                        <div class="list card">
+                            <div class="item item-image">
+                                <pre-img ratio="_1_1" helper-class="main-image">
+                                    <img ng-src="{{product.images}}" spinner-on-load>
+                                </pre-img>
+                            </div>
+                            <div class="item item-body">
+                                <h2 class="card-title">{{product.name}}</h2>
+                                <p class="card-description"><b>฿{{product.price}}</b> - {{product.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-scroll>
         </div>
     </ion-content>
 </ion-view>
+
+
+<!--<div class="row shop-products-narrow-cards-outer">
+    <div ng-repeat="product in products" class="col col-50 shop-product-narrow-card" ui-sref="app.product-detail({productId: product._id})">
+        <div class="list card">
+            <div class="item item-image">
+                <pre-img ratio="_1_1" helper-class="main-image">
+                    <img ng-src="{{product.images}}" spinner-on-load>
+                </pre-img>
+            </div>
+            <div class="item item-body">
+                <h2 class="card-title">{{product.name}}</h2>
+                <p class="card-description"><b>฿{{product.price}}</b> - {{product.description}}</p>
+            </div>
+        </div>
+    </div>
+</div>-->

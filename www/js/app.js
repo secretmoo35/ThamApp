@@ -153,6 +153,20 @@ angular.module('your_app_name', [
                 }
             })
 
+            .state('app.shop.all', {
+                url: "/all",
+                params: {
+                    cate: null
+                },
+                // cache: false,
+                views: {
+                    'shop-home': {
+                        templateUrl: "views/app/shop/shop-all.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+
             .state('app.shop.popular', {
                 url: "/popular",
                 // cache: false,
@@ -247,7 +261,7 @@ angular.module('your_app_name', [
                 views: {
                     'menuContent': {
                         templateUrl: "views/app/profile/change-password.html",
-                        controller: 'EditProfileCtrl'
+                        controller: 'ProfileCtrl'
                     }
                 }
             })

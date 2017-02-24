@@ -20,7 +20,7 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ProfileCtrl', function ($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer) {
+    .controller('ProfileCtrl', function ($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer, $ionicPopup) {
 
         $scope.apiUrl = config.apiUrl;
 
@@ -31,6 +31,47 @@ angular.module('your_app_name.app.controllers', [])
         }, function (err) {
             alert(JSON.stringify(err));
         });
+        $scope.getNewData = function () {
+            ShopService.getCompleteOrder().then(function (res) {
+                $scope.history = res;
+                $scope.$broadcast('scroll.refreshComplete');
+            }, function (err) {
+                alert(JSON.stringify(err));
+            });
+        };
+
+        $scope.showConfirm = function (item) {
+            var confirmPopup = $ionicPopup.confirm({
+                title: 'ยกเลิกรายการ',
+                template: 'คุณต้องการยกเลิกรายการสั่งซื้อนี้ใช้หรือไม่ ?!'
+            });
+
+            confirmPopup.then(function (res) {
+                if (res) {
+                    $scope.cancelOrder(item);
+                    $scope.getNewData();
+                    console.log('You are sure');
+                } else {
+                    console.log('You are not sure');
+                }
+            });
+        };
+
+        $scope.cancelOrder = function (order) {
+            if (order.deliverystatus === 'confirmed' || order.deliverystatus === 'wait deliver') {
+                order.deliverystatus = 'cancel';
+                var historystatus = {
+                    status: 'cancel',
+                    datestatus: new Date()
+                };
+                order.historystatus.push(historystatus);
+                ShopService.cancelOrder(order).then(function (res) {
+                    $scope.history = res;
+                }, function (err) {
+                    alert(JSON.stringify(err));
+                });
+            }
+        };
 
         $scope.tabs = 'H';
 
@@ -179,18 +220,29 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ShopCtrl', function ($scope, $rootScope, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window) {
+    .controller('ShopCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup) {
+        if ($stateParams.cate) {
+            $scope.cate = $stateParams.cate;
+        }
         $rootScope.loadUser = function () {
             $rootScope.user = AuthService.getUser();
         };
         $rootScope.loadUser();
         $scope.apiUrl = config.apiUrl;
         $scope.products = [];
+        $scope.category = [];
         $scope.popular_products = [];
+        $scope.scroll = $scope.scroll ? $scope.scroll : true;
+        $scope.images = ['img/1.png', 'img/2.png'];
         $scope.readProduct = function () {
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>' });
             ShopService.getProducts().then(function (products) {
                 $scope.products = products;
+                for (var i = 1; i < $scope.products.length; i++) {
+                    if ($scope.category.indexOf($scope.products[i].category) == -1) {
+                        $scope.category.push($scope.products[i].category);
+                    }
+                }
                 $timeout(function () {
                     $ionicLoading.hide();
                 }, 500);
@@ -212,6 +264,73 @@ angular.module('your_app_name.app.controllers', [])
             // $location.path('/app/shop/home');
             // $state.go('app.shop.home')
         }
+        $scope.onSwipeRight = function () {
+            $scope.scroll = false;
+            console.log('right');
+        }
+        $scope.onSwipeLeft = function () {
+            $scope.scroll = false;
+            console.log('left');
+        }
+        $scope.onSwipeUp = function () {
+            $scope.scroll = true;
+            console.log('up');
+        }
+        $scope.onSwipeDown = function () {
+            $scope.scroll = true;
+            console.log('down');
+        }
+
+        $scope.successAlert = function () {
+            var alertPopup = $ionicPopup.alert({
+                title: 'บันทึกข้อมูล',
+                template: 'บันทึกตำแหน่งที่ตั้งของคุณเรียบร้อยแล้ว'
+            });
+            alertPopup.then(function (res) {
+
+            });
+        };
+
+        $scope.errorAlert = function () {
+            var alertPopup = $ionicPopup.alert({
+                title: 'ผิดพลาด!',
+                template: 'กรุณาเปิด GPS ในมือถือของท่าน!'
+            });
+            alertPopup.then(function (res) {
+
+            });
+        };
+
+        $scope.updateLocation = function () {
+            var posOptions = {
+                timeout: 10000,
+                enableHighAccuracy: true
+            };
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังตรวจสอบ GPS ของท่าน</p>' });
+            $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (position) {
+                    $ionicLoading.hide();
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    $rootScope.user.address = $rootScope.user.address ? $rootScope.user.address : {};
+                    $rootScope.user.address.sharelocation = $rootScope.user.address.sharelocation ? $rootScope.user.address.sharelocation : {};
+                    $rootScope.user.address.sharelocation.latitude = lat;
+                    $rootScope.user.address.sharelocation.longitude = lng;
+                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังบันทึกข้อมูล</p>' });
+                    AuthService.updateProfile($rootScope.user).then(function (res) {
+                        $ionicLoading.hide();
+                        $scope.successAlert();
+                    }, function (err) {
+                        $ionicLoading.hide();
+                        alert(JSON.stringify(err));
+                    })
+                }, function (err) {
+                    $ionicLoading.hide();
+                    $scope.errorAlert();
+                })
+        };
+
     })
 
     .controller('ShoppingCartCtrl', function ($scope, $rootScope, $state, $stateParams, ShopService, AuthService, $ionicActionSheet, _, config) {

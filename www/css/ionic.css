@@ -542,6 +542,8 @@ h2.no-l-background span:after {
 
 .height-100per {
     height: 100% !important;
+    width: 100% !important;
+    border-radius: 50%;
 }
 .bg-gray {
     background-color: #e2e2e2 !important;
@@ -564,4 +566,21 @@ h2.no-l-background span:after {
 
 .margin-top-20{
     margin-top: 20px !important;
+}
+
+.wide-as-needed {
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+.white-space-non{
+    white-space: nowrap;
+}
+
+.danger-coler-text{
+    color: red;
+}
+
+.cancel-coler-text{
+    color: #1ab394;
 }

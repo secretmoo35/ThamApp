@@ -42,12 +42,12 @@
               <a class="item item-avatar" ng-repeat="item in item.items">
                 <img ng-src="{{item.product.images}}">
                 <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
-                <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>                                       
+                <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
               </a>
               <div class="item item-divider">
-                <p>ราคารวม {{item.amount}} บาท</p>                
-                <p ng-if="item.deliveryamount > 0">ค่าจัดส่ง {{item.deliveryamount}} บาท</p>              
-                <p ng-if="item.discountpromotion > 0">ส่วนลด {{item.discountpromotion}} บาท</p>     
+                <p>ราคารวม {{item.amount}} บาท</p>
+                <p ng-if="item.deliveryamount > 0">ค่าจัดส่ง {{item.deliveryamount}} บาท</p>
+                <p ng-if="item.discountpromotion > 0">ส่วนลด {{item.discountpromotion}} บาท</p>
                 <p>ราคาสุทธิ {{item.totalamount}} บาท</p>
               </div>
             </div>
@@ -55,6 +55,12 @@
           <div class="item-expand-footer">
             <i ng-class="isItemShown(item) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i> {{ isItemShown(item)
             ? 'ปิด' : 'เปิด' }}
+          </div>
+          <div class="text-right cancel-coler-text" ng-click="showConfirm(item)" ng-if="(item.deliverystatus === 'confirmed' || item.deliverystatus === 'wait deliver') && item.deliverystatus !== 'cancel'">
+            ยกเลิกรายการ
+          </div>
+          <div class="text-right danger-coler-text" ng-if="item.deliverystatus === 'cancel'">
+            รายการถูกยกเลิกแล้ว
           </div>
         </ion-item>
       </ion-list>

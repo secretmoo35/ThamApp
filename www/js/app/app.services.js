@@ -335,6 +335,18 @@ angular.module('your_app_name.app.services', [])
             return dfd.promise;
         }
 
+        this.cancelOrder = function (order) {
+            var dfd = $q.defer();
+            var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
+            var data = [];
+            $http.put(apiUrl + 'api/orders/' + order._id, order).success(function (database) {
+                dfd.resolve(data);
+            }).error(function (err) {
+                dfd.reject(err);
+            });;
+            return dfd.promise;
+        }
+
     })
 
     .service('CheckoutService', function ($http, $q, _, config, AuthService) {
