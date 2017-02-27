@@ -18,12 +18,13 @@ angular.module('your_app_name.app.services', [])
         this.signout = function () {
 
             window.localStorage.removeItem('user');
+            window.localStorage.removeItem('credential');
             return true;
 
         };
 
         this.login = function (user) {
-
+            window.localStorage.credential = JSON.stringify(user);
             var dfd = $q.defer();
 
             $http.post(apiUrl + 'api/auth/signin', user).success(function (res) {
@@ -349,7 +350,7 @@ angular.module('your_app_name.app.services', [])
 
     })
 
-    .service('CheckoutService', function ($http, $q, _, config, AuthService) {
+    .service('CheckoutService', function ($http, $q, _, config, AuthService, $rootScope) {
 
         var apiUrl = config.apiUrl;
 
@@ -367,6 +368,18 @@ angular.module('your_app_name.app.services', [])
 
             return dfd.promise;
 
+        };
+
+        this.getPostcode = function (callback) {
+            var dfd = $q.defer();
+
+            $http.get('postcode.json').success(function (postcodes) {
+                //alert(JSON.stringify(postcodes));
+
+                dfd.resolve(postcodes);
+            });
+
+            return dfd.promise;
         };
 
     });

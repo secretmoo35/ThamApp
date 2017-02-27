@@ -1,10 +1,9 @@
 <span class="popup-product-title">{{data.product.title}}</span>
-<span class="popup-product-price">฿{{data.product.price}}</span>
+<span class="popup-product-price">ราคาต่อหน่วย : {{data.product.price}} บาท</span>
 <div class="separator-line"></div>
+<span class="popup-product-price">ระบุจำนวนสั่งซื้อ</span>
 <div class="row product-options">
-    <div class="col col-100 select-option-wrapper">
-        <select ng-model="productGotoCart.qty">
-            <option ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]" ng-selected="productGotoCart.qty == i"value="{{i}}">{{i}}</option>
-        </select>
+    <div class="col col-100 border-1">
+        <input type="number" ng-model="productGotoCart.qty"></input>
     </div>
 </div>

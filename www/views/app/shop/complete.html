@@ -14,7 +14,8 @@
           หากท่านพบปัญหาใด ๆ ในระหว่างการสั่งซื้อสินค้า หรือหลังจากที่ท่านได้รับสินค้าแล้ว
         </p>
         <p>
-          ท่านสามารถติดต่อเราได้ตามช่องทางดังต่อไปนี้ สำหรับข้อมูลเพิ่มเติม กรุณาติดต่อแผนกบริการลูกค้า Line: @thamturakit หรือ Facebook: facebook.com/thamturakit ขอขอบคุณที่ท่านให้ความสนใจและเลือกใช้บริการจากเรา
+          ท่านสามารถติดต่อเราได้ตามช่องทางดังต่อไปนี้ สำหรับข้อมูลเพิ่มเติม กรุณาติดต่อแผนกบริการลูกค้า Line: @thamturakit หรือ Facebook:
+          facebook.com/thamturakit ขอขอบคุณที่ท่านให้ความสนใจและเลือกใช้บริการจากเรา
         </p>
         <p><b>ธรรมธุรกิจ : Thamturakit</b></p>
 
@@ -40,6 +41,20 @@
           <h2>{{item.product.name}} (฿{{item.product.price}})</h2>
           <p>{{item.qty}} ชิ้น(฿{{item.amount}})</p>
         </a>
+        <div class="row item item-divider text-right">
+          <div class="col col-50">
+            <div class="row">ราคารวม</div>
+            <div class="row">ค่าจัดส่ง</div>
+            <div class="row">ส่วนลด</div>
+            <div class="row">ราคาสุทธิ</div>
+          </div>
+          <div class="col col-50 totals-numbers">
+            <div class="row">฿{{completeOrder.amount}}</div>
+            <div class="row">฿{{completeOrder.deliveryamount}}</div>
+            <div class="row">฿{{completeOrder.discountpromotion}}</div>
+            <div class="row">฿{{completeOrder.totalamount}}</div>
+          </div>
+        </div>
       </div>
     </div>
   </ion-content>

@@ -228,6 +228,7 @@ angular.module('your_app_name.app.controllers', [])
             $rootScope.user = AuthService.getUser();
         };
         $rootScope.loadUser();
+        // alert('user: ' + JSON.stringify($rootScope.user));
         $scope.apiUrl = config.apiUrl;
         $scope.products = [];
         $scope.category = [];
@@ -406,6 +407,12 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.apiUrl = config.apiUrl;
         $scope.status = true;
+        // $scope.postcode = CheckoutService.getPostcode();
+        CheckoutService.getPostcode().then(function (success) {
+            $scope.postcode = success.postcode;
+        }, function (err) {
+            alert('unsuccess');
+        });
         $scope.user = AuthService.getUser();
         if ($stateParams.order) {
             $scope.completeOrder = JSON.parse($stateParams.order);
@@ -482,7 +489,7 @@ angular.module('your_app_name.app.controllers', [])
                 })
             } else {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-                // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
                 $scope.authentication.address.tel = $scope.authentication.username;
                 $scope.authentication.password = 'Usr#Pass1234';
                 AuthService.signup($scope.authentication).then(function (res) {

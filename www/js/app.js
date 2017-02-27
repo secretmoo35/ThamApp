@@ -26,13 +26,13 @@ angular.module('your_app_name', [
     })
 
     .constant('config', {
-        apiUrl: 'https://thamapp.herokuapp.com/'
+        apiUrl: 'https://thamapptest.herokuapp.com/'
         //https://thamapp.herokuapp.com/      for production
         //https://thamapptest.herokuapp.com/  for heroku test
         //http://localhost:3000/              for local
     })
 
-    .run(function ($ionicPlatform, $rootScope, $ionicHistory, $timeout, $ionicConfig) {
+    .run(function ($ionicPlatform, $rootScope, $ionicHistory, $timeout, $ionicConfig, AuthService) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -41,6 +41,10 @@ angular.module('your_app_name', [
             }
             if (window.StatusBar) {
                 StatusBar.styleDefault();
+            }
+            if (window.localStorage.credential) {
+                var user = JSON.parse(window.localStorage.credential);
+                AuthService.login(user);
             }
         });
 
@@ -67,6 +71,100 @@ angular.module('your_app_name', [
             }
         });
     })
+
+    .directive('typeahead', ['$compile', '$timeout', function ($compile, $timeout) {
+        return {
+            restrict: 'A',
+            transclude: true,
+            scope: {
+                ngModel: '=',
+                typeahead: '=',
+                typeaheadCallback: '='
+            },
+            link: function (scope, elem, attrs) {
+                var template = '<div class="dropdown"><ul class="dropdown-menu" ng-if="ngModel.length === 5" style="display:block; float: left; height: auto; max-height: 200px;	width: auto; overflow-y: scroll;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (typeahead | filter:{postcode:ngModel}:true) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.subdistrict}} {{item.district}} {{item.province}} {{item.postcode}}</a></li></ul></div>';
+                var filterCustom = [];
+                elem.bind('blur', function () {
+                    $timeout(function () {
+                        scope.selected = true;
+                    }, 100);
+                });
+
+                elem.bind('keydown', function ($event) {
+                    if ($event.keyCode === 38 && scope.active > 0) { // arrow up
+                        scope.active--;
+                        scope.$digest();
+                    } else if (scope.filitered && ($event.keyCode === 40 && scope.active < scope.filitered.length - 1)) { // arrow down
+                        scope.active++;
+                        scope.$digest();
+                    } else if ($event.keyCode === 13) { // enter
+                        filterCustom = [];
+
+                        if (scope.active === 0) {
+                            scope.typeahead.forEach(function (e) {
+                                if (e.postcode === scope.ngModel) {
+                                    filterCustom.push(e);
+                                }
+                            });
+                            scope.filitered = filterCustom;
+                        }
+                        scope.$apply(function () {
+                            scope.click(scope.filitered[scope.active]);
+                        });
+                    }
+                });
+
+                scope.click = function (item) {
+                    alert('item');
+                    scope.ngModel = item.postcode;
+                    scope.selected = item;
+                    if (scope.typeaheadCallback) {
+                        scope.typeaheadCallback(item);
+                    }
+                    elem[0].blur();
+                };
+
+                scope.mouseenter = function ($index) {
+                    scope.active = $index;
+                };
+
+                scope.$watch('ngModel', function (input) {
+                    if (scope.selected && scope.selected.postcode === input) {
+                        return;
+                    }
+
+                    scope.active = 0;
+                    scope.selected = false;
+
+                    // if we have an exact match and there is only one item in the list, automatically select it
+                    if (scope.filitered) {
+                        if (input && scope.filitered.length === 1 && scope.filitered[0].name === input) {
+                            scope.click(scope.filitered[0]);
+                        }
+                    }
+                    if (scope.ngModel) {
+                        if (scope.ngModel.length === 5) {
+                            filterCustom = [];
+
+                            if (scope.active === 0) {
+                                scope.typeahead.forEach(function (e) {
+                                    if (e.postcode === scope.ngModel) {
+                                        filterCustom.push(e);
+                                    }
+                                });
+                                scope.filitered = filterCustom;
+                            }
+                            if (scope.typeaheadCallback) {
+                                scope.typeaheadCallback(scope.filitered[0]);
+                            }
+                        }
+                    }
+                });
+
+                elem.after($compile(template)(scope));
+            }
+        };
+    }])
 
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider

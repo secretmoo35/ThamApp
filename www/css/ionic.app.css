@@ -14768,3 +14768,9 @@ ion-nav-bar.checkout-color * .buttons button::before {
 .checkout-view .submit-order-btn {
     font-weight: 500;
 }
+
+.border-1 {
+    border: 1px;
+    border-style: solid;
+    border-color: gray;
+}
