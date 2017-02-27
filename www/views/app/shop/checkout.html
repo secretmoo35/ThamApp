@@ -1,3 +1,4 @@
+<style>.popover { height:300px; width: 300px; }</style>
 <ion-view view-title="ข้อมูลการส่งสินค้า" class="checkout-view" ng-init="calculate()">
   <ion-content>
     <!--address-->
@@ -24,7 +25,7 @@
         </label>
         <label class="item item-input">
           <span class="input-label">รหัสไปรษณีย์*</span>
-          <input type="text" ng-model="order.shipping.postcode">
+          <input type="text" ng-model="order.shipping.postcode" ionic-autocomplete="{items: postcodes, onSelect: onCheckOutPostcodeSelected, onDataInvalid: onCheckOutPostcodeInvalid}" />
         </label>
         <label class="item item-input">
           <span class="input-label">แขวง/ตำบล*</span>

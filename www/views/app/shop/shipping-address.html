@@ -1,3 +1,4 @@
+<style>.popover { height:300px; width: 350px; }</style>
 <ion-view view-title="เข้าสู่ระบบเพื่อชำระสินค้า" class="shipping-address-view">
     <ion-content scroll="true">
         <div class="list" ng-if="step === '1'">
@@ -46,7 +47,8 @@
             </label>
             <label class="item item-input item-floating-label">
                 <span class="input-label">รหัสไปรษณีย์</span>
-                <input type="text" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode">
+                <!--<input type="text" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode">-->
+                <input type="text" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode" ionic-autocomplete="{items: postcodes, onSelect: onPostcodeSelected, onDataInvalid: onPostcodeInvalid}" />
             </label>
             <!--<label class="item item-input item-floating-label">
                 <span class="input-label">รหัสไปรษณีย์</span>

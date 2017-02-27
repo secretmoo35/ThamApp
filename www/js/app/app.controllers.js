@@ -409,11 +409,35 @@ angular.module('your_app_name.app.controllers', [])
         $scope.status = true;
         // $scope.postcode = CheckoutService.getPostcode();
         CheckoutService.getPostcode().then(function (success) {
-            $scope.postcode = success.postcode;
+            $scope.postcodes = success.postcode;
         }, function (err) {
             alert('unsuccess');
         });
         $scope.user = AuthService.getUser();
+        $scope.onPostcodeSelected = function (item) {
+            $scope.authentication.address.subdistrict = item.subdistrict;
+            $scope.authentication.address.district = item.district;
+            $scope.authentication.address.province = item.province;
+        };
+
+        $scope.onCheckOutPostcodeSelected = function (item) {
+            $scope.order.shipping.subdistrict = item.subdistrict;
+            $scope.order.shipping.district = item.district;
+            $scope.order.shipping.province = item.province;
+        };
+
+        $scope.onCheckOutPostcodeInvalid = function () {
+            $scope.order.shipping.subdistrict = '';
+            $scope.order.shipping.district = '';
+            $scope.order.shipping.province = '';
+        };
+
+        $scope.onPostcodeInvalid = function () {
+            $scope.authentication.address.subdistrict = '';
+            $scope.authentication.address.district = '';
+            $scope.authentication.address.province = '';
+        };
+
         if ($stateParams.order) {
             $scope.completeOrder = JSON.parse($stateParams.order);
             // alert(JSON.stringify($scope.completeOrder));
