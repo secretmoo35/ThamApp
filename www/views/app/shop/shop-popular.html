@@ -8,7 +8,8 @@
           <div ng-class="isItemShown(item) ? 'item-expand active' : 'item-expand inactive'">
             <h2>หมายเลขสั่งซื้อ {{item.docno}}</h2>
             <p>{{item.docdate | date:'dd MMMM yyyy'}}</p>
-            <p ng-if="item.deliverystatus === 'confirmed' || item.deliverystatus === 'wait deliver'">คุณจะได้รับสินค้าภายใน 7 วัน นับจากวันที่สั่งซื้อ</p>
+            <p ng-if="item.deliverystatus === 'confirmed' || item.deliverystatus === 'wait deliver' || item.deliverystatus === 'reject'">คุณจะได้รับสินค้าภายใน 7 วัน นับจากวันที่สั่งซื้อ</p>
+            <p ng-if="item.deliverystatus === 'accept'">คุณจะได้รับสินค้าภายใน 7 วัน นับจากวันที่สั่งซื้อ</p>
             <p ng-if="item.deliverystatus === 'cancel'">รายการนี้ถูกยกเลิกเรียบร้อยแล้ว</p>
             <p ng-if="item.deliverystatus === 'complete'">ได้รับสินค้าเรียบร้อยแล้ว</p>
             <p><b>{{item.shipping.firstname}} {{item.shipping.lastname}}</b></p>
@@ -58,7 +59,7 @@
             <i ng-class="isItemShown(item) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i> {{ isItemShown(item)
             ? 'ปิด' : 'เปิด' }}
           </div>
-          <div class="text-right cancel-coler-text" ng-click="showConfirm(item)" ng-if="(item.deliverystatus === 'confirmed' || item.deliverystatus === 'wait deliver') && item.deliverystatus !== 'cancel'">
+          <div class="text-right cancel-coler-text" ng-click="showConfirm(item)" ng-if="(item.deliverystatus === 'confirmed' || item.deliverystatus === 'wait deliver' || item.deliverystatus === 'reject') && item.deliverystatus !== 'cancel'">
             ยกเลิกรายการ
           </div>
           <div class="text-right danger-coler-text" ng-if="item.deliverystatus === 'cancel'">
@@ -66,6 +67,9 @@
           </div>
           <div class="text-right cancel-coler-text" ng-if="item.deliverystatus === 'complete'">
             ได้รับสินค้าเรียบร้อยแล้ว
+          </div>
+          <div class="text-right cancel-coler-text" ng-if="item.deliverystatus === 'accept'">
+            กำลังดำเนินการจัดส่ง
           </div>
         </ion-item>
       </ion-list>
