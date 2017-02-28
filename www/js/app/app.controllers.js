@@ -167,6 +167,13 @@ angular.module('your_app_name.app.controllers', [])
             }, 2000);
         }
 
+        $scope.$watch('productGotoCart.qty', function (newValue, oldValue) {
+            if (newValue !== undefined) {
+                $scope.productGotoCart.qty = parseInt(newValue);
+            } else {
+                $scope.productGotoCart.qty = parseInt(oldValue);
+            }
+        });
         // show add to cart popup on button click
         $scope.showAddToCartPopup = function (product, now) {
             $scope.data = {};
@@ -379,7 +386,6 @@ angular.module('your_app_name.app.controllers', [])
                 }
             });
         };
-
         $scope.calculate = function (product) {
             ShopService.addProductToCart(product, true);
             $scope.products = ShopService.getCartProducts();
