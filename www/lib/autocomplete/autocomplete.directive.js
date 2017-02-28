@@ -20,7 +20,6 @@ angular.module('autocomplete.directive', [])
                 var popoverShown = false;
                 var popover = null;
                 $scope.items = [];
-
                 //Add autocorrect="off" so the 'change' event is detected when user tap the keyboard
                 $element.attr('autocorrect', 'off');
 
@@ -29,6 +28,7 @@ angular.module('autocomplete.directive', [])
                     scope: $scope
                 });
                 $element.on('keyup', function (e) {
+                    $scope.inputSearch = $scope.inputSearch ? $scope.inputSearch.toString() : '';
                     if (!popoverShown && $scope.inputSearch && $scope.inputSearch.length === 5) {
                         $scope.items = $scope.params.items;
                         popover.show(e);

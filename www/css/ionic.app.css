@@ -14774,3 +14774,7 @@ ion-nav-bar.checkout-color * .buttons button::before {
     border-style: solid;
     border-color: gray;
 }
+
+.font-set {
+    font-weight: bold;
+}

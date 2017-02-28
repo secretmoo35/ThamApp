@@ -25,7 +25,7 @@
         </label>
         <label class="item item-input">
           <span class="input-label">รหัสไปรษณีย์*</span>
-          <input type="text" ng-model="order.shipping.postcode" ionic-autocomplete="{items: postcodes, onSelect: onCheckOutPostcodeSelected, onDataInvalid: onCheckOutPostcodeInvalid}" />
+          <input type="number" ng-model="order.shipping.postcode" ionic-autocomplete="{items: postcodes, onSelect: onCheckOutPostcodeSelected, onDataInvalid: onCheckOutPostcodeInvalid}" />
         </label>
         <label class="item item-input">
           <span class="input-label">แขวง/ตำบล*</span>
@@ -52,7 +52,7 @@
         <span class="title-copy">ประเภทการจัดส่ง</span>
       </div>
       <ion-list>
-        <ion-radio ng-model="order.delivery.deliveryid" ng-value="'0'">ส่งโดยคนส่งข้าว</ion-radio>
+        <ion-radio ng-model="order.delivery.deliveryid" ng-value="'0'"><p class="font-set">ส่งโดยคนส่งข้าว (ชำระเงินปลายทาง)</p></ion-radio>
         <!--<ion-radio ng-model="order.delivery.deliveryid" ng-value="'1'">ส่งทางไปรษณีย์</ion-radio>-->
       </ion-list>
       <div class="item item-divider shop-section-title">

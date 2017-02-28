@@ -513,6 +513,7 @@ angular.module('your_app_name.app.controllers', [])
                 })
             } else {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
                 $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
                 $scope.authentication.address.tel = $scope.authentication.username;
                 $scope.authentication.password = 'Usr#Pass1234';
@@ -558,6 +559,7 @@ angular.module('your_app_name.app.controllers', [])
             $scope.order.docdate = new Date();
             $scope.order.user = AuthService.getUser();
             $scope.order.platform = 'Mobile';
+            $scope.order.shipping.postcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
             $scope.order.historystatus = [{
                 status: 'confirmed',
                 datestatus: new Date()
