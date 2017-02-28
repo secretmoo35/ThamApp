@@ -1,0 +1,51 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-geolocation": {
+            "GEOLOCATION_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-image-picker": {
+            "PHOTO_LIBRARY_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        }
+    }
+}
