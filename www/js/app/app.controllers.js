@@ -107,8 +107,8 @@ angular.module('your_app_name.app.controllers', [])
         $scope.changeImageProfile = function () {
             var optionsImg = {
                 maximumImagesCount: 1,
-                width: 128,
-                height: 128,
+                width: 600,
+                height: 600,
                 quality: 80
             };
 
