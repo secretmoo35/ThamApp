@@ -1,0 +1,25 @@
+<ion-view class="cart-view" view-title="ตำแหน่งที่ตั้งในการสั่งซื้อ" ng-init="getNewLocation()">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear" ui-sref="app.shop.sale">
+            <i class="ion-ios-arrow-back color-gray font-30"></i>
+        </button>
+    </ion-nav-buttons>
+    <ion-content overflow-scroll="false">
+        <div id="map" data-tap-disabled="true" ng-show="loadLocation === 'success'"></div>
+        <div class="empty-cart" ng-show="loadLocation === 'error'" ng-click="getNewLocation()">
+            <i class="icon ion-ios-loop"></i>
+            <h3 class="no-products">ตรวจสอบ GPS และลองใหม่อีกครั้ง</h3>
+            <h2 class="no-locations">คลิกที่นี่!!</h2>            
+        </div>
+        <div class="form-fields-outer list list-inset {{loadLocation === 'error' ? 'no-bg-button' : loadLocation === 'success' ? '' : 'no-bg-button'}}">
+            <div class="row slide-content">
+                <div class="row">
+                    <!--<div class="col col-50">
+                        <button class="sign-up button button-energized button-block" ng-click="getNewLocation()">ลองอีกครั้ง</button>
+                    </div>-->
+                    <button class="sign-up button button-energized button-block" ng-click="updateLocation()" ng-disabled="loadLocation === 'error'">ยืนยันตำแหน่งที่ตั้ง</button>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

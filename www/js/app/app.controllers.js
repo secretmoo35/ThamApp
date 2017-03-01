@@ -309,6 +309,49 @@ angular.module('your_app_name.app.controllers', [])
             });
         };
 
+        // var myLatlng = new google.maps.LatLng(13.757884, 100.485148);
+        // var mapOptions = {
+        //     center: myLatlng,
+        //     zoom: 16,
+        //     mapTypeId: google.maps.MapTypeId.ROADMAP
+        // };
+        // var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+
+        $scope.getNewLocation = function () {
+            // $scope.loadLocation = '';
+            var posOptions = {
+                timeout: 10000,
+                enableHighAccuracy: true
+            };
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังตรวจสอบ GPS ของท่าน</p>' });
+            $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (position) {
+                    $ionicLoading.hide();
+                    $scope.loadLocation = 'success';
+                    lat = position.coords.latitude
+                    long = position.coords.longitude
+                    var myLatlng = new google.maps.LatLng(lat, long);
+                    var mapOptions = {
+                        center: myLatlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: myLatlng,
+                    })
+
+                    $scope.map = map;
+                }, function (err) {
+                    $ionicLoading.hide();
+                    $scope.loadLocation = 'error';
+                });
+        };
+
+
         $scope.updateLocation = function () {
             var posOptions = {
                 timeout: 10000,
@@ -570,340 +613,662 @@ angular.module('your_app_name.app.controllers', [])
                 status: 'confirmed',
                 datestatus: new Date()
             }];
-            if (status) {
+            if (status === true) {
+                $scope.order.shipping.sharelocation = {};
                 $scope.order.shipping = $scope.order.user.address;
                 $scope.order.shipping.firstname = $scope.order.user.firstName;
                 $scope.order.shipping.lastname = $scope.order.user.lastName;
+                if ($scope.order.user && $scope.order.user.address.sharelocation) {
+                    $scope.order.shipping.sharelocation.latitude = $scope.order.user.address.sharelocation.latitude;
+                    $scope.order.shipping.sharelocation.longitude = $scope.order.user.address.sharelocation.longitude;
+                    CheckoutService.saveOrder($scope.order).then(function (res) {
+                        // alert(JSON.stringify(res));                                
+                        $ionicLoading.hide();
+                        $state.go('app.complete', {
+                            order: JSON.stringify(res)
+                        });
+                    }, function (err) {
+                        alert(err.data.message);
+                    });
+                } else {
+                    var posOptions = {
+                        timeout: 10000,
+                        enableHighAccuracy: true
+                    };
+
+                    $cordovaGeolocation
+                        .getCurrentPosition(posOptions)
+                        .then(function (position) {
+
+
+                            var lat = position.coords.latitude;
+                            var lng = position.coords.longitude;
+                            $scope.order.shipping.sharelocation = {};
+                            // $scope.order.shipping.sharelocation.latitude = lat;
+                            // $scope.order.shipping.sharelocation.longitude = lng;
+                            // เส้นทางตามถนน
+                            var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+                            // alert(fullAddress);
+                            $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+                                if (response.status.toUpperCase() === 'OK') {
+                                    $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                    $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                    // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                    // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                    //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                    //     if (distance.rows[0].elements[0].distance.value) {
+                                    CheckoutService.saveOrder($scope.order).then(function (res) {
+                                        // alert(JSON.stringify(res));                                
+                                        $ionicLoading.hide();
+                                        $state.go('app.complete', {
+                                            order: JSON.stringify(res)
+                                        });
+                                    }, function (err) {
+                                        alert(err.data.message);
+                                    });
+                                    //     } else {
+                                    //         $ionicLoading.hide();
+                                    //         // alert("5");
+                                    //         var confirmPopup = $ionicPopup.confirm({
+                                    //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                                    //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                                    //         });
+                                    //         confirmPopup.then(function (res) {
+                                    //             if (res) {
+                                    //                 $scope.order.shipping.sharelocation.latitude = lat;
+                                    //                 $scope.order.shipping.sharelocation.longitude = lng;
+                                    //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                                    //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+
+
+                                    //                     // alert(JSON.stringify(results));
+
+                                    //                     $scope.data = {}
+                                    //                     // An elaborate, custom popup
+                                    //                     var myPopup1 = $ionicPopup.show({
+                                    //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                                    //                         title: 'ยืนยันที่อยู่ใหม่',
+                                    //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                                    //                         scope: $scope,
+                                    //                         buttons: [
+                                    //                             { text: 'Cancel' },
+                                    //                             {
+                                    //                                 text: '<b>Save</b>',
+                                    //                                 type: 'button-positive',
+                                    //                                 onTap: function (e) {
+                                    //                                     if (!$scope.data.address) {
+                                    //                                         // alert(1);
+                                    //                                         //don't allow the user to close unless he enters address password
+                                    //                                         e.preventDefault();
+
+                                    //                                     } else {
+                                    //                                         // alert(JSON.stringify(results.results[0]));
+                                    //                                         //  alert(JSON.stringify(results[0]));
+                                    //                                         $scope.order.shipping.address = $scope.data.address;
+                                    //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                                    //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                                    //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                                    //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                                    //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    //                                             $ionicLoading.hide();
+                                    //                                             console.log(res);
+                                    //                                             $state.go('app.complete', {
+                                    //                                                 order: JSON.stringify(res)
+                                    //                                             });
+                                    //                                         }, function (err) {
+                                    //                                             alert(err.data.message);
+                                    //                                         });
+                                    //                                         return $scope.data.address;
+                                    //                                     }
+                                    //                                 }
+                                    //                             },
+                                    //                         ]
+                                    //                     });
+                                    //                     // alert(JSON.stringify(results));
+                                    //                     var newAdress = results;
+
+                                    //                     myPopup1.then(function (resp) {
+                                    //                         // alert(3);
+
+                                    //                         // postcode: String,
+                                    //                         //     subdistrict: String,
+                                    //                         //         province: String,
+                                    //                         //             district: String,
+                                    //                     });
+
+                                    //                 }).error(function (err) {
+
+                                    //                 });
+                                    //             } else {
+                                    //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                    //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                    //                 // alert();
+                                    //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                                    //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    //                     $ionicLoading.hide();
+                                    //                     console.log(res);
+                                    //                     $state.go('app.complete', {
+                                    //                         order: JSON.stringify(res)
+                                    //                     });
+                                    //                 }, function (err) {
+                                    //                     alert(err.data.message);
+                                    //                 });
+                                    //             }
+                                    //         });
+                                    //     };
+                                    // }).error(function (err) {
+                                    //     console.log(err);
+                                    // });
+                                } else {
+
+                                    $scope.order.shipping.sharelocation.latitude = lat;
+                                    $scope.order.shipping.sharelocation.longitude = lng;
+                                    // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                    // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                    //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                    //     if (distance.rows[0].elements[0].distance.value) {
+                                    CheckoutService.saveOrder($scope.order).then(function (res) {
+                                        // alert(JSON.stringify(res));                                
+                                        $ionicLoading.hide();
+                                        console.log(res);
+                                        $state.go('app.complete', {
+                                            order: JSON.stringify(res)
+                                        });
+                                    }, function (err) {
+                                        alert(err.data.message);
+                                    });
+                                }
+                                function successCallback(res) {
+                                    vm.cart.clear();
+                                    $state.go('complete', {
+                                        orderId: res._id
+                                    });
+                                }
+                                function errorCallback(res) {
+                                    vm.error = res.data.message;
+                                }
+                            }).error(function (err) {
+                                console.log(err);
+                            });
+
+
+
+
+                        }, function (err) {
+
+                            $scope.order.shipping.sharelocation = {};
+                            // $scope.order.shipping.sharelocation.latitude = lat;
+                            // $scope.order.shipping.sharelocation.longitude = lng;
+                            // เส้นทางตามถนน
+                            var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+                            // alert(fullAddress);
+                            $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+                                if (response.status.toUpperCase() === 'OK') {
+                                    $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                    $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                    // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                    // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                    //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                    //     if (distance.rows[0].elements[0].distance.value) {
+                                    CheckoutService.saveOrder($scope.order).then(function (res) {
+                                        // alert(JSON.stringify(res));
+                                        $ionicLoading.hide();
+                                        console.log(res);
+                                        $state.go('app.complete', {
+                                            order: JSON.stringify(res)
+                                        });
+                                    }, function (err) {
+                                        alert(err.data.message);
+                                    });
+                                    //     } else {
+                                    //         $ionicLoading.hide();
+                                    //         // alert("5");
+                                    //         var confirmPopup = $ionicPopup.confirm({
+                                    //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                                    //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                                    //         });
+                                    //         confirmPopup.then(function (res) {
+                                    //             if (res) {
+                                    //                 $scope.order.shipping.sharelocation.latitude = lat;
+                                    //                 $scope.order.shipping.sharelocation.longitude = lng;
+                                    //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                                    //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+
+
+                                    //                     // alert(JSON.stringify(results));
+
+                                    //                     $scope.data = {}
+                                    //                     // An elaborate, custom popup
+                                    //                     var myPopup1 = $ionicPopup.show({
+                                    //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                                    //                         title: 'ยืนยันที่อยู่ใหม่',
+                                    //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                                    //                         scope: $scope,
+                                    //                         buttons: [
+                                    //                             { text: 'Cancel' },
+                                    //                             {
+                                    //                                 text: '<b>Save</b>',
+                                    //                                 type: 'button-positive',
+                                    //                                 onTap: function (e) {
+                                    //                                     if (!$scope.data.address) {
+                                    //                                         // alert(1);
+                                    //                                         //don't allow the user to close unless he enters address password
+                                    //                                         e.preventDefault();
+
+                                    //                                     } else {
+                                    //                                         // alert(JSON.stringify(results.results[0]));
+                                    //                                         //  alert(JSON.stringify(results[0]));
+                                    //                                         $scope.order.shipping.address = $scope.data.address;
+                                    //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                                    //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                                    //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                                    //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                                    //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    //                                             $ionicLoading.hide();
+                                    //                                             console.log(res);
+                                    //                                             $state.go('app.complete', {
+                                    //                                                 order: JSON.stringify(res)
+                                    //                                             });
+                                    //                                         }, function (err) {
+                                    //                                             alert(err.data.message);
+                                    //                                         });
+                                    //                                         return $scope.data.address;
+                                    //                                     }
+                                    //                                 }
+                                    //                             },
+                                    //                         ]
+                                    //                     });
+                                    //                     // alert(JSON.stringify(results));
+                                    //                     var newAdress = results;
+
+                                    //                     myPopup1.then(function (resp) {
+                                    //                         // alert(3);
+
+                                    //                         // postcode: String,
+                                    //                         //     subdistrict: String,
+                                    //                         //         province: String,
+                                    //                         //             district: String,
+                                    //                     });
+
+                                    //                 }).error(function (err) {
+
+                                    //                 });
+                                    //             } else {
+                                    //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                    //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                    //                 // alert();
+                                    //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                                    //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    //                     $ionicLoading.hide();
+                                    //                     console.log(res);
+                                    //                     $state.go('app.complete', {
+                                    //                         order: JSON.stringify(res)
+                                    //                     });
+                                    //                 }, function (err) {
+                                    //                     alert(err.data.message);
+                                    //                 });
+                                    //             }
+                                    //         });
+                                    //     };
+                                    // }).error(function (err) {
+                                    //     console.log(err);
+                                    // });
+                                } else {
+
+                                    $scope.order.shipping.sharelocation.latitude = '';
+                                    $scope.order.shipping.sharelocation.longitude = '';
+                                    // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                    // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                    //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                    //     if (distance.rows[0].elements[0].distance.value) {
+                                    CheckoutService.saveOrder($scope.order).then(function (res) {
+                                        // alert(JSON.stringify(res));                                
+                                        $ionicLoading.hide();
+                                        console.log(res);
+                                        $state.go('app.complete', {
+                                            order: JSON.stringify(res)
+                                        });
+                                    }, function (err) {
+                                        alert(err.data.message);
+                                    });
+                                }
+                            });
+
+                            $ionicLoading.hide();
+
+                            if (error.code == PositionError.PERMISSION_DENIED) {
+                                alert("Permission denied. check setting");
+                            } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
+                                alert("Cannot get position. May be problem with network or can't get a satellite fix.");
+                            } else if (error.code == PositionError.TIMEOUT) {
+                                alert("Geolocation is timed out.");
+                            } else {
+                                alert(error.message);
+                            }
+                        });
+                }
+            } else {
+                var posOptions = {
+                    timeout: 10000,
+                    enableHighAccuracy: true
+                };
+
+                $cordovaGeolocation
+                    .getCurrentPosition(posOptions)
+                    .then(function (position) {
+
+
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+
+
+                        // alert(lat + ' ' + lng);
+
+
+                        $scope.order.shipping.sharelocation = {};
+                        // $scope.order.shipping.sharelocation.latitude = lat;
+                        // $scope.order.shipping.sharelocation.longitude = lng;
+                        // เส้นทางตามถนน
+                        var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+                        // alert(fullAddress);
+                        $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+                            if (response.status.toUpperCase() === 'OK') {
+                                $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                //     if (distance.rows[0].elements[0].distance.value) {
+                                CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    // alert(JSON.stringify(res));                                
+                                    $ionicLoading.hide();
+                                    $state.go('app.complete', {
+                                        order: JSON.stringify(res)
+                                    });
+                                }, function (err) {
+                                    alert(err.data.message);
+                                });
+                                //     } else {
+                                //         $ionicLoading.hide();
+                                //         // alert("5");
+                                //         var confirmPopup = $ionicPopup.confirm({
+                                //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                                //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                                //         });
+                                //         confirmPopup.then(function (res) {
+                                //             if (res) {
+                                //                 $scope.order.shipping.sharelocation.latitude = lat;
+                                //                 $scope.order.shipping.sharelocation.longitude = lng;
+                                //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                                //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+
+
+                                //                     // alert(JSON.stringify(results));
+
+                                //                     $scope.data = {}
+                                //                     // An elaborate, custom popup
+                                //                     var myPopup1 = $ionicPopup.show({
+                                //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                                //                         title: 'ยืนยันที่อยู่ใหม่',
+                                //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                                //                         scope: $scope,
+                                //                         buttons: [
+                                //                             { text: 'Cancel' },
+                                //                             {
+                                //                                 text: '<b>Save</b>',
+                                //                                 type: 'button-positive',
+                                //                                 onTap: function (e) {
+                                //                                     if (!$scope.data.address) {
+                                //                                         // alert(1);
+                                //                                         //don't allow the user to close unless he enters address password
+                                //                                         e.preventDefault();
+
+                                //                                     } else {
+                                //                                         // alert(JSON.stringify(results.results[0]));
+                                //                                         //  alert(JSON.stringify(results[0]));
+                                //                                         $scope.order.shipping.address = $scope.data.address;
+                                //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                                //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                                //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                                //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                                //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                                //                                             $ionicLoading.hide();
+                                //                                             console.log(res);
+                                //                                             $state.go('app.complete', {
+                                //                                                 order: JSON.stringify(res)
+                                //                                             });
+                                //                                         }, function (err) {
+                                //                                             alert(err.data.message);
+                                //                                         });
+                                //                                         return $scope.data.address;
+                                //                                     }
+                                //                                 }
+                                //                             },
+                                //                         ]
+                                //                     });
+                                //                     // alert(JSON.stringify(results));
+                                //                     var newAdress = results;
+
+                                //                     myPopup1.then(function (resp) {
+                                //                         // alert(3);
+
+                                //                         // postcode: String,
+                                //                         //     subdistrict: String,
+                                //                         //         province: String,
+                                //                         //             district: String,
+                                //                     });
+
+                                //                 }).error(function (err) {
+
+                                //                 });
+                                //             } else {
+                                //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                //                 // alert();
+                                //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                                //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                                //                     $ionicLoading.hide();
+                                //                     console.log(res);
+                                //                     $state.go('app.complete', {
+                                //                         order: JSON.stringify(res)
+                                //                     });
+                                //                 }, function (err) {
+                                //                     alert(err.data.message);
+                                //                 });
+                                //             }
+                                //         });
+                                //     };
+                                // }).error(function (err) {
+                                //     console.log(err);
+                                // });
+                            } else {
+
+                                $scope.order.shipping.sharelocation.latitude = lat;
+                                $scope.order.shipping.sharelocation.longitude = lng;
+                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                //     if (distance.rows[0].elements[0].distance.value) {
+                                CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    // alert(JSON.stringify(res));                                
+                                    $ionicLoading.hide();
+                                    console.log(res);
+                                    $state.go('app.complete', {
+                                        order: JSON.stringify(res)
+                                    });
+                                }, function (err) {
+                                    alert(err.data.message);
+                                });
+                            }
+                            function successCallback(res) {
+                                vm.cart.clear();
+                                $state.go('complete', {
+                                    orderId: res._id
+                                });
+                            }
+                            function errorCallback(res) {
+                                vm.error = res.data.message;
+                            }
+                        }).error(function (err) {
+                            console.log(err);
+                        });
+
+
+
+
+                    }, function (err) {
+
+                        $scope.order.shipping.sharelocation = {};
+                        // $scope.order.shipping.sharelocation.latitude = lat;
+                        // $scope.order.shipping.sharelocation.longitude = lng;
+                        // เส้นทางตามถนน
+                        var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+                        // alert(fullAddress);
+                        $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+                            if (response.status.toUpperCase() === 'OK') {
+                                $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                //     if (distance.rows[0].elements[0].distance.value) {
+                                CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    // alert(JSON.stringify(res));
+                                    $ionicLoading.hide();
+                                    console.log(res);
+                                    $state.go('app.complete', {
+                                        order: JSON.stringify(res)
+                                    });
+                                }, function (err) {
+                                    alert(err.data.message);
+                                });
+                                //     } else {
+                                //         $ionicLoading.hide();
+                                //         // alert("5");
+                                //         var confirmPopup = $ionicPopup.confirm({
+                                //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                                //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                                //         });
+                                //         confirmPopup.then(function (res) {
+                                //             if (res) {
+                                //                 $scope.order.shipping.sharelocation.latitude = lat;
+                                //                 $scope.order.shipping.sharelocation.longitude = lng;
+                                //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                                //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+
+
+                                //                     // alert(JSON.stringify(results));
+
+                                //                     $scope.data = {}
+                                //                     // An elaborate, custom popup
+                                //                     var myPopup1 = $ionicPopup.show({
+                                //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                                //                         title: 'ยืนยันที่อยู่ใหม่',
+                                //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                                //                         scope: $scope,
+                                //                         buttons: [
+                                //                             { text: 'Cancel' },
+                                //                             {
+                                //                                 text: '<b>Save</b>',
+                                //                                 type: 'button-positive',
+                                //                                 onTap: function (e) {
+                                //                                     if (!$scope.data.address) {
+                                //                                         // alert(1);
+                                //                                         //don't allow the user to close unless he enters address password
+                                //                                         e.preventDefault();
+
+                                //                                     } else {
+                                //                                         // alert(JSON.stringify(results.results[0]));
+                                //                                         //  alert(JSON.stringify(results[0]));
+                                //                                         $scope.order.shipping.address = $scope.data.address;
+                                //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                                //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                                //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                                //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                                //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                                //                                             $ionicLoading.hide();
+                                //                                             console.log(res);
+                                //                                             $state.go('app.complete', {
+                                //                                                 order: JSON.stringify(res)
+                                //                                             });
+                                //                                         }, function (err) {
+                                //                                             alert(err.data.message);
+                                //                                         });
+                                //                                         return $scope.data.address;
+                                //                                     }
+                                //                                 }
+                                //                             },
+                                //                         ]
+                                //                     });
+                                //                     // alert(JSON.stringify(results));
+                                //                     var newAdress = results;
+
+                                //                     myPopup1.then(function (resp) {
+                                //                         // alert(3);
+
+                                //                         // postcode: String,
+                                //                         //     subdistrict: String,
+                                //                         //         province: String,
+                                //                         //             district: String,
+                                //                     });
+
+                                //                 }).error(function (err) {
+
+                                //                 });
+                                //             } else {
+                                //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                                //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                                //                 // alert();
+                                //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                                //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                                //                     $ionicLoading.hide();
+                                //                     console.log(res);
+                                //                     $state.go('app.complete', {
+                                //                         order: JSON.stringify(res)
+                                //                     });
+                                //                 }, function (err) {
+                                //                     alert(err.data.message);
+                                //                 });
+                                //             }
+                                //         });
+                                //     };
+                                // }).error(function (err) {
+                                //     console.log(err);
+                                // });
+                            } else {
+
+                                $scope.order.shipping.sharelocation.latitude = '';
+                                $scope.order.shipping.sharelocation.longitude = '';
+                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                                //     if (distance.rows[0].elements[0].distance.value) {
+                                CheckoutService.saveOrder($scope.order).then(function (res) {
+                                    // alert(JSON.stringify(res));                                
+                                    $ionicLoading.hide();
+                                    console.log(res);
+                                    $state.go('app.complete', {
+                                        order: JSON.stringify(res)
+                                    });
+                                }, function (err) {
+                                    alert(err.data.message);
+                                });
+                            }
+                        });
+
+                        $ionicLoading.hide();
+
+                        if (error.code == PositionError.PERMISSION_DENIED) {
+                            alert("Permission denied. check setting");
+                        } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
+                            alert("Cannot get position. May be problem with network or can't get a satellite fix.");
+                        } else if (error.code == PositionError.TIMEOUT) {
+                            alert("Geolocation is timed out.");
+                        } else {
+                            alert(error.message);
+                        }
+                    });
             }
-            var posOptions = {
-                timeout: 10000,
-                enableHighAccuracy: true
-            };
-
-            $cordovaGeolocation
-                .getCurrentPosition(posOptions)
-                .then(function (position) {
-
-
-                    var lat = position.coords.latitude;
-                    var lng = position.coords.longitude;
-
-
-                    // alert(lat + ' ' + lng);
-
-
-                    $scope.order.shipping.sharelocation = {};
-                    // $scope.order.shipping.sharelocation.latitude = lat;
-                    // $scope.order.shipping.sharelocation.longitude = lng;
-                    // เส้นทางตามถนน
-                    var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
-                    // alert(fullAddress);
-                    $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
-                        if (response.status.toUpperCase() === 'OK') {
-                            $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function (res) {
-                                // alert(JSON.stringify(res));                                
-                                $ionicLoading.hide();
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                            }, function (err) {
-                                alert(err.data.message);
-                            });
-                            //     } else {
-                            //         $ionicLoading.hide();
-                            //         // alert("5");
-                            //         var confirmPopup = $ionicPopup.confirm({
-                            //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
-                            //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
-                            //         });
-                            //         confirmPopup.then(function (res) {
-                            //             if (res) {
-                            //                 $scope.order.shipping.sharelocation.latitude = lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = lng;
-                            //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
-                            //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
-
-
-                            //                     // alert(JSON.stringify(results));
-
-                            //                     $scope.data = {}
-                            //                     // An elaborate, custom popup
-                            //                     var myPopup1 = $ionicPopup.show({
-                            //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
-                            //                         title: 'ยืนยันที่อยู่ใหม่',
-                            //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
-                            //                         scope: $scope,
-                            //                         buttons: [
-                            //                             { text: 'Cancel' },
-                            //                             {
-                            //                                 text: '<b>Save</b>',
-                            //                                 type: 'button-positive',
-                            //                                 onTap: function (e) {
-                            //                                     if (!$scope.data.address) {
-                            //                                         // alert(1);
-                            //                                         //don't allow the user to close unless he enters address password
-                            //                                         e.preventDefault();
-
-                            //                                     } else {
-                            //                                         // alert(JSON.stringify(results.results[0]));
-                            //                                         //  alert(JSON.stringify(results[0]));
-                            //                                         $scope.order.shipping.address = $scope.data.address;
-                            //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
-                            //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
-                            //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
-                            //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
-                            //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                                             $ionicLoading.hide();
-                            //                                             console.log(res);
-                            //                                             $state.go('app.complete', {
-                            //                                                 order: JSON.stringify(res)
-                            //                                             });
-                            //                                         }, function (err) {
-                            //                                             alert(err.data.message);
-                            //                                         });
-                            //                                         return $scope.data.address;
-                            //                                     }
-                            //                                 }
-                            //                             },
-                            //                         ]
-                            //                     });
-                            //                     // alert(JSON.stringify(results));
-                            //                     var newAdress = results;
-
-                            //                     myPopup1.then(function (resp) {
-                            //                         // alert(3);
-
-                            //                         // postcode: String,
-                            //                         //     subdistrict: String,
-                            //                         //         province: String,
-                            //                         //             district: String,
-                            //                     });
-
-                            //                 }).error(function (err) {
-
-                            //                 });
-                            //             } else {
-                            //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            //                 // alert();
-                            //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-                            //                 CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                     $ionicLoading.hide();
-                            //                     console.log(res);
-                            //                     $state.go('app.complete', {
-                            //                         order: JSON.stringify(res)
-                            //                     });
-                            //                 }, function (err) {
-                            //                     alert(err.data.message);
-                            //                 });
-                            //             }
-                            //         });
-                            //     };
-                            // }).error(function (err) {
-                            //     console.log(err);
-                            // });
-                        } else {
-
-                            $scope.order.shipping.sharelocation.latitude = lat;
-                            $scope.order.shipping.sharelocation.longitude = lng;
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function (res) {
-                                // alert(JSON.stringify(res));                                
-                                $ionicLoading.hide();
-                                console.log(res);
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                            }, function (err) {
-                                alert(err.data.message);
-                            });
-                        }
-                        function successCallback(res) {
-                            vm.cart.clear();
-                            $state.go('complete', {
-                                orderId: res._id
-                            });
-                        }
-                        function errorCallback(res) {
-                            vm.error = res.data.message;
-                        }
-                    }).error(function (err) {
-                        console.log(err);
-                    });
-
-
-
-
-                }, function (err) {
-
-                    $scope.order.shipping.sharelocation = {};
-                    // $scope.order.shipping.sharelocation.latitude = lat;
-                    // $scope.order.shipping.sharelocation.longitude = lng;
-                    // เส้นทางตามถนน
-                    var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
-                    // alert(fullAddress);
-                    $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
-                        if (response.status.toUpperCase() === 'OK') {
-                            $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function (res) {
-                                // alert(JSON.stringify(res));
-                                $ionicLoading.hide();
-                                console.log(res);
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                            }, function (err) {
-                                alert(err.data.message);
-                            });
-                            //     } else {
-                            //         $ionicLoading.hide();
-                            //         // alert("5");
-                            //         var confirmPopup = $ionicPopup.confirm({
-                            //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
-                            //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
-                            //         });
-                            //         confirmPopup.then(function (res) {
-                            //             if (res) {
-                            //                 $scope.order.shipping.sharelocation.latitude = lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = lng;
-                            //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
-                            //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
-
-
-                            //                     // alert(JSON.stringify(results));
-
-                            //                     $scope.data = {}
-                            //                     // An elaborate, custom popup
-                            //                     var myPopup1 = $ionicPopup.show({
-                            //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
-                            //                         title: 'ยืนยันที่อยู่ใหม่',
-                            //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
-                            //                         scope: $scope,
-                            //                         buttons: [
-                            //                             { text: 'Cancel' },
-                            //                             {
-                            //                                 text: '<b>Save</b>',
-                            //                                 type: 'button-positive',
-                            //                                 onTap: function (e) {
-                            //                                     if (!$scope.data.address) {
-                            //                                         // alert(1);
-                            //                                         //don't allow the user to close unless he enters address password
-                            //                                         e.preventDefault();
-
-                            //                                     } else {
-                            //                                         // alert(JSON.stringify(results.results[0]));
-                            //                                         //  alert(JSON.stringify(results[0]));
-                            //                                         $scope.order.shipping.address = $scope.data.address;
-                            //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
-                            //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
-                            //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
-                            //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
-                            //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                                             $ionicLoading.hide();
-                            //                                             console.log(res);
-                            //                                             $state.go('app.complete', {
-                            //                                                 order: JSON.stringify(res)
-                            //                                             });
-                            //                                         }, function (err) {
-                            //                                             alert(err.data.message);
-                            //                                         });
-                            //                                         return $scope.data.address;
-                            //                                     }
-                            //                                 }
-                            //                             },
-                            //                         ]
-                            //                     });
-                            //                     // alert(JSON.stringify(results));
-                            //                     var newAdress = results;
-
-                            //                     myPopup1.then(function (resp) {
-                            //                         // alert(3);
-
-                            //                         // postcode: String,
-                            //                         //     subdistrict: String,
-                            //                         //         province: String,
-                            //                         //             district: String,
-                            //                     });
-
-                            //                 }).error(function (err) {
-
-                            //                 });
-                            //             } else {
-                            //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            //                 // alert();
-                            //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-                            //                 CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                     $ionicLoading.hide();
-                            //                     console.log(res);
-                            //                     $state.go('app.complete', {
-                            //                         order: JSON.stringify(res)
-                            //                     });
-                            //                 }, function (err) {
-                            //                     alert(err.data.message);
-                            //                 });
-                            //             }
-                            //         });
-                            //     };
-                            // }).error(function (err) {
-                            //     console.log(err);
-                            // });
-                        } else {
-
-                            $scope.order.shipping.sharelocation.latitude = '';
-                            $scope.order.shipping.sharelocation.longitude = '';
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function (res) {
-                                // alert(JSON.stringify(res));                                
-                                $ionicLoading.hide();
-                                console.log(res);
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                            }, function (err) {
-                                alert(err.data.message);
-                            });
-                        }
-                    });
-
-                    $ionicLoading.hide();
-
-                    if (error.code == PositionError.PERMISSION_DENIED) {
-                        alert("Permission denied. check setting");
-                    } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
-                        alert("Cannot get position. May be problem with network or can't get a satellite fix.");
-                    } else if (error.code == PositionError.TIMEOUT) {
-                        alert("Geolocation is timed out.");
-                    } else {
-                        alert(error.message);
-                    }
-                });
-
-
-
-
-
-
-
-
-
         };
 
     })

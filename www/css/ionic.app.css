@@ -14301,6 +14301,12 @@ ion-nav-bar.cart-color * .buttons button::before {
     font-weight: 400;
 }
 
+.cart-view .empty-cart .no-locations {
+    color: #18a689;
+    font-size: 20px;
+    font-weight: 400;
+}
+
 .cart-view .gohome-cart {
     text-align: center;
     margin-top: 0px;
@@ -14777,4 +14783,17 @@ ion-nav-bar.checkout-color * .buttons button::before {
 
 .font-set {
     font-weight: bold;
+}
+
+.scroll {
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 78%;
+}
+
+.no-bg-button{
+    background-color: #eeeeee;
 }
