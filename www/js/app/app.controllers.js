@@ -25,11 +25,13 @@ angular.module('your_app_name.app.controllers', [])
         $scope.apiUrl = config.apiUrl;
 
         $scope.loggedUser = AuthService.getUser();
-
+        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
         ShopService.getCompleteOrder().then(function (res) {
             $scope.history = res;
+            $ionicLoading.hide();
         }, function (err) {
             alert(JSON.stringify(err));
+            $ionicLoading.hide();
         });
         $scope.getNewData = function () {
             ShopService.getCompleteOrder().then(function (res) {

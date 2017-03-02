@@ -1,7 +1,7 @@
-<ion-view view-title="ประวัติการสั่งซื้อ" class="shop-popular-view">
-  <ion-content scroll="true">
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
-    </ion-refresher>
+<ion-view view-title="ประวัติการสั่งซื้อ" class="shop-popular-view" cache-view="false">
+  <ion-content overflow-scroll="true">
+    <!--<ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
+    </ion-refresher>-->
     <div class="row shop-products-narrow-cards-outer" ng-if="loggedUser">
       <ion-list>
         <ion-item ng-class="isItemShown(item) ? 'whitesmoke' : ''" ng-repeat="item in history" ng-click="toggleItem(item)" class="item item-text-wrap">
@@ -19,7 +19,11 @@
             <p>{{item.shipping.tel}}</p>
             <br>
             <p>
-              <b>ช่องทางการชำระเงิน : ชำระเงินปลายทางกับคนส่งข้าว</b>
+              <b>การชำระเงิน : ชำระเงินปลายทางกับคนส่งข้าว</b>
+            </p>
+            <br>  
+            <p ng-if="item.namedeliver">
+              <b>ผู้ส่ง : {{item.namedeliver.displayName}} โทร. {{item.namedeliver.address.tel}}</b>
             </p>
             <div class="row text-center">
               <div class="col col-33 padding-0">
