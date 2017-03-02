@@ -271,6 +271,16 @@ angular.module('your_app_name', [
                 }
             })
 
+            .state('app.locations', {
+                url: "/change-password",
+                views: {
+                    'menuContent': {
+                        templateUrl: "views/app/profile/location.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+
             //AUTH ROUTES
             .state('auth', {
                 url: "/auth",
