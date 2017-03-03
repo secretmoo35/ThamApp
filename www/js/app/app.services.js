@@ -28,7 +28,6 @@ angular.module('your_app_name.app.services', [])
             var dfd = $q.defer();
 
             $http.post(apiUrl + 'api/auth/signin', user).success(function (res) {
-
                 window.localStorage.user = JSON.stringify(res);
                 dfd.resolve(res);
 
@@ -88,6 +87,19 @@ angular.module('your_app_name.app.services', [])
 
             return dfd.promise;
 
+        };
+
+        this.saveUserPushNoti = function (push_user) {
+            var dfd = $q.defer();
+            $http.post(apiUrl + 'api/pushnotiusers', push_user).success(function (database) {
+                dfd.resolve(database);
+            }).error(function (error) {
+                /* Act on the event */
+                alert(JSON.stringify(error));
+                dfd.resolve(error);
+                // return dfd.promise;
+            });
+            return dfd.promise;
         };
 
     })
@@ -358,7 +370,19 @@ angular.module('your_app_name.app.services', [])
             var dfd = $q.defer();
             var user = AuthService.getUser();
             $http.post(apiUrl + 'api/orders', order, user).then(function (res) {
-
+                if (window.localStorage.token && window.localStorage.user) {
+                    var userStore = JSON.parse(window.localStorage.user);
+                    var push_usr = {
+                        user_id: userStore._id,
+                        user_name: userStore.username,
+                        role: 'user',
+                        device_token: window.localStorage.token
+                    };
+                    AuthService.saveUserPushNoti(push_usr)
+                        .then(function (res) {
+                            console.log('success');
+                        });
+                }
                 dfd.resolve(res.data);
                 window.localStorage.removeItem('ionTheme1_cart');
 

@@ -47,6 +47,24 @@ angular.module('your_app_name', [
                 var user = JSON.parse(window.localStorage.credential);
                 AuthService.login(user);
             }
+            var push = new Ionic.Push({
+                "debug": true
+            });
+
+            push.register(function (token) {
+                console.log("My Device token:", token.token);
+                window.localStorage.token = token.token;
+                // prompt("Copy token", token.token);
+                push.saveToken(token);  // persist the token in the Ionic Platform
+            });
+        });
+
+        $ionicPlatform.on("resume", function (event) {
+            // user opened the app from the background
+            if (window.localStorage.credential) {
+                var user = JSON.parse(window.localStorage.credential);
+                AuthService.login(user);
+            }
         });
 
         // This fixes transitions for transparent background views

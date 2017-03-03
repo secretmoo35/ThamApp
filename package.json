@@ -1,5 +1,5 @@
 {
-  "name": "e-commerce",
+  "name": "ธรรมธุรกิจ",
   "version": "1.1.1",
   "description": "e-commerce: An Ionic project",
   "dependencies": {
@@ -20,7 +20,8 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
-    "ionic-plugin-keyboard"
+    "ionic-plugin-keyboard",
+    "phonegap-plugin-push"
   ],
   "cordovaPlatforms": []
 }

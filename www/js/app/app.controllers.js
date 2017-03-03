@@ -25,22 +25,16 @@ angular.module('your_app_name.app.controllers', [])
         $scope.apiUrl = config.apiUrl;
 
         $scope.loggedUser = AuthService.getUser();
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-        ShopService.getCompleteOrder().then(function (res) {
-            $scope.history = res;
-            $ionicLoading.hide();
-        }, function (err) {
-            alert(JSON.stringify(err));
-            $ionicLoading.hide();
-        });
-        $scope.getNewData = function () {
+        if ($scope.loggedUser) {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'});
             ShopService.getCompleteOrder().then(function (res) {
                 $scope.history = res;
-                $scope.$broadcast('scroll.refreshComplete');
+                $ionicLoading.hide();
             }, function (err) {
+                $ionicLoading.hide();                
                 alert(JSON.stringify(err));
             });
-        };
+        }
 
         $scope.showConfirm = function (item) {
             var confirmPopup = $ionicPopup.confirm({
@@ -237,6 +231,7 @@ angular.module('your_app_name.app.controllers', [])
             $rootScope.user = AuthService.getUser();
         };
         $rootScope.loadUser();
+
         // alert('user: ' + JSON.stringify($rootScope.user));
         $scope.apiUrl = config.apiUrl;
         $scope.products = [];
