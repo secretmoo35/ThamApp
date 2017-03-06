@@ -26,12 +26,24 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.loggedUser = AuthService.getUser();
         if ($scope.loggedUser) {
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'});
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
             ShopService.getCompleteOrder().then(function (res) {
                 $scope.history = res;
                 $ionicLoading.hide();
             }, function (err) {
-                $ionicLoading.hide();                
+                $ionicLoading.hide();
+                alert(JSON.stringify(err));
+            });
+        }
+
+        $scope.getNewData = function () {
+            $scope.history = [];
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
+            ShopService.getCompleteOrder().then(function (res) {
+                $scope.history = res;
+                $ionicLoading.hide();
+            }, function (err) {
+                $ionicLoading.hide();
                 alert(JSON.stringify(err));
             });
         }
@@ -45,7 +57,6 @@ angular.module('your_app_name.app.controllers', [])
             confirmPopup.then(function (res) {
                 if (res) {
                     $scope.cancelOrder(item);
-                    $scope.getNewData();
                     console.log('You are sure');
                 } else {
                     console.log('You are not sure');
@@ -62,7 +73,7 @@ angular.module('your_app_name.app.controllers', [])
                 };
                 order.historystatus.push(historystatus);
                 ShopService.cancelOrder(order).then(function (res) {
-                    $scope.history = res;
+                    $scope.getNewData();
                 }, function (err) {
                     alert(JSON.stringify(err));
                 });
