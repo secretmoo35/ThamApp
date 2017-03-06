@@ -38,6 +38,10 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "312799958769",
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
         }
     },
     "dependent_plugins": {
