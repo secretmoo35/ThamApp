@@ -271,7 +271,8 @@ angular.module('your_app_name.app.services', [])
         };
 
         this.addProductToCart = function (productToAdd, update) {
-
+            productToAdd.price = productToAdd.product.price;
+            productToAdd.retailerprice = productToAdd.product.retailerprice;
             productToAdd.discountamount = 0;
             productToAdd.deliverycost = 0;
             var cart_products = !_.isUndefined(window.localStorage.ionTheme1_cart) ? JSON.parse(window.localStorage.ionTheme1_cart) : [];

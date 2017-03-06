@@ -26,6 +26,7 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.loggedUser = AuthService.getUser();
         if ($scope.loggedUser) {
+            $scope.history = [];
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
             ShopService.getCompleteOrder().then(function (res) {
                 $scope.history = res;
