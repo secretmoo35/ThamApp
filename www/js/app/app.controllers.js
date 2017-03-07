@@ -618,6 +618,7 @@ angular.module('your_app_name.app.controllers', [])
             $scope.order.user = AuthService.getUser();
             $scope.order.platform = 'Mobile';
             $scope.order.shipping.postcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
+            $scope.order.shipping.tel = $scope.order.shipping.tel ? $scope.order.shipping.tel : $scope.order.user.address.tel;
             $scope.order.historystatus = [{
                 status: 'confirmed',
                 datestatus: new Date()
