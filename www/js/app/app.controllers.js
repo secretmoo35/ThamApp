@@ -247,15 +247,15 @@ angular.module('your_app_name.app.controllers', [])
         // alert('user: ' + JSON.stringify($rootScope.user));
         $scope.apiUrl = config.apiUrl;
         $scope.products = [];
-        $scope.category = [];
         $scope.popular_products = [];
         $scope.scroll = $scope.scroll ? $scope.scroll : true;
         $scope.images = ['img/1.png', 'img/2.png'];
         $scope.readProduct = function () {
+            $scope.category = [];
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>' });
             ShopService.getProducts().then(function (products) {
                 $scope.products = products;
-                for (var i = 1; i < $scope.products.length; i++) {
+                for (var i = 0; i < $scope.products.length; i++) {
                     if ($scope.category.indexOf($scope.products[i].category) == -1) {
                         $scope.category.push($scope.products[i].category);
                     }
