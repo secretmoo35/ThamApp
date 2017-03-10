@@ -57,6 +57,9 @@ angular.module('your_app_name', [
                 // prompt("Copy token", token.token);
                 push.saveToken(token);  // persist the token in the Ionic Platform
             });
+
+            var devicePlatform = device.platform;
+            window.localStorage.platform = devicePlatform;
         });
 
         $ionicPlatform.on("resume", function (event) {

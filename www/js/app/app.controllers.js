@@ -615,6 +615,9 @@ angular.module('your_app_name.app.controllers', [])
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
             $scope.order.docno = (+new Date());
             $scope.order.docdate = new Date();
+            if(window.localStorage.platform){
+               $scope.order.src = window.localStorage.platform;
+            }
             $scope.order.user = AuthService.getUser();
             $scope.order.platform = 'Mobile';
             $scope.order.shipping.postcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
