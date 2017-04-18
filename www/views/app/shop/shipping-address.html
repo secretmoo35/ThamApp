@@ -1,4 +1,9 @@
-<style>.popover { height:300px; width: 350px; }</style>
+<style>
+    .popover {
+        height: 300px;
+        width: 350px;
+    }
+</style>
 <ion-view view-title="เข้าสู่ระบบเพื่อชำระสินค้า" class="shipping-address-view">
     <ion-content scroll="true">
         <div class="list" ng-if="step === '1'">
@@ -30,6 +35,14 @@
                     <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('3')" ng-disabled="!authentication.username || !authentication.password">
                         ดำเนินการต่อ
                     </button>
+                </div>
+            </div>
+            <div class="bottom-content row">
+                <div class="col col-bottom">
+                    <a class="facebook-sign-in button-large button button-block button-facebook" ng-click="loginFacebook()">
+            Sign In with Facebook
+          </a>
+                    <button ng-click="signOutFacebook()">logout by facebook</button>
                 </div>
             </div>
         </div>
