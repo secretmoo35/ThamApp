@@ -23,8 +23,11 @@
                     <h2 class="product-title">{{product.name}}</h2>
                 </div>
                 <div class="row">
-                    <div class="col-col-33">
+                    <div>
                         <p class="product-price thamma-ore-style">฿{{product.price}}</p>
+                    </div>
+                    <div class="col col-95 text-right">
+                        <a class="button button-icon icon ion-android-share-alt" ng-click="shares()"></a>
                     </div>
                 </div>
             </div>
@@ -38,7 +41,7 @@
             </div>
         </div>
         <div class="item item-body" ng-if="product.promotions.length > 0">
-            <p class="product-description">โปรโมชั่น</p>            
+            <p class="product-description">โปรโมชั่น</p>
             <p class="product-description" ng-repeat="promotion in product.promotions">- {{promotion.description}}</p>
         </div>
         <div class="item item-body">

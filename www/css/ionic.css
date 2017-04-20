@@ -392,6 +392,12 @@ h2.no-l-background span:after {
     color: #fff;
 }
 
+.button-facebook {
+    border-color: transparent;
+    background-color: #8b9dc3 !important;
+    color: #fff;
+}
+
 .width-70per {
     width: 70% !important;
 }

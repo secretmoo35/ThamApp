@@ -46,6 +46,12 @@
         "phonegap-plugin-push": {
             "SENDER_ID": "312799958769",
             "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
         }
     },
     "dependent_plugins": {}

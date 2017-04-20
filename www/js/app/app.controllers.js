@@ -146,7 +146,7 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ProductCtrl', function ($scope, $timeout, $rootScope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config) {
+    .controller('ProductCtrl', function ($scope, $timeout, $rootScope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config, $cordovaSocialSharing) {
 
         var productId = $stateParams.productId;
         $scope.apiUrl = config.apiUrl;
@@ -159,6 +159,25 @@ angular.module('your_app_name.app.controllers', [])
                 $ionicLoading.hide();
             }, 500);
         });
+
+        $scope.shares = function () {
+
+            $cordovaSocialSharing
+                .share($scope.product.name, 'ธรรมธุรกิจ', null, 'https://thamapptest.herokuapp.com/products/' + $scope.product._id) // Share via native share sheet
+                .then(function (result) {
+                    // Success!
+                }, function (err) {
+                    // An error occured. Show a message to the user
+                });
+
+            // $cordovaSocialSharing
+            //     .shareViaFacebook($scope.product.name, $scope.product.images, 'https://thamapptest.herokuapp.com/products/' + $scope.product._id)
+            //     .then(function (result) {
+            //         // Success!
+            //     }, function (err) {
+            //         // An error occurred. Show a message to the user
+            //     });
+        };
 
         $scope.productGotoCart = {
             qty: 1
@@ -671,11 +690,36 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http) {
+    .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, OpenFB) {
         //$scope.paymentDetails;
 
         $scope.apiUrl = config.apiUrl;
         $scope.status = true;
+        $scope.loginFacebook = function () {
+            OpenFB.login('email,public_profile,user_friends,user_photos,user_posts,publish_actions,user_birthday,email,manage_pages,publish_pages,read_page_mailboxes').then(
+                function () {
+
+                    // $state.go('app.feed');
+                    alert('OpenFB : Login Success!');
+
+                },
+                function () {
+                    alert('OpenFB : Login Failed! Please Try Again...');
+                });
+        };
+
+        $scope.signOutFacebook = function () {
+
+            OpenFB.revokePermissions().then(
+                function () {
+                    // $state.go('facebook-sign-in');
+                    alert('OpenFB : Revoke Permissions Success!');
+                },
+                function () {
+                    alert('OpenFB : Revoke Permissions Failed!ppppp');
+                });
+
+        };
         // $scope.postcode = CheckoutService.getPostcode();
         CheckoutService.getPostcode().then(function (success) {
             $scope.postcodes = success.postcode;
