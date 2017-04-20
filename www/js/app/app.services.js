@@ -246,6 +246,30 @@ angular.module('your_app_name.app.services', [])
             return dfd.promise;
         };
 
+        this.getMarketplans = function () {
+            var dfd = $q.defer();
+            $http.get(apiUrl + 'api/marketplans/').success(function (database) {
+                dfd.resolve(database);
+            });
+            return dfd.promise;
+        };
+
+        this.getCampaigns = function () {
+            var dfd = $q.defer();
+            $http.get(apiUrl + 'api/campaigns/').success(function (database) {
+                dfd.resolve(database);
+            });
+            return dfd.promise;
+        };
+
+        this.getCampaign = function (campaignId) {
+            var dfd = $q.defer();
+            $http.get(apiUrl + 'api/campaigns/' + campaignId).success(function (database) {
+                dfd.resolve(database);
+            });
+            return dfd.promise;
+        };
+
         this.getDeliveryCost = function (product) {
             if (product.product.deliveryratetype === 0) {
                 product.deliverycost = 0;
@@ -354,6 +378,18 @@ angular.module('your_app_name.app.services', [])
             var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
             var data = [];
             $http.put(apiUrl + 'api/orders/' + order._id, order).success(function (database) {
+                dfd.resolve(data);
+            }).error(function (err) {
+                dfd.reject(err);
+            });;
+            return dfd.promise;
+        }
+
+        this.acceptCampaign = function (accept) {
+            var dfd = $q.defer();
+            var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
+            var data = [];
+            $http.put(apiUrl + 'api/campaigns/' + accept._id, accept).success(function (database) {
                 dfd.resolve(data);
             }).error(function (err) {
                 dfd.reject(err);

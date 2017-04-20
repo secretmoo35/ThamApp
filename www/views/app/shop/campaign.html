@@ -1,0 +1,26 @@
+<ion-view view-title class="shop-home-view" cache-view="false" ng-init="readProduct()">
+    <ion-nav-buttons side="right">
+        <a class="button button-icon" ui-sref="app.cart()">
+            <i class="icon ion-ios-cart" ng-class="{'color-gray' : ('app.product-detail' | includedByState)}">
+          <span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span>
+          </i>
+        </a>
+    </ion-nav-buttons>
+    <ion-content>
+        <div class="row shop-products-narrow-cards-outer">
+            <div ng-repeat="campaign in campaigns | orderBy: 'created'" class="col col-50 shop-product-narrow-card" ui-sref="app.campaign-detail({campaignId: campaign._id})">
+                <div class="list card">
+                    <div class="item item-image">
+                        <pre-img ratio="_1_1" helper-class="main-image">
+                            <img ng-src="http://res.cloudinary.com/hrpqiager/image/upload/v1485171075/d7mt2yhjrwttxdllvnzr.jpg" spinner-on-load>
+                        </pre-img>
+                    </div>
+                    <div class="item item-body">
+                        <h2 class="card-title">{{campaign.name}}</h2>
+                        <p class="card-description">{{campaign.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

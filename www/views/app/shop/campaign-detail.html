@@ -1,0 +1,157 @@
+<ion-view view-title class="product-view" cache-view="false">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear" ui-sref="app.shop.home">
+            <i class="ion-ios-arrow-back color-gray font-30"></i>
+        </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <a class="button button-icon" ui-sref="app.cart()">
+            <i class="icon ion-ios-cart" ng-class="{'color-gray' : ('app.product-detail' | includedByState)}">
+          <span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span>
+          </i>
+        </a>
+    </ion-nav-buttons>
+    <ion-content overflow-scroll="true">
+        <div class="product-card-content">
+            <div class="item item-image">
+                <pre-img helper-class="main-image" ratio="_1_1">
+                    <img ng-src="http://res.cloudinary.com/hrpqiager/image/upload/v1485171075/d7mt2yhjrwttxdllvnzr.jpg" spinner-on-load>
+                </pre-img>
+            </div>
+            <div class="item item-body">
+                <div class="row">
+                    <h2 class="product-title">{{campaign.name}}</h2>
+                </div>
+                <div class="row">
+                    <div class="col-col-33">
+                        <p>{{campaign.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item item-body">
+            <p class="product-description">ลงทะเบียนรับสิทธิ์</p>
+            <div class="list" ng-if="step === '1'">
+                <ion-list>
+                    <ion-radio ng-model="choice" ng-value="true">ดำเนินการต่อโดยไม่ต้องใช้รหัสผ่าน</ion-radio>
+                    <ion-radio ng-model="choice" ng-value="false">ฉันมีบัญชีผู้ใช้อยู่แล้ว</ion-radio>
+                </ion-list>
+                <div class="margin-top-8" ng-if="choice === true">
+                    <label class="item item-input">
+                    <span class="input-label">เบอร์โทร*</span>
+                    <input type="text" ng-model="authentication.username">
+                </label>
+                    <div class="row padding ">
+                        <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('2')" ng-disabled="!authentication.username">
+                        ดำเนินการต่อ
+                    </button>
+                    </div>
+                </div>
+                <div class="list margin-top-8" ng-if="choice === false">
+                    <label class="item item-input">
+                    <span class="input-label">ชื่อผู้ใช้</span>
+                    <input type="text" ng-model="authentication.username">
+                </label>
+                    <label class="item item-input">
+                    <span class="input-label">รหัสผ่าน</span>
+                    <input type="password" ng-model="authentication.password">
+                </label>
+                    <div class="row padding">
+                        <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('3')" ng-disabled="!authentication.username || !authentication.password">
+                        ดำเนินการต่อ
+                    </button>
+                    </div>
+                </div>
+                <div class="bottom-content row">
+                    <div class="col col-bottom">
+                        <a class="facebook-sign-in button button-block button-facebook">
+            Sign In with Facebook
+          </a>
+                        <!--ng-click="loginFacebook()"-->
+                    </div>
+                </div>
+            </div>
+            <div class="list" ng-if="step === '2'">
+                <div class="item item-divider shop-section-title">
+                    <span class="title-copy">สมัครสมาชิกเพื่อลงทะเบียน</span>
+                </div>
+                <label class="item item-input">
+                <span class="input-label">ชื่อ</span>
+                <input type="text" placeholder="ชื่อ*" ng-model="authentication.firstName">
+            </label>
+                <label class="item item-input">
+                <span class="input-label">นามสกุล</span>
+                <input type="text" placeholder="นามสกุล*" ng-model="authentication.lastName">
+            </label>
+                <label class="item item-input">
+                <span class="input-label">รหัสไปรษณีย์</span>
+                <!--<input type="text" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode">-->
+                <input type="number" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode" ionic-autocomplete="{items: postcodes, onSelect: onPostcodeSelected, onDataInvalid: onPostcodeInvalid}" />
+            </label>
+                <!--<label class="item item-input item-floating-label">
+                <span class="input-label">รหัสไปรษณีย์</span>
+                <input type="text" autocomplete="false" typeahead="postcode" typeahead-callback="callback" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode">
+            </label>-->
+                <label class="item item-input">
+                <span class="input-label">แขวง/ตำบล</span>
+                <input type="text" placeholder="แขวง/ตำบล*" ng-model="authentication.address.subdistrict">
+            </label>
+                <label class="item item-input">
+                <span class="input-label">เขต/อำเภอ</span>
+                <input type="text" placeholder="เขต/อำเภอ*" ng-model="authentication.address.district">
+            </label>
+                <label class="item item-input">
+                <span class="input-label">จังหวัด</span>
+                <input type="text" placeholder="จังหวัด*" ng-model="authentication.address.province">
+            </label>
+                <label class="item item-input">
+                <span class="input-label">ที่อยู่</span>
+                <input type="text" placeholder="ที่อยู่*" ng-model="authentication.address.address">
+            </label>
+                <!--<ion-toggle toggle-class="toggle-energized">Use as my default address</ion-toggle>-->
+                <div class="row padding">
+                    <button class="button button-block button-energized save-address-btn" ng-click="gotoForm()" ng-disabled="!authentication.address.address || !authentication.address.province || !authentication.address.district || !authentication.address.postcode || !authentication.lastName || !authentication.firstName">
+                    ดำเนินการต่อ
+                </button>
+                </div>
+            </div>
+            <div class="list" ng-if="step === '4'">
+                <div class="margin-top-8">
+                    <label class="item item-input">
+                    <span class="input-label">รหัสบัตรประชาชน*</span>
+                    <input type="text" ng-model="acceptCampaign.identification" maxlength="13">
+                </label>
+                </div>
+                <div class="margin-top-8">
+                    <label class="item item-input">
+                    <span class="input-label">Line ID*</span>
+                    <input type="text" ng-model="acceptCampaign.lineid">
+                </label>
+                </div>
+                <div class="margin-top-8">
+                    <label class="item item-input">
+                    <span class="input-label">Facebook*</span>
+                    <input type="text" ng-model="acceptCampaign.facebook">
+                </label>
+                </div>
+                <div class="margin-top-8 list">
+                    <div class="item item-divider shop-section-title">
+                        <span class="title-copy">กำหนดวันมารับสิทธิ์</span>
+                    </div>
+                    <label class="item item-input item-select">
+                    <!--<input type="text" ng-model="acceptCampaign.identification">-->
+                    <select ng-model="acceptCampaign.acceptcampaigndate" ng-options="marketplan.text for marketplan in marketplans">
+                        <option value="">กรุณาระบุวันที่มารับสิทธิ์</option>
+                    </select>
+                    
+                </label>
+                </div>
+                <div class="row padding ">
+                    <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('4')" ng-disabled="!acceptCampaign.identification || !acceptCampaign.acceptcampaigndate">
+                        ดำเนินการต่อ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

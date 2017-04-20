@@ -584,3 +584,9 @@ h2.no-l-background span:after {
 .cancel-coler-text{
     color: #1ab394;
 }
+
+.button-facebook {
+    border-color: transparent;
+    background-color: #8b9dc3 !important;
+    color: #fff;
+}

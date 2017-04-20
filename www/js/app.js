@@ -27,7 +27,7 @@ angular.module('your_app_name', [
     })
 
     .constant('config', {
-        apiUrl: 'https://thamapp.herokuapp.com/'
+        apiUrl: 'https://thamapptest.herokuapp.com/'
         //https://thamapp.herokuapp.com/      for production
         //https://thamapptest.herokuapp.com/  for heroku test
         //http://localhost:3000/              for local
@@ -193,6 +193,20 @@ angular.module('your_app_name', [
                 }
             })
 
+            .state('app.shop.campaigns', {
+                url: "/campaigns",
+                params: {
+                    cate: null
+                },
+                // cache: false,
+                views: {
+                    'shop-home': {
+                        templateUrl: "views/app/shop/campaign.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+
             .state('app.shop.popular', {
                 url: "/popular",
                 // cache: false,
@@ -297,6 +311,16 @@ angular.module('your_app_name', [
                 views: {
                     'menuContent': {
                         templateUrl: "views/app/profile/location.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+
+            .state('app.campaign-detail', {
+                url: "/campaign/:campaignId",
+                views: {
+                    'menuContent': {
+                        templateUrl: "views/app/shop/campaign-detail.html",
                         controller: 'ShopCtrl'
                     }
                 }

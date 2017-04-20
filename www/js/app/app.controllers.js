@@ -235,7 +235,20 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ShopCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup) {
+    .controller('ShopCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup, CheckoutService) {
+
+        CheckoutService.getPostcode().then(function (success) {
+            $scope.postcodes = success.postcode;
+        }, function (err) {
+            alert('unsuccess');
+        });
+
+        ShopService.getMarketplans().then(function (success) {
+            $scope.marketplans = success;
+        }, function (err) {
+            alert('getMarketplans unsuccess');
+        });
+
         if ($stateParams.cate) {
             $scope.cate = $stateParams.cate;
         }
@@ -243,7 +256,202 @@ angular.module('your_app_name.app.controllers', [])
             $rootScope.user = AuthService.getUser();
         };
         $rootScope.loadUser();
+        if ($stateParams.campaignId) {
+            var campaignId = $stateParams.campaignId;
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>' });
+            ShopService.getCampaign(campaignId).then(function (campaign) {
+                $scope.campaign = campaign;
+                $timeout(function () {
+                    $ionicLoading.hide();
+                }, 500);
+            });
+        }
+        if ($rootScope.user) {
+            $scope.step = '4';
+        } else {
+            $scope.step = '1';
 
+        }
+
+        $scope.onPostcodeSelected = function (item) {
+            $scope.authentication.address.subdistrict = item.subdistrict;
+            $scope.authentication.address.district = item.district;
+            $scope.authentication.address.province = item.province;
+        };
+        $scope.onPostcodeInvalid = function () {
+            $scope.authentication.address.subdistrict = '';
+            $scope.authentication.address.district = '';
+            $scope.authentication.address.province = '';
+        };
+        $scope.authentication = {};
+        $scope.acceptCampaign = {
+            status: 'accept'
+        };
+        $scope.gotoForm = function (num) {
+            if (num === '4') {
+                if ($scope.campaign.usercount - $scope.campaign.listusercampaign.length > 0) {
+                    $scope.acceptCampaign.user = $rootScope.user;
+                    $scope.campaign.listusercampaign.push($scope.acceptCampaign);
+                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                    ShopService.acceptCampaign($scope.campaign).then(function (res) {
+                        $ionicLoading.hide();
+                        $scope.step = num;
+                        var myPopup = $ionicPopup.show({
+                            title: 'ลงทะเบียนเรียบร้อยแล้ว!!',
+                            subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
+                            scope: $scope,
+                            buttons: [{
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                    // $scope.gotoForm();
+                                    $scope.acceptCampaign = {};
+                                }
+                            }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
+                    }, function (err) {
+                        $scope.acceptCampaign = {};
+                        $ionicLoading.hide();
+                        if (err.message === 'Identification is already!') {
+                            var myPopup = $ionicPopup.show({
+                                title: 'ผิดพลาด',
+                                subTitle: 'รหัสบัตรประชาชนของคุณไม่ถูกต้อง',
+                                scope: $scope,
+                                buttons: [{
+                                    text: '<b>ตกลง</b>',
+                                    type: 'button-positive',
+                                    onTap: function (e) {
+                                        // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                        // $scope.gotoForm();
+                                        $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                                        $scope.acceptCampaign = {};
+                                    }
+                                }
+                                ]
+                            });
+
+                            myPopup.then(function (res) {
+                                console.log('Tapped!', res);
+                            });
+                        } else {
+                            alert(JSON.stringify(err));
+                        }
+
+                    })
+                } else {
+                    var myPopup = $ionicPopup.show({
+                        title: 'ท่านไม่สามารถรับสิทธิ์',
+                        subTitle: 'จำนวนสิทธิ์คงเหลือเต็มแล้ว!',
+                        scope: $scope,
+                        buttons: [{
+                            text: '<b>ตกลง</b>',
+                            type: 'button-positive',
+                            onTap: function (e) {
+                                // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                // $scope.gotoForm();
+                                $scope.acceptCampaign = {};
+                            }
+                        }
+                        ]
+                    });
+
+                    myPopup.then(function (res) {
+                        console.log('Tapped!', res);
+                    });
+                }
+            } else if (num === '3') {
+                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                AuthService.login($scope.authentication).then(function (success) {
+                    $scope.step = '4';
+                    $rootScope.loadUser();
+                    $ionicLoading.hide();
+                }, function (err) {
+                    if (err.message === 'Unknown user or invalid password') {
+                        var myPopup = $ionicPopup.show({
+                            title: 'ผิดพลาด',
+                            subTitle: 'ชื่อหรือพาสเวิร์ดไม่ถูกต้อง',
+                            scope: $scope,
+                            buttons: [{
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                    // $scope.gotoForm();
+                                    $scope.authentication.username = '';
+                                    $scope.authentication.password = '';
+                                }
+                            }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                    $scope.step = '1';
+                    $ionicLoading.hide();
+                })
+            } else if (num === '2') {
+                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                $scope.authentication.username = $scope.authentication.username;
+                $scope.authentication.password = 'Usr#Pass1234';
+                AuthService.login($scope.authentication).then(function (success) {
+                    $scope.step = '4';
+                    $rootScope.loadUser();
+                    $ionicLoading.hide();
+                }, function (err) {
+
+                    $scope.step = num;
+                    $ionicLoading.hide();
+                })
+            } else {
+                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
+                $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                $scope.authentication.address.tel = $scope.authentication.username;
+                $scope.authentication.password = 'Usr#Pass1234';
+                AuthService.signup($scope.authentication).then(function (res) {
+                    $scope.step = '4';
+                    $rootScope.loadUser();
+                    $ionicLoading.hide();
+                }, function (err) {
+                    $ionicLoading.hide();
+                    if (err.message === 'Username already exists') {
+                        var myPopup = $ionicPopup.show({
+                            template: '<input type="text" ng-model="authentication.username">',
+                            title: 'มีชื่อผู้ใช้งานนี้แล้ว',
+                            subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
+                            scope: $scope,
+                            buttons: [
+                                { text: 'ยกเลิก' }, {
+                                    text: '<b>ตกลง</b>',
+                                    type: 'button-positive',
+                                    onTap: function (e) {
+                                        // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                        $scope.gotoForm();
+                                    }
+                                }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+
+                });
+            }
+        };
         // alert('user: ' + JSON.stringify($rootScope.user));
         $scope.apiUrl = config.apiUrl;
         $scope.products = [];
@@ -263,6 +471,9 @@ angular.module('your_app_name.app.controllers', [])
                 $timeout(function () {
                     $ionicLoading.hide();
                 }, 500);
+            });
+            ShopService.getCampaigns().then(function (campaigns) {
+                $scope.campaigns = campaigns;
             });
         }
 
@@ -615,8 +826,8 @@ angular.module('your_app_name.app.controllers', [])
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
             $scope.order.docno = (+new Date());
             $scope.order.docdate = new Date();
-            if(window.localStorage.platform){
-               $scope.order.src = window.localStorage.platform;
+            if (window.localStorage.platform) {
+                $scope.order.src = window.localStorage.platform;
             }
             $scope.order.user = AuthService.getUser();
             $scope.order.platform = 'Mobile';
