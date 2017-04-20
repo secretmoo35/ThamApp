@@ -36,7 +36,7 @@ angular.module('your_app_name', [
 
     .run(function ($ionicPlatform, $rootScope, $ionicHistory, $timeout, $ionicConfig, AuthService, OpenFB) {
 
-        OpenFB.init('414384685598077', 'https://thamapptest.herokuapp.com/api/auth/facebook/callback');
+        OpenFB.init('414384685598077', 'http://thamapptest.herokuapp.com/api/auth/facebook/callback');
 
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -462,7 +462,7 @@ angular.module('openfb', [])
             if (!oauthRedirectURL) {
                 if (runningInCordova) {
                     //Moo : for dev
-                    oauthRedirectURL = 'https://thamapptest.herokuapp.com/api/auth/facebook/callback';
+                    oauthRedirectURL = 'http://thamapptest.herokuapp.com/api/auth/facebook/callback';
 
                     //Moo : for android
                     //oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
