@@ -308,65 +308,15 @@ angular.module('your_app_name.app.controllers', [])
         };
         $scope.gotoForm = function (num) {
             if (num === '4') {
-                if ($scope.campaign.usercount - $scope.campaign.listusercampaign.length > 0) {
-                    $scope.acceptCampaign.user = $rootScope.user;
-                    $scope.campaign.listusercampaign.push($scope.acceptCampaign);
-                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-                    ShopService.acceptCampaign($scope.campaign).then(function (res) {
-                        $ionicLoading.hide();
-                        $scope.step = num;
-                        var myPopup = $ionicPopup.show({
-                            title: 'ลงทะเบียนเรียบร้อยแล้ว!!',
-                            subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
-                            scope: $scope,
-                            buttons: [{
-                                text: '<b>ตกลง</b>',
-                                type: 'button-positive',
-                                onTap: function (e) {
-                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                    // $scope.gotoForm();
-                                    $scope.acceptCampaign = {};
-                                }
-                            }
-                            ]
-                        });
-
-                        myPopup.then(function (res) {
-                            console.log('Tapped!', res);
-                        });
-                    }, function (err) {
-                        $scope.acceptCampaign = {};
-                        $ionicLoading.hide();
-                        if (err.message === 'Identification is already!') {
-                            var myPopup = $ionicPopup.show({
-                                title: 'ผิดพลาด',
-                                subTitle: 'รหัสบัตรประชาชนของคุณไม่ถูกต้อง',
-                                scope: $scope,
-                                buttons: [{
-                                    text: '<b>ตกลง</b>',
-                                    type: 'button-positive',
-                                    onTap: function (e) {
-                                        // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                        // $scope.gotoForm();
-                                        $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
-                                        $scope.acceptCampaign = {};
-                                    }
-                                }
-                                ]
-                            });
-
-                            myPopup.then(function (res) {
-                                console.log('Tapped!', res);
-                            });
-                        } else {
-                            alert(JSON.stringify(err));
-                        }
-
-                    })
-                } else {
+                $scope.acceptCampaign.user = $rootScope.user;
+                $scope.campaign.listusercampaign.push($scope.acceptCampaign);
+                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                ShopService.acceptCampaign($scope.campaign).then(function (res) {
+                    $ionicLoading.hide();
+                    $scope.step = num;
                     var myPopup = $ionicPopup.show({
-                        title: 'ท่านไม่สามารถรับสิทธิ์',
-                        subTitle: 'จำนวนสิทธิ์คงเหลือเต็มแล้ว!',
+                        title: 'ลงทะเบียนเรียบร้อยแล้ว!!',
+                        subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
                         scope: $scope,
                         buttons: [{
                             text: '<b>ตกลง</b>',
@@ -383,7 +333,79 @@ angular.module('your_app_name.app.controllers', [])
                     myPopup.then(function (res) {
                         console.log('Tapped!', res);
                     });
-                }
+                }, function (err) {
+                    $scope.acceptCampaign = {};
+                    $ionicLoading.hide();
+                    if (err.message === 'Identification is already!' || err.message === 'Your identification is Invalid!') {
+                        var myPopup = $ionicPopup.show({
+                            title: 'ผิดพลาด',
+                            subTitle: 'รหัสบัตรประชาชนของคุณไม่ถูกต้อง',
+                            scope: $scope,
+                            buttons: [{
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                    // $scope.gotoForm();
+                                    $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                                    $scope.acceptCampaign = {};
+                                }
+                            }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
+                    } else if (err.message === 'Privilege is full') {
+                        var myPopup = $ionicPopup.show({
+                            title: 'ท่านไม่สามารถรับสิทธิ์',
+                            subTitle: 'จำนวนสิทธิ์คงเหลือเต็มแล้ว',
+                            scope: $scope,
+                            buttons: [{
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                    // $scope.gotoForm();
+                                    $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                                    $scope.acceptCampaign = {};
+                                }
+                            }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
+                    } else if (err.message === '') {
+                        var myPopup = $ionicPopup.show({
+                            title: 'ผิดพลาด',
+                            subTitle: 'กรุณาลองใหม่อีกครั้ง',
+                            scope: $scope,
+                            buttons: [{
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                    // $scope.gotoForm();
+                                    $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                                    $scope.acceptCampaign = {};
+                                }
+                            }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
+                    } else {
+                        alert(JSON.stringify(err));
+                        $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                        $scope.acceptCampaign = {};
+                    }
+
+                })
             } else if (num === '3') {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
                 AuthService.login($scope.authentication).then(function (success) {
