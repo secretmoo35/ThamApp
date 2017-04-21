@@ -35,14 +35,15 @@
                 </div>
             </a>
         </div>
-        <div ng-disbled="true">
+        <div ng-disbled="true" ng-if="campaigns.length > 0">
             <div class="item item-divider shop-section-title">
                 <span class="title-copy">แคมเปญ</span>
                 <a class="button button-small button-dark section-action" ui-sref="app.shop.campaigns">เพิ่มเติม</a>
             </div>
             <ion-scroll direction="x" class="wide-as-needed" scroll="true" overflow-scroll="{{scroll === true ? 'true': scroll === false ? 'false' : 'true'}}">
                 <div class="row shop-products-narrow-cards-outer shop-product-cards-scroller">
-                    <div ng-repeat="campaign in campaigns | orderBy: 'created' | limitTo : 4" style="width: 500px;" class="col col-50 shop-product-narrow-card" ui-sref="app.campaign-detail({campaignId: campaign._id})">
+                    <div ng-repeat="campaign in campaigns | orderBy: 'created' | limitTo : 4" style="width: 500px;" class="col col-50 shop-product-narrow-card"
+                        ui-sref="app.campaign-detail({campaignId: campaign._id})">
                         <div class="list card">
                             <div class="item item-image">
                                 <pre-img ratio="_1_1" helper-class="main-image">
