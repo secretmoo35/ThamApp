@@ -28,7 +28,7 @@ angular.module('your_app_name', [
     })
 
     .constant('config', {
-        apiUrl: 'https://thamapptest.herokuapp.com/'
+        apiUrl: 'https://thamapp.herokuapp.com/'
         //https://thamapp.herokuapp.com/      for production
         //https://thamapptest.herokuapp.com/  for heroku test
         //http://localhost:3000/              for local
