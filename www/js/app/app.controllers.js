@@ -1581,6 +1581,168 @@ angular.module('your_app_name.app.controllers', [])
             $state.go('app.shop.home')
         }
 
+    })
+
+    .controller('ChatCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+        $scope.listRoom = function () {
+            roomService.getrooms().then(function (res) {
+                $scope.chats = res;
+            }, function (err) {
+                console.log(err);
+            });
+        };
+        $scope.listRoom();
+        $scope.createRoom = function (data) {
+            roomService.createRoom(data).then(function (res) {
+                $scope.listRoom();
+            }, function (err) {
+                console.log(err);
+            });
+        };
+
+        Socket.on('invite', function (res) {
+            $scope.listRoom();
+        });
+
+    })
+
+    .controller('ChatDetailCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, $stateParams, Socket, $ionicScrollDelegate, $timeout) {
+        $scope.user = AuthService.getUser();
+        var roomId = $stateParams.chatId;
+        $scope.messages = [];
+        $scope.chat = null;
+        $scope.room = {};
+        Socket.connect();
+        // ทดสอบ mobile connect
+        // Socket.on('mobile', function (message) {
+        //   $scope.messages.unshift(message);
+        // });
+
+        roomService.getRoom(roomId).then(function (res) {
+            $scope.chat = res;
+            Socket.emit('join', $scope.chat);
+            $scope.chat.users.forEach(function (user) {
+                if ($scope.user._id != user._id) {
+                    $scope.title = user.displayName;
+                    alert($scope.title);
+                }
+            });
+        }, function (err) {
+            console.log(err);
+        });
+        // Add an event listener to the 'invite' event
+        Socket.on('invite', function (res) {
+            // alert('invite : ' + JSON.stringify(data));
+            Socket.emit('join', res);
+        });
+
+        // Add an event listener to the 'joinsuccess' event
+        Socket.on('joinsuccess', function (data) {
+            $scope.room = data;
+            // alert('joinsuccess : ' + JSON.stringify(data));
+        });
+
+        // Add an event listener to the 'chatMessage' event
+        Socket.on('chatMessage', function (data) {
+            $scope.room = data;
+        });
+        $scope.hideTime = true;
+        var alternate,
+            isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+        // Create a controller method for sending messages
+        $scope.sendMessage = function () {
+            // alternate = !alternate
+            // if (!$scope.room.messages) {
+            //     $scope.room.messages = [];
+            $scope.room.messages.unshift({
+                type: 'message',
+                created: Date.now(),
+                profileImageURL: $scope.user.profileImageURL,
+                username: $scope.user.username,
+                text: this.message
+            });
+            // } else {
+            //     $scope.room.messages.unshift({
+            //         type: 'message',
+            //         created: Date.now(),
+            //         profileImageURL: $scope.user.profileImageURL,
+            //         username: $scope.user.username,
+            //         text: this.message
+            //     });
+            // }
+            $ionicScrollDelegate.scrollBottom(true);
+
+            Socket.emit('chatMessage', $scope.room);
+            this.message = '';
+        };
+
+
+
+
+
+
+
+
+        // $scope.sendMessage = function () {
+        //     alternate = !alternate;
+
+        //     // var d = new Date();
+        //     // d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+        //     // $scope.room.messages.forEach(function(message){
+
+        //     // });
+        //     $scope.messages.push({
+        //         userId: alternate ? '12345' : '54321',
+        //         text: $scope.room.message,
+        //         time: d
+        //     });
+
+        //     delete $scope.room.message;
+        //     $ionicScrollDelegate.scrollBottom(true);
+
+        // };
+
+        $scope.inputUp = function () {
+            if (isIOS) $scope.room.keyboardHeight = 216;
+            $timeout(function () {
+                $ionicScrollDelegate.scrollBottom(true);
+            }, 300);
+
+        };
+
+        $scope.inputDown = function () {
+            if (isIOS) $scope.room.keyboardHeight = 0;
+            $ionicScrollDelegate.resize();
+        };
+
+        $scope.closeKeyboard = function () {
+            // cordova.plugins.Keyboard.close();
+        };
+
+
+        $scope.data = {};
+        $scope.myId = $scope.user.username;
+    })
+
+    .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+        $scope.user = AuthService.getUser();
+        $scope.listAccount = function () {
+            AuthService.getusers().then(function (accounts) {
+                $scope.accounts = accounts;
+            }, function (err) {
+                console.log(err);
+            });
+        };
+        $scope.listAccount();
+        $scope.addFriend = function (user) {
+            var data = {
+                name: $scope.user.username + '' + user.username,
+                type: 'P',
+                users: [$scope.user, user],
+                user: $scope.user
+            };
+            Socket.emit('createroom', data);
+        };
     });
 
 

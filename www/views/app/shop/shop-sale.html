@@ -3,6 +3,9 @@
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
     </ion-refresher>
     <div class="list" ng-if="user">
+      <a class="item item-icon-left" ui-sref="app.chat">
+        <i class="icon ion-ios-chatbubble-outline"></i> สนทนา
+      </a>
       <a class="item item-icon-left" ui-sref="app.edit-profile">
         <i class="icon ion-ios-person-outline"></i> แก้ไขโปรไฟล์
       </a>

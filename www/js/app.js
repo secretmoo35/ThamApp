@@ -15,7 +15,8 @@ angular.module('your_app_name', [
     'angularMoment',
     'ngIOS9UIWebViewPatch',
     'autocomplete.directive',
-    'openfb'
+    'openfb',
+    'btford.socket-io'
 ])
 
 
@@ -28,7 +29,7 @@ angular.module('your_app_name', [
     })
 
     .constant('config', {
-        apiUrl: 'https://thamapp.herokuapp.com/'
+        apiUrl: 'https://thamapptest.herokuapp.com/'
         //https://thamapp.herokuapp.com/      for production
         //https://thamapptest.herokuapp.com/  for heroku test
         //http://localhost:3000/              for local
@@ -316,6 +317,36 @@ angular.module('your_app_name', [
                     'menuContent': {
                         templateUrl: "views/app/profile/location.html",
                         controller: 'ShopCtrl'
+                    }
+                }
+            })
+
+            .state('app.chat', {
+                url: "/chat",
+                views: {
+                    'menuContent': {
+                        templateUrl: "views/app/profile/chat.html",
+                        controller: 'ChatCtrl'
+                    }
+                }
+            })
+
+            .state('app.chat-detail', {
+                url: "/chat/:chatId",
+                views: {
+                    'menuContent': {
+                        templateUrl: "views/app/profile/chat-detail.html",
+                        controller: 'ChatDetailCtrl'
+                    }
+                }
+            })
+
+            .state('app.listfriend', {
+                url: "/listfriend",
+                views: {
+                    'menuContent': {
+                        templateUrl: "views/app/profile/listfriend.html",
+                        controller: 'FriendsCtrl'
                     }
                 }
             })
