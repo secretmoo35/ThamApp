@@ -597,10 +597,6 @@ h2.no-l-background span:after {
     color: #fff;
 }
 
-.scroll {
-    padding: 10px 0 50px !important;
-}
-
 .messages {
     display: -webkit-box !important;
     display: -moz-box !important;

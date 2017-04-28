@@ -209,16 +209,38 @@ angular.module('your_app_name.app.controllers', [])
             $scope.data.productQuantity = 1;
 
             if (now) {
-                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
-                $scope.productGotoCart.product = product;
-                $scope.productGotoCart.qty = 1;
-                $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
-                $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
-                ShopService.addProductToCart($scope.productGotoCart);
-                console.log('Shop now!', $scope.productGotoCart);
-                $state.go('app.cart');
-                $rootScope.shakeitCart();
+                if (ShopService.getCartProducts().length === 0) {
+                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
+                    $scope.productGotoCart.product = product;
+                    $scope.productGotoCart.qty = 1;
+                    $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
+                    $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
+                    ShopService.addProductToCart($scope.productGotoCart);
+                    console.log('Shop now!', $scope.productGotoCart);
+                    $state.go('app.cart');
+                    $rootScope.shakeitCart();
+                } else {
+                    var cartQty = 0;
+                    ShopService.getCartProducts().forEach(function (cart) {
+                        if (product._id === cart.product._id) {
+                            cartQty = cart.qty;
+                        }
+                    });
 
+                    if (cartQty > 0) {
+                        $state.go('app.cart');
+                    } else {
+                        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
+                        $scope.productGotoCart.product = product;
+                        $scope.productGotoCart.qty = 1;
+                        $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
+                        $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
+                        ShopService.addProductToCart($scope.productGotoCart);
+                        console.log('Shop now!', $scope.productGotoCart);
+                        $state.go('app.cart');
+                        $rootScope.shakeitCart();
+                    }
+                }
             } else {
                 var myPopup = $ionicPopup.show({
                     cssClass: 'add-to-cart-popup',
@@ -1677,6 +1699,12 @@ angular.module('your_app_name.app.controllers', [])
         };
 
 
+        $scope.pageDown = function () {
+            $timeout(function () {
+                $ionicScrollDelegate.scrollBottom(true);
+            }, 300);
+        };
+
 
 
 
@@ -1746,7 +1774,6 @@ angular.module('your_app_name.app.controllers', [])
                         });
                     });
                 }
-                alert($scope.friends.length);
                 AuthService.getusers().then(function (accounts) {
                     $scope.accounts = accounts;
                 }, function (err) {
