@@ -1751,7 +1751,7 @@ angular.module('your_app_name.app.controllers', [])
 
 
         $scope.data = {};
-        $scope.myId = $scope.user.username;
+        $scope.myId = $scope.user.displayName;
     })
 
     .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
