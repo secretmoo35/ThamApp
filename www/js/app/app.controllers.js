@@ -1682,7 +1682,7 @@ angular.module('your_app_name.app.controllers', [])
                 type: 'message',
                 created: Date.now(),
                 profileImageURL: $scope.user.profileImageURL,
-                username: $scope.user.username,
+                username: $scope.user.displayName,
                 text: this.message
             });
             // } else {
