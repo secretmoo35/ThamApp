@@ -1733,7 +1733,7 @@ angular.module('your_app_name.app.controllers', [])
         // };
 
         $scope.inputUp = function () {
-            if (isIOS) $scope.room.keyboardHeight = 216;
+            // if (isIOS) $scope.room.keyboardHeight = 216;
             $timeout(function () {
                 $ionicScrollDelegate.scrollBottom(true);
             }, 300);
@@ -1741,7 +1741,7 @@ angular.module('your_app_name.app.controllers', [])
         };
 
         $scope.inputDown = function () {
-            if (isIOS) $scope.room.keyboardHeight = 0;
+            // if (isIOS) $scope.room.keyboardHeight = 0;
             $ionicScrollDelegate.resize();
         };
 
