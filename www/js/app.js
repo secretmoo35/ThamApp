@@ -212,17 +212,6 @@ angular.module('your_app_name', [
                 }
             })
 
-            .state('app.shop.popular', {
-                url: "/popular",
-                // cache: false,
-                views: {
-                    'shop-popular': {
-                        templateUrl: "views/app/shop/shop-popular.html",
-                        controller: 'ProfileCtrl'
-                    }
-                }
-            })
-
             .state('app.shop.sale', {
                 url: "/sale",
                 // cache: false,
@@ -234,34 +223,57 @@ angular.module('your_app_name', [
                 }
             })
 
-            .state('app.cart', {
+            .state('app.shop.salelogin', {
+                url: "/sale-login",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-sale-login.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+            
+            .state('app.shop.popular', {
+                url: "/popular",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-popular.html",
+                        controller: 'ProfileCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.cart', {
                 url: "/cart",
                 params: {
                     state: null
                 },
+                // cache: false,
                 views: {
-                    'menuContent': {
+                    'shop-cart': {
                         templateUrl: "views/app/shop/cart.html",
                         controller: 'ShoppingCartCtrl'
                     }
                 }
             })
 
-            .state('app.shipping-address', {
+            .state('app.shop.shipping-address', {
                 url: "/shipping-address",
                 views: {
-                    'menuContent': {
+                    'shop-cart': {
                         templateUrl: "views/app/shop/shipping-address.html",
                         controller: "CheckoutCtrl"
                     }
                 }
             })
 
-            .state('app.checkout', {
+            .state('app.shop.checkout', {
                 url: "/checkout",
                 cache: false,
                 views: {
-                    'menuContent': {
+                    'shop-cart': {
                         templateUrl: "views/app/shop/checkout.html",
                         controller: "CheckoutCtrl"
                     }
@@ -278,6 +290,27 @@ angular.module('your_app_name', [
                         templateUrl: "views/app/shop/complete.html",
                         controller: "CheckoutCtrl"
                     },
+                }
+            })
+
+            .state('app.shop.chat', {
+                url: "/chat",
+                // cache: false,
+                views: {
+                    'shop-chat': {
+                        templateUrl: "views/app/profile/chat.html",
+                        controller: 'ChatCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.chat-detail', {
+                url: "/chat/:chatId",
+                views: {
+                    'shop-chat': {
+                        templateUrl: "views/app/profile/chat-detail.html",
+                        controller: 'ChatDetailCtrl'
+                    }
                 }
             })
 
@@ -317,26 +350,6 @@ angular.module('your_app_name', [
                     'menuContent': {
                         templateUrl: "views/app/profile/location.html",
                         controller: 'ShopCtrl'
-                    }
-                }
-            })
-
-            .state('app.chat', {
-                url: "/chat",
-                views: {
-                    'menuContent': {
-                        templateUrl: "views/app/profile/chat.html",
-                        controller: 'ChatCtrl'
-                    }
-                }
-            })
-
-            .state('app.chat-detail', {
-                url: "/chat/:chatId",
-                views: {
-                    'menuContent': {
-                        templateUrl: "views/app/profile/chat-detail.html",
-                        controller: 'ChatDetailCtrl'
                     }
                 }
             })

@@ -1,8 +1,8 @@
-<ion-view view-title="สินค้า" class="shop-home-view" cache-view="false" ng-init="readProduct()">
+<ion-view view-title="หน้าหลัก" class="shop-home-view" cache-view="false" ng-init="readProduct()">
     <ion-nav-buttons side="right">
-        <a class="button button-icon" ui-sref="app.cart({state : 'app.shop'})">
+        <!--<a class="button button-icon" ui-sref="app.shop.cart">
             <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
-        </a>
+        </a>-->
     </ion-nav-buttons>
     <ion-content on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()" on-swipe-up="onSwipeUp()" on-swipe-down="onSwipeDown()">
         <!--<ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">

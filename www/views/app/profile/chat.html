@@ -1,13 +1,13 @@
-<ion-view class="profile-likes" view-title="รายชื่อผู้ใช้งาน" cache-view="false">
-    <ion-nav-buttons side="left">
-        <button class="button button-icon button-clear" ui-sref="app.shop.sale">
-            <i class="ion-ios-arrow-back color-gray font-30"></i>
-        </button>
+<ion-view class="profile-likes" view-title="แชท" cache-view="false">
+    <ion-nav-buttons side="right">
+        <!--<a class="button button-icon" ui-sref="app.shop.cart">
+            <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
+        </a>-->
     </ion-nav-buttons>
     <ion-content>
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats | filter: { users : { _id : user._id } }"
-                type="item-text-wrap" ui-sref="app.chat-detail({chatId: chat._id})">
+                type="item-text-wrap" ui-sref="app.shop.chat-detail({chatId: chat._id})">
                 <img ng-repeat="user in chat.users | filter: { _id : '!' + user._id}" ng-src="{{user.profileImageURL}}">
                 <h2 ng-repeat="user in chat.users | filter: { _id : '!' + user._id}">{{user.displayName}}</h2>
                 <p>{{chat.lastText}}</p>

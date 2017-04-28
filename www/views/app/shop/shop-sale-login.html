@@ -1,0 +1,30 @@
+<ion-view view-title="เข้าสู่ระบบเพื่อชำระสินค้า" class="shipping-address-view">
+    <ion-nav-buttons side="right">
+        <!--<a class="button button-icon" ui-sref="app.shop.cart">
+            <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
+        </a>-->
+    </ion-nav-buttons>
+    <ion-content scroll="true">
+        <div class="list">
+            <div class="margin-top-8">
+                <label class="item item-input">
+                    <span class="input-label">เบอร์โทร*</span>
+                    <input type="text" ng-model="authentication.username">
+                </label>
+                <div class="row padding ">
+                    <button class="button button-block button-energized checkout-btn" ng-disabled="!authentication.username">
+                        ดำเนินการต่อ
+                    </button>
+                </div>
+            </div>
+            <div class="bottom-content row">
+                <div class="col col-bottom">
+                    <a class="facebook-sign-in button button-block button-facebook" ng-click="loginFacebook()">
+            Sign In with Facebook
+          </a>
+                    <!--<button ng-click="signOutFacebook()">logout by facebook</button>-->
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

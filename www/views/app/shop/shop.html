@@ -1,13 +1,17 @@
 <ion-view view-title="" class="shop-view" cache-view="false">
     <ion-tabs class="tabs-icon-top tabs-striped tabs-background-balanced tabs-color-light shop-tabs">
-        <ion-tab title="สินค้า" icon-on="ion-android-cart" icon-off="ion-android-cart" ui-sref="app.shop.home">
+        <ion-tab title="หน้าหลัก" icon-on="ion-ios-home" icon-off="ion-ios-home-outline" ui-sref="app.shop.home">
 
             <ion-nav-view name="shop-home"></ion-nav-view>
         </ion-tab>
-        <ion-tab title="ประวัติการสั่งซื้อ" icon-on="ion-document-text" icon-off="ion-document-text" ui-sref="app.shop.popular">
-            <ion-nav-view name="shop-popular"></ion-nav-view>
+        <ion-tab title="แชท" icon-on="ion-ios-chatboxes" icon-off="ion-ios-chatboxes-outline"  ui-sref="app.shop.chat">
+
+            <ion-nav-view name="shop-chat"></ion-nav-view>
         </ion-tab>
-        <ion-tab title="ประวัติส่วนตัว" icon-on="ion-android-contact" icon-off="ion-android-contact" ui-sref="app.shop.sale">
+        <ion-tab title="ตระกร้าสินค้า" badge="countProduct.getCountProduct()" icon-on="ion-ios-cart" icon-off="ion-ios-cart-outline" ui-sref="app.shop.cart">
+            <ion-nav-view name="shop-cart"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="ประวัติส่วนตัว" icon-on="ion-ios-person" icon-off="ion-ios-person-outline" ui-sref="app.shop.sale">
             <ion-nav-view name="shop-sale"></ion-nav-view>
         </ion-tab>
     </ion-tabs>

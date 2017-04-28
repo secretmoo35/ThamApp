@@ -217,7 +217,7 @@ angular.module('your_app_name.app.controllers', [])
                     $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
                     ShopService.addProductToCart($scope.productGotoCart);
                     console.log('Shop now!', $scope.productGotoCart);
-                    $state.go('app.cart');
+                    $state.go('app.shop.cart');
                     $rootScope.shakeitCart();
                 } else {
                     var cartQty = 0;
@@ -228,7 +228,7 @@ angular.module('your_app_name.app.controllers', [])
                     });
 
                     if (cartQty > 0) {
-                        $state.go('app.cart');
+                        $state.go('app.shop.cart');
                     } else {
                         $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
                         $scope.productGotoCart.product = product;
@@ -237,7 +237,7 @@ angular.module('your_app_name.app.controllers', [])
                         $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
                         ShopService.addProductToCart($scope.productGotoCart);
                         console.log('Shop now!', $scope.productGotoCart);
-                        $state.go('app.cart');
+                        $state.go('app.shop.cart');
                         $rootScope.shakeitCart();
                     }
                 }
@@ -726,9 +726,9 @@ angular.module('your_app_name.app.controllers', [])
         $scope.getUserAndContinue = function () {
             var user = AuthService.getUser();
             if (user) {
-                $state.go('app.checkout');
+                $state.go('app.shop.checkout');
             } else {
-                $state.go('app.shipping-address');
+                $state.go('app.shop.shipping-address');
             }
         };
 
@@ -844,11 +844,11 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.gotoForm = function (num) {
             if (num === '4') {
-                $state.go('app.checkout');
+                $state.go('app.shop.checkout');
             } else if (num === '3') {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
                 AuthService.login($scope.authentication).then(function (res) {
-                    $state.go('app.checkout');
+                    $state.go('app.shop.checkout');
                     $ionicLoading.hide();
                     $scope.step = num;
                 }, function (err) {
@@ -861,7 +861,7 @@ angular.module('your_app_name.app.controllers', [])
                 $scope.authentication.password = 'Usr#Pass1234';
                 AuthService.login($scope.authentication).then(function (success) {
                     $scope.step = '3';
-                    $state.go('app.checkout');
+                    $state.go('app.shop.checkout');
                     $ionicLoading.hide();
                 }, function (err) {
 
@@ -877,7 +877,7 @@ angular.module('your_app_name.app.controllers', [])
                 AuthService.signup($scope.authentication).then(function (res) {
                     $scope.state = false;
                     $scope.step = '3';
-                    $state.go('app.checkout');
+                    $state.go('app.shop.checkout');
                     $ionicLoading.hide();
                 }, function (err) {
                     $ionicLoading.hide();
@@ -1630,7 +1630,6 @@ angular.module('your_app_name.app.controllers', [])
 
     .controller('ChatDetailCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, $stateParams, Socket, $ionicScrollDelegate, $timeout) {
         $scope.user = AuthService.getUser();
-        var roomId = $stateParams.chatId;
         $scope.messages = [];
         $scope.chat = null;
         $scope.room = {};
@@ -1639,18 +1638,21 @@ angular.module('your_app_name.app.controllers', [])
         // Socket.on('mobile', function (message) {
         //   $scope.messages.unshift(message);
         // });
-
-        roomService.getRoom(roomId).then(function (res) {
-            $scope.chat = res;
-            Socket.emit('join', $scope.chat);
-            $scope.chat.users.forEach(function (user) {
-                if ($scope.user._id != user._id) {
-                    $scope.title = user.displayName;
-                }
+        $scope.loadRoom = function () {
+            var roomId = $stateParams.chatId;
+            roomService.getRoom(roomId).then(function (res) {
+                res.users.forEach(function (user) {
+                    if ($scope.user._id != user._id) {
+                        $scope.title = user.displayName;
+                    }
+                });
+                $scope.chat = res;
+                Socket.emit('join', $scope.chat);
+            }, function (err) {
+                console.log(err);
             });
-        }, function (err) {
-            console.log(err);
-        });
+        };
+
         // Add an event listener to the 'invite' event
         Socket.on('invite', function (res) {
             // alert('invite : ' + JSON.stringify(data));

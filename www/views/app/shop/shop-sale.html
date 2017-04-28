@@ -1,30 +1,62 @@
-<ion-view view-title="ประวัติส่วนตัว" class="shop-sale-view">
+<ion-view view-title="ประวัติส่วนตัว" class="shop-sale-view" cache-view="false">
+  <ion-nav-buttons side="right">
+    <!--<a class="button button-icon" ui-sref="app.shop.cart">
+            <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
+        </a>-->
+  </ion-nav-buttons>
   <ion-content>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getNewData()">
     </ion-refresher>
+
+    <div class="list">
+      <a class="item item-icon-left" ui-sref="app.shop.salelogin" ng-if="!user">
+        <i class="icon ion-happy-outline"></i> ลงชื่อเข้าใช้
+      </a>
+      <a class="item item-icon-left" ng-if="user">
+        <i class="icon ion-happy-outline"></i> สวัสดี, {{user.displayName}}
+      </a>
+    </div>
+
+    <div class="list">
+      <a class="item item-icon-left">
+        <i class="icon ion-android-notifications-none"></i> การแจ้งเตือนของคุณ
+      </a>
+      <a class="item item-icon-left" ui-sref="app.shop.popular">
+        <i class="icon ion-bag"></i> สินค้าของฉัน
+      </a>
+      <a class="item item-icon-left" ui-sref="app.locations" ng-if="user">
+        <i class="icon ion-ios-location-outline"></i> ที่อยู่ของฉัน
+      </a>
+    </div>
+
+    <div class="list">
+      <a class="item item-icon-left">
+        <i class="icon ion-android-settings"></i> การตั้งค่า
+      </a>
+    </div>
+    <div class="list">
+      <a class="item item-icon-left">
+        <i class="icon ion-document"></i> นโยบาย
+      </a>
+      <a class="item item-icon-left">
+        <i class="icon ion-ios-help-outline"></i> ช่วยเหลือ
+      </a>
+    </div>
     <div class="list" ng-if="user">
-      <a class="item item-icon-left" ui-sref="app.chat">
-        <i class="icon ion-ios-chatbubble-outline"></i> สนทนา
+      <a class="item item-icon-left" ng-click="signout()">
+        <i class="icon ion-log-out"></i> ออกจากระบบ
       </a>
-      <a class="item item-icon-left" ui-sref="app.edit-profile">
+      <!--<a class="item item-icon-left" ui-sref="app.edit-profile">
         <i class="icon ion-ios-person-outline"></i> แก้ไขโปรไฟล์
-      </a>
+      </a>-->
       <!--<a class="item item-icon-left" href="#" ng-disabled="true">
                         <i class="icon ion-ios-reverse-camera"></i> เปลี่ยนรูปโปรไฟล์
                     </a> -->
-      <a class="item item-icon-left" ui-sref="app.change-password">
+      <!--<a class="item item-icon-left" ui-sref="app.change-password">
         <i class="icon ion-ios-reverse-camera-outline"></i> เปลี่ยนรูปโปรไฟล์
-      </a>
-      <a class="item item-icon-left" ui-sref="app.locations">
-        <i class="icon ion-ios-flag-outline"></i> ยืนยันตำแหน่งที่ตั้ง
-      </a>
-      <a class="item item-icon-left settings-option" ng-click="signout()">
+      </a>-->
+      <!--<a class="item item-icon-left settings-option" ng-click="signout()">
         <i class="icon ion-ios-close-outline"></i> ลงชื่อออก
-      </a>
-    </div>
-    <div class="list" ng-if="!user">
-      <!--<a class="item item-icon-left" ui-sref="app.edit-profile">
-        <i class="icon ion-ios-person-outline"></i> เข้าสู่ระบบ
       </a>-->
     </div>
   </ion-content>
