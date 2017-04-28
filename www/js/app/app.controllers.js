@@ -1624,7 +1624,6 @@ angular.module('your_app_name.app.controllers', [])
             $scope.chat.users.forEach(function (user) {
                 if ($scope.user._id != user._id) {
                     $scope.title = user.displayName;
-                    alert($scope.title);
                 }
             });
         }, function (err) {
@@ -1644,6 +1643,7 @@ angular.module('your_app_name.app.controllers', [])
 
         // Add an event listener to the 'chatMessage' event
         Socket.on('chatMessage', function (data) {
+            // alert(JSON.stringify(data));
             $scope.room = data;
         });
         $scope.hideTime = true;
@@ -1727,10 +1727,31 @@ angular.module('your_app_name.app.controllers', [])
     .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
         $scope.user = AuthService.getUser();
         $scope.listAccount = function () {
-            AuthService.getusers().then(function (accounts) {
-                $scope.accounts = accounts;
-            }, function (err) {
-                console.log(err);
+            $scope.listRoom = [];
+            $scope.friends = [];
+            roomService.getrooms().then(function (rooms) {
+                rooms.forEach(function (room) {
+                    room.users.forEach(function (user) {
+                        if ($scope.user._id === user._id) {
+                            $scope.listRoom.push(room);
+                        }
+                    });
+                });
+                if ($scope.listRoom.length > 0) {
+                    $scope.listRoom.forEach(function (room) {
+                        room.users.forEach(function (user) {
+                            if ($scope.user._id !== user._id) {
+                                $scope.friends.push(user);
+                            }
+                        });
+                    });
+                }
+                alert($scope.friends.length);
+                AuthService.getusers().then(function (accounts) {
+                    $scope.accounts = accounts;
+                }, function (err) {
+                    console.log(err);
+                });
             });
         };
         $scope.listAccount();

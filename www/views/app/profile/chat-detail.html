@@ -26,7 +26,7 @@
 
     <ion-content class="content-stable" on-swipe-left="hideTime = false" on-swipe-right="hideTime = true">
 
-        <div ng-repeat="message in room.messages | orderBy: '-created'" ng-class="{other: message.username == myId}" class="messages">
+        <div ng-repeat="message in room.messages | orderBy: '-'" ng-class="{other: message.username == myId}" class="messages">
 
             <div class="message" ng-class="{'slide-right': hideTime, '': !hideTime}">
                 <!--<p> {{ message.username }}</p>-->
