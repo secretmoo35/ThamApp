@@ -413,7 +413,19 @@ angular.module('your_app_name.app.services', [])
                 dfd.resolve(data);
             }).error(function (err) {
                 dfd.reject(err);
-            });;
+            });
+            return dfd.promise;
+        }
+
+        this.getCompleteOrderById = function (id) {
+            var dfd = $q.defer();
+            var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
+            var data = [];
+            $http.get(apiUrl + 'api/orders/' + id).success(function (database) {
+                dfd.resolve(database);
+            }).error(function (err) {
+                dfd.reject(err);
+            });
             return dfd.promise;
         }
 

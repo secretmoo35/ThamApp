@@ -23,7 +23,21 @@ angular.module('your_app_name.app.controllers', [])
     .controller('ProfileCtrl', function ($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer, $ionicPopup) {
 
         $scope.apiUrl = config.apiUrl;
+        $scope.getCompleteOrderById = function (id) {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
+            ShopService.getCompleteOrderById(id).then(function (res) {
+                $scope.historyById = res;
+                $ionicLoading.hide();
+            }, function (err) {
+                $ionicLoading.hide();
+                alert(JSON.stringify(err));
+            });
+        }
 
+        if ($stateParams.hisId) {
+            $scope.hisId = $stateParams.hisId;
+            $scope.getCompleteOrderById($scope.hisId);
+        };
         $scope.loggedUser = AuthService.getUser();
         if ($scope.loggedUser) {
             $scope.history = [];
@@ -75,6 +89,16 @@ angular.module('your_app_name.app.controllers', [])
                 order.historystatus.push(historystatus);
                 ShopService.cancelOrder(order).then(function (res) {
                     $scope.getNewData();
+                    if ($stateParams.hisId) {
+                        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
+                        ShopService.getCompleteOrderById($stateParams.hisId).then(function (res) {
+                            $scope.getCompleteOrderById(res._id);
+                            $ionicLoading.hide();
+                        }, function (err) {
+                            $ionicLoading.hide();
+                            alert(JSON.stringify(err));
+                        });
+                    }
                 }, function (err) {
                     alert(JSON.stringify(err));
                 });
@@ -106,10 +130,6 @@ angular.module('your_app_name.app.controllers', [])
             } else {
                 $scope.shownItem = item;
             }
-        };
-
-        $scope.isItemShown = function (item) {
-            return $scope.shownItem === item;
         };
 
         $scope.changeImageProfile = function () {
@@ -663,6 +683,82 @@ angular.module('your_app_name.app.controllers', [])
                     $ionicLoading.hide();
                     $scope.errorAlert();
                 })
+        };
+
+        $scope.settingLogin = function () {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+            $scope.authentication.username = this.username;
+            $scope.authentication.password = 'Usr#Pass1234';
+            AuthService.login($scope.authentication).then(function (success) {
+                $rootScope.loadUser();
+                $ionicLoading.hide();
+                $state.go('app.shop.sale');
+            }, function (err) {
+                $ionicLoading.hide();
+                var myPopup = $ionicPopup.show({
+                    title: 'ไม่มีข้อมูลสมาชิก!!',
+                    subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
+                    scope: $scope,
+                    buttons: [{
+                        text: '<b>ตกลง</b>',
+                        type: 'button-positive',
+                        onTap: function (e) {
+                            alert($scope.authentication.username);
+                            $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
+                        }
+                    }, {
+                            text: '<b>ยกเลิก</b>',
+                            onTap: function (e) {
+                                this.username = '';
+                                $state.go('app.shop.sale');
+                            }
+                        }
+                    ]
+                });
+            })
+        };
+
+        $scope.settingRegis = function () {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+            if ($stateParams.setusername) {
+                $scope.authentication.username = $stateParams.setusername;
+            }
+            $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
+            $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+            $scope.authentication.address.tel = $scope.authentication.username;
+            $scope.authentication.password = 'Usr#Pass1234';
+            AuthService.signup($scope.authentication).then(function (res) {
+                $rootScope.loadUser();
+                $ionicLoading.hide();
+                $state.go('app.shop.sale');
+            }, function (err) {
+                $ionicLoading.hide();
+                if (err.message === 'Username already exists') {
+                    var myPopup = $ionicPopup.show({
+                        template: '<input type="text" ng-model="authentication.username">',
+                        title: 'มีชื่อผู้ใช้งานนี้แล้ว',
+                        subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
+                        scope: $scope,
+                        buttons: [
+                            { text: 'ยกเลิก' }, {
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                    $scope.settingRegis();
+                                }
+                            }
+                        ]
+                    });
+
+                    myPopup.then(function (res) {
+                        console.log('Tapped!', res);
+                    });
+                } else {
+                    alert(JSON.stringify(err));
+                }
+
+            });
         };
 
     })

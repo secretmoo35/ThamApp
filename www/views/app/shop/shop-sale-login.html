@@ -9,10 +9,10 @@
             <div class="margin-top-8">
                 <label class="item item-input">
                     <span class="input-label">เบอร์โทร*</span>
-                    <input type="text" ng-model="authentication.username">
+                    <input type="text" ng-model="username">
                 </label>
                 <div class="row padding ">
-                    <button class="button button-block button-energized checkout-btn" ng-disabled="!authentication.username">
+                    <button class="button button-block button-energized checkout-btn" ng-disabled="!username" ng-click="settingLogin(username)">
                         ดำเนินการต่อ
                     </button>
                 </div>

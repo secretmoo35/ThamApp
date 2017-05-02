@@ -233,13 +233,35 @@ angular.module('your_app_name', [
                     }
                 }
             })
-            
+
+            .state('app.shop.saleregis', {
+                url: "/sale-regis/:setusername",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-sale-register.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+
             .state('app.shop.popular', {
                 url: "/popular",
                 // cache: false,
                 views: {
                     'shop-sale': {
                         templateUrl: "views/app/shop/shop-popular.html",
+                        controller: 'ProfileCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.historybyid', {
+                url: "/historybyid/:hisId",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-history-byid.html",
                         controller: 'ProfileCtrl'
                     }
                 }
