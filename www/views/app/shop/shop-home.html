@@ -40,24 +40,26 @@
                 <span class="title-copy">แคมเปญ</span>
                 <a class="button button-small button-dark section-action" ui-sref="app.shop.campaigns">เพิ่มเติม</a>
             </div>
-            <ion-scroll direction="x" class="wide-as-needed" scroll="true" overflow-scroll="{{scroll === true ? 'true': scroll === false ? 'false' : 'true'}}">
-                <div class="row shop-products-narrow-cards-outer shop-product-cards-scroller">
-                    <div ng-repeat="campaign in campaigns | orderBy: 'created' | limitTo : 4" style="width: 500px;" class="col col-50 shop-product-narrow-card"
-                        ui-sref="app.campaign-detail({campaignId: campaign._id})">
-                        <div class="list card">
-                            <div class="item item-image">
+            <div class="row" ng-repeat="campaign in campaigns | orderBy: 'created' | limitTo : 4">
+                <div class="list col col-100">
+                    <a class="item item-icon" ui-sref="app.shop.campaign-detail({campaignId: campaign._id})">
+                        <div class="row">
+                            <div class="col col-20 item item-image">
                                 <pre-img ratio="_1_1" helper-class="main-image">
-                                    <img ng-src="http://res.cloudinary.com/hrpqiager/image/upload/v1485171075/d7mt2yhjrwttxdllvnzr.jpg" spinner-on-load>
+                                    <img ng-src="{{product.images}}" spinner-on-load>
                                 </pre-img>
                             </div>
-                            <div class="item item-body">
+                            <div class="col col-50">
                                 <h2 class="card-title">{{campaign.name}}</h2>
                                 <p class="card-description">{{campaign.description}}</p>
                             </div>
+                            <div class="col col-30 text-right font-30">
+                                <i class="icon ion-ios-arrow-right"></i>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </ion-scroll>
+            </div>
         </div>
 
         <div ng-repeat="cate in category" ng-disbled="true">

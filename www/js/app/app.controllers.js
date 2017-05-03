@@ -327,6 +327,28 @@ angular.module('your_app_name.app.controllers', [])
                 }, 500);
             });
         }
+
+        if ($stateParams.campaign) {
+            var campaignId = $stateParams.campaign;
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>' });
+            ShopService.getCampaign(campaignId).then(function (campaign) {
+                $scope.campaign = campaign;
+                $timeout(function () {
+                    $ionicLoading.hide();
+                }, 500);
+            });
+        }
+
+        if ($stateParams.product) {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>' });
+            ShopService.getProduct($stateParams.product).then(function (product) {
+                $scope.product = product;
+                $timeout(function () {
+                    $ionicLoading.hide();
+                }, 500);
+            });
+        }
+
         if ($rootScope.user) {
             $scope.step = '4';
         } else {
@@ -351,6 +373,8 @@ angular.module('your_app_name.app.controllers', [])
         $scope.gotoForm = function (num) {
             if (num === '4') {
                 $scope.acceptCampaign.user = $rootScope.user;
+                $scope.campaign = $scope.campaign ? $scope.campaign : {};
+                $scope.campaign.listusercampaign = $scope.campaign.listusercampaign ? $scope.campaign.listusercampaign : [];
                 $scope.campaign.listusercampaign.push($scope.acceptCampaign);
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
                 ShopService.acceptCampaign($scope.campaign).then(function (res) {
@@ -378,7 +402,7 @@ angular.module('your_app_name.app.controllers', [])
                 }, function (err) {
                     $scope.acceptCampaign = {};
                     $ionicLoading.hide();
-                    if (err.message === 'Identification is already!' || err.message === 'Your identification is Invalid!') {
+                    if (err.message === 'Identification is already!' || err.message === 'Your identification is Invalid!' || err.message === 'Wrong Identification!') {
                         var myPopup = $ionicPopup.show({
                             title: 'ผิดพลาด',
                             subTitle: 'รหัสบัตรประชาชนของคุณไม่ถูกต้อง',
@@ -1758,6 +1782,7 @@ angular.module('your_app_name.app.controllers', [])
         // Add an event listener to the 'joinsuccess' event
         Socket.on('joinsuccess', function (data) {
             $scope.room = data;
+            $scope.pageDown();
             // alert('joinsuccess : ' + JSON.stringify(data));
         });
 
@@ -1889,6 +1914,18 @@ angular.module('your_app_name.app.controllers', [])
             };
             Socket.emit('createroom', data);
         };
+    })
+
+    .controller('QuizCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+        $scope.quizWelcome = "This is a QuizCtrl";
+    })
+
+    .controller('PolicyCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+
+    })
+
+    .controller('PushNotiCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+        $scope.welcome = "This is a PushNotification";
     });
 
 

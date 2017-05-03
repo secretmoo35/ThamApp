@@ -1,4 +1,4 @@
-<ion-view view-title="รายการสินค้า" class="shop-home-view" cache-view="false">
+<ion-view view-title="ลงทะเบียน" class="product-view" cache-view="false">
     <ion-nav-buttons side="right">
         <!--<a class="button button-icon" ui-sref="app.cart()">
             <i class="icon ion-ios-cart" ng-class="{'color-gray' : ('app.product-detail' | includedByState)}">
@@ -6,29 +6,11 @@
           </i>
         </a>-->
     </ion-nav-buttons>
-    <ion-content scroll="true">
-        <div class="row shop-products-narrow-cards-outer">
-            <div ng-repeat="product in campaign.products" class="col col-50 shop-product-narrow-card" ui-sref="app.shop.campaignproduct({campaign: campaign._id, product: product.product._id})">
-                <div class="list card">
-                    <div class="item item-image">
-                        <pre-img ratio="_1_1" helper-class="main-image">
-                            <img ng-src="{{product.product.images}}" spinner-on-load>
-                        </pre-img>
-                    </div>
-                    <div class="item item-body">
-                        <h2 class="card-title">{{product.product.name}}</h2>
-                        <p class="card-description">{{product.product.description}}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </ion-content>
-    <!--<ion-content overflow-scroll="true">
+    <ion-content overflow-scroll="true">
         <div class="product-card-content">
             <div class="item item-image">
                 <pre-img helper-class="main-image" ratio="_1_1">
-                    <img ng-src="http://res.cloudinary.com/hrpqiager/image/upload/v1485171075/d7mt2yhjrwttxdllvnzr.jpg" spinner-on-load>
+                    <img ng-src="{{product.images}}" spinner-on-load>
                 </pre-img>
             </div>
             <div class="item item-body">
@@ -37,7 +19,7 @@
                 </div>
                 <div class="row">
                     <div class="col-col-33">
-                        <p>{{campaign.description}}</p>
+                        <p>สินค้าที่ร่วมรายการ : {{product.name}}</p>
                     </div>
                 </div>
             </div>
@@ -80,6 +62,7 @@
                         <a class="facebook-sign-in button button-block button-facebook">
             Sign In with Facebook
           </a>
+                        <!--ng-click="loginFacebook()"-->
                     </div>
                 </div>
             </div>
@@ -97,8 +80,13 @@
             </label>
                 <label class="item item-input">
                 <span class="input-label">รหัสไปรษณีย์</span>
+                <!--<input type="text" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode">-->
                 <input type="number" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode" ionic-autocomplete="{items: postcodes, onSelect: onPostcodeSelected, onDataInvalid: onPostcodeInvalid}" />
             </label>
+                <!--<label class="item item-input item-floating-label">
+                <span class="input-label">รหัสไปรษณีย์</span>
+                <input type="text" autocomplete="false" typeahead="postcode" typeahead-callback="callback" placeholder="รหัสไปรษณีย์*" ng-model="authentication.address.postcode">
+            </label>-->
                 <label class="item item-input">
                 <span class="input-label">แขวง/ตำบล</span>
                 <input type="text" placeholder="แขวง/ตำบล*" ng-model="authentication.address.subdistrict">
@@ -115,6 +103,7 @@
                 <span class="input-label">ที่อยู่</span>
                 <input type="text" placeholder="ที่อยู่*" ng-model="authentication.address.address">
             </label>
+                <!--<ion-toggle toggle-class="toggle-energized">Use as my default address</ion-toggle>-->
                 <div class="row padding">
                     <button class="button button-block button-energized save-address-btn" ng-click="gotoForm()" ng-disabled="!authentication.address.address || !authentication.address.province || !authentication.address.district || !authentication.address.postcode || !authentication.lastName || !authentication.firstName">
                     ดำเนินการต่อ
@@ -145,6 +134,7 @@
                         <span class="title-copy">กำหนดวันมารับสิทธิ์</span>
                     </div>
                     <label class="item item-input item-select">
+                    <!--<input type="text" ng-model="acceptCampaign.identification">-->
                     <select ng-model="acceptCampaign.acceptcampaigndate" ng-options="marketplan.text for marketplan in marketplans">
                         <option value="">กรุณาระบุวันที่มารับสิทธิ์</option>
                     </select>
@@ -158,5 +148,5 @@
                 </div>
             </div>
         </div>
-    </ion-content>-->
+    </ion-content>
 </ion-view>

@@ -212,6 +212,30 @@ angular.module('your_app_name', [
                 }
             })
 
+            .state('app.shop.campaign-detail', {
+                url: "/campaign/:campaignId",
+                views: {
+                    'shop-home': {
+                        templateUrl: "views/app/shop/campaign-detail.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.campaignproduct', {
+                url: "/campaignproduct/:campaign/:product",
+                params: {
+                    cate: null
+                },
+                // cache: false,
+                views: {
+                    'shop-home': {
+                        templateUrl: "views/app/shop/campaignproduct.html",
+                        controller: 'ShopCtrl'
+                    }
+                }
+            })
+
             .state('app.shop.sale', {
                 url: "/sale",
                 // cache: false,
@@ -263,6 +287,61 @@ angular.module('your_app_name', [
                     'shop-sale': {
                         templateUrl: "views/app/shop/shop-history-byid.html",
                         controller: 'ProfileCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.setting', {
+                url: "/setting",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-setting.html",
+                        controller: 'ProfileCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.policy', {
+                url: "/policy",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-policy.html",
+                        controller: 'PolicyCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.help', {
+                url: "/help",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-help.html",
+                        controller: 'PolicyCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.pushnotifications', {
+                url: "/pushnotifications",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/shop-pushnotifications.html",
+                        controller: 'PushNotiCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.quiz', {
+                url: "/quiz",
+                // cache: false,
+                views: {
+                    'shop-quiz': {
+                        templateUrl: "views/app/shop/quiz.html",
+                        controller: 'QuizCtrl'
                     }
                 }
             })
@@ -382,16 +461,6 @@ angular.module('your_app_name', [
                     'menuContent': {
                         templateUrl: "views/app/profile/listfriend.html",
                         controller: 'FriendsCtrl'
-                    }
-                }
-            })
-
-            .state('app.campaign-detail', {
-                url: "/campaign/:campaignId",
-                views: {
-                    'menuContent': {
-                        templateUrl: "views/app/shop/campaign-detail.html",
-                        controller: 'ShopCtrl'
                     }
                 }
             })

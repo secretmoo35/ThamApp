@@ -681,3 +681,7 @@ span1 {
 .bg-color-brow {
     background-color: #F9F9F9 !important;
 }
+
+.font-20 {
+    font-size: 10%;
+}
