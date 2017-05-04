@@ -1916,15 +1916,107 @@ angular.module('your_app_name.app.controllers', [])
         };
     })
 
-    .controller('QuizCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
-        $scope.quizWelcome = "This is a QuizCtrl";
+    .controller('QuizCtrl', function ($scope, $stateParams, $ionicModal, AuthService, $rootScope, QuizService, $ionicLoading, $state) {
+        $scope.user = AuthService.getUser();
+        $scope.loadWelcom = function () {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
+            QuizService.getQuizs().then(function (res) {
+                $scope.quizWelcome = res;
+                $ionicLoading.hide();
+                $scope.$broadcast('scroll.refreshComplete');                
+            }, function (err) {
+                $ionicLoading.hide();
+                alert(JSON.stringify(err));
+            });
+        };
+
+        $scope.loadWelcom();
+
+        $scope.chkShow = function (q) {
+            var isShow = true;
+            q.users.forEach(function (user) {
+                if (user._id === $scope.user._id) {
+                    isShow = false;
+                }
+            });
+            return isShow;
+        };
+
+        if ($stateParams.quizId) {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
+            QuizService.getQuiz($stateParams.quizId).then(function (res) {
+                $scope.quiz = res;
+                console.log($scope.quiz.quizs);
+                $ionicLoading.hide();
+            }, function (err) {
+                $ionicLoading.hide();
+                alert(JSON.stringify(err));
+            });
+        }
+
+        // $scope.returnAnswer = function (ans, type) {
+        //     if (type.questiontype === 'choice') {
+        //         var parseAns = JSON.parse(ans);
+        //         return parseAns.choice;
+        //     } else {
+        //         return ans;
+        //     }
+        // };
+
+        // $scope.gotoAnswer = function (quiz) {
+        //     $state.go('app.shop.quiz-answer', {
+        //         quiz: JSON.stringify(quiz)
+        //     });
+        // };
+        function arrayObjectIndexOf(myArray, searchTerm, property) {
+            for (var i = 0, len = myArray.length; i < len; i++) {
+                if (myArray[i][property] === searchTerm) return i;
+            }
+            return -1;
+        }
+        // $scope.loadQuiz = function () {
+        //     $scope.quizParam = JSON.parse($stateParams.quiz);
+        // };
+        $scope.quizrepeat = function (quiz) {
+            // alert($scope.user._id);
+            // alert(arrayObjectIndexOf($scope.quiz.users, $scope.user._id, "_id"));
+            if (arrayObjectIndexOf($scope.quiz.users, $scope.user._id, '_id') === -1) {
+                if (quiz.answers) {
+                    quiz.answers.push({
+                        user: $scope.user,
+                        answer: ''
+                    });
+                } else {
+                    quiz.answers = [];
+                    quiz.answers.push({
+                        user: $scope.user,
+                        answer: ''
+                    });
+                }
+            }
+        };
+
+        $scope.saveQuiz = function () {
+            $scope.quiz.users = $scope.quiz.users ? $scope.quiz.users : [];
+            $scope.quiz.users.push($scope.user);
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
+            QuizService.saveQuiz($scope.quiz).then(function (res) {
+                $ionicLoading.hide();
+                $state.go('app.shop.quiz');
+            }, function (err) {
+                $ionicLoading.hide();
+                alert(JSON.stringify(err));
+            });
+            QuizService.saveQuiz()
+        };
+
     })
 
-    .controller('PolicyCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+    .controller('PolicyCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService) {
 
     })
 
-    .controller('PushNotiCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+    .controller('PushNotiCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService) {
         $scope.welcome = "This is a PushNotification";
     });
 

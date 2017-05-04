@@ -1,0 +1,17 @@
+<ion-view view-title="{{quizParam.questiontype === 'choice' ? 'เลือกคำตอบ' : 'กรอกคำตอบ'}}" class="cart-view" cache-view="false"
+    ng-init="loadQuiz()">
+    <ion-nav-buttons side="right">
+        <!--<a class="button button-icon" ui-sref="app.shop.cart">
+            <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
+        </a>-->
+    </ion-nav-buttons>
+    <ion-content scroll="true">
+        <div ng-repeat="answer in quizParam.answers | filter: { user : {_id : user._id } }">
+            <ion-list ng-if="quizParam.questiontype === 'choice'">
+                <ion-radio ng-repeat="choice in quizParam.choices" ng-model="answer.answer" ng-value="{{parseJson(choice.choice)}}">{{choice.choice}}</ion-radio>
+            </ion-list>
+            <textarea class="txtarea" ng-model="answer.answer" ng-if="quizParam.questiontype === 'none-choice'"></textarea>
+        </div>
+
+    </ion-content>
+</ion-view>

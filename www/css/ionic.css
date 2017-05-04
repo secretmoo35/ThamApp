@@ -685,3 +685,13 @@ span1 {
 .font-20 {
     font-size: 10%;
 }
+
+.txtarea {
+    width: 100% !important;    
+    height: 100px !important;    
+}
+
+.background-write {
+    background-color: #ffffff !important;
+}
+textarea::-webkit-input-placeholder {  color: #999;}

@@ -455,6 +455,42 @@ angular.module('your_app_name.app.services', [])
 
     })
 
+    .service('QuizService', function ($http, $q, _, config) {
+
+        var apiUrl = config.apiUrl;
+
+        // window.localStorage.clear(); //# เคลียร์ localStorage ทั้งหมด สำหรับ test อย่างเดียว 20161223 by Moo.
+
+        this.getQuizs = function () {
+            var dfd = $q.defer();
+            $http.get(apiUrl + 'api/quizzes').success(function (database) {
+                dfd.resolve(database);
+            });
+            return dfd.promise;
+        };
+
+        this.getQuiz = function (quizId) {
+            var dfd = $q.defer();
+            $http.get(apiUrl + 'api/quizzes/' + quizId).success(function (database) {
+                dfd.resolve(database);
+            });
+            return dfd.promise;
+        };
+
+        this.saveQuiz = function (quiz) {
+            var dfd = $q.defer();
+            var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
+            var data = [];
+            $http.put(apiUrl + 'api/quizzes/' + quiz._id, quiz).success(function (database) {
+                dfd.resolve(data);
+            }).error(function (err) {
+                dfd.reject(err);
+            });;
+            return dfd.promise;
+        }
+
+    })
+
     .service('CheckoutService', function ($http, $q, _, config, AuthService, $rootScope) {
 
         var apiUrl = config.apiUrl;

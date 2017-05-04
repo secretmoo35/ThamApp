@@ -1,0 +1,34 @@
+<ion-view view-title="คำตอบ" class="cart-view" cache-view="true">
+    <ion-nav-buttons side="right">
+        <a class="button button-icon" ng-click="saveQuiz()">
+            <i class="icon ion-ios-checkmark-outline"></i>
+        </a>
+    </ion-nav-buttons>
+    <ion-content scroll="true">
+        <div class="list" ng-repeat="q in quiz.quizs" ng-init="quizrepeat(q)">
+
+            <div class="item item-body">
+                <h2 class="paragraph">{{$index+1}}. {{q.question}}</h2>
+            </div>
+            <!--<div class="item item-input">
+                <span>คำตอบ : </span>
+                <p class="product-description paragraph" ng-repeat="answer in q.answers | filter: { user : {_id : user._id } }" >{{answer.answer}}</p>
+            </div>-->
+            <div ng-repeat="answer in q.answers | filter: { user : {_id : user._id } }">
+                <ion-list>
+                    <div class="row background-write" ng-if="q.questiontype === 'choice'" ng-repeat="choice in q.choices">
+                        <div class="col col-20 text-right">
+                            <input type="radio" ng-model="answer.answer" value="{{choice}}"></input>                            
+                        </div>
+                        <div class="col col-80">
+                            {{$index+1}}. {{choice.choice}}
+                        </div>
+                        <!--<p class="product-description paragraph" ng-repeat="answer in q.answers | filter: { user : {_id : user._id } }" >{{answer.answer}}</p>-->
+                    </div>
+                    <!--<ion-radio ng-repeat="choice in q.choices" ng-model="answer.answer" ng-value="choice">{{$index+1}}. {{choice.choice}}</ion-radio>-->
+                </ion-list>
+                <textarea class="txtarea" ng-model="answer.answer" placeholder="กรุณากรอกข้อความ" ng-if="q.questiontype === 'none-choice'"></textarea>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

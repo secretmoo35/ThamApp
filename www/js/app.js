@@ -346,6 +346,30 @@ angular.module('your_app_name', [
                 }
             })
 
+            .state('app.shop.quiz-detail', {
+                url: "/quiz-detail/:quizId",
+                // cache: false,
+                views: {
+                    'shop-quiz': {
+                        templateUrl: "views/app/shop/quiz-detail.html",
+                        controller: 'QuizCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.quiz-answer', {
+                url: "/quiz-answer",
+                params: {
+                    quiz: null
+                },
+                views: {
+                    'shop-quiz': {
+                        templateUrl: "views/app/shop/quiz-answer.html",
+                        controller: 'QuizCtrl'
+                    }
+                }
+            })
+
             .state('app.shop.cart', {
                 url: "/cart",
                 params: {

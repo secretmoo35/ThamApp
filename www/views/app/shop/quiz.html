@@ -5,6 +5,19 @@
         </a>-->
     </ion-nav-buttons>
     <ion-content scroll="true">
-        <p class="text-center">{{quizWelcome}}</p>
+        <ion-refresher pulling-text="Pull to refresh..." on-refresh="loadWelcom()">
+        </ion-refresher>
+        <div class="list" ng-if="user">
+            <a class="item item-icon-right" ng-repeat="quiz in quizWelcome" ng-if="chkShow(quiz)" ui-sref="app.shop.quiz-detail({quizId: quiz._id})">
+                 {{quiz.topic}}
+                <i class="icon ion-ios-arrow-right"></i>
+            </a>
+        </div>
+        <div class="list" ng-if="!user">
+            <a class="item item-icon-left" ui-sref="app.shop.sale">
+                 กรุณาเข้าสู่ระบบ
+                <i class="icon ion-ios-information-outline"></i>
+            </a>
+        </div>
     </ion-content>
 </ion-view>
