@@ -402,7 +402,7 @@ angular.module('your_app_name.app.controllers', [])
                 }, function (err) {
                     $scope.acceptCampaign = {};
                     $ionicLoading.hide();
-                    if (err.message === 'Identification is already!' || err.message === 'Your identification is Invalid!' || err.message === 'Wrong Identification!') {
+                    if (err.message === 'Your identification is Invalid!' || err.message === 'Wrong Identification!') {
                         var myPopup = $ionicPopup.show({
                             title: 'ผิดพลาด',
                             subTitle: 'รหัสบัตรประชาชนของคุณไม่ถูกต้อง',
