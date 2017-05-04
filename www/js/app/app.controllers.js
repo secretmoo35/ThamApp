@@ -423,6 +423,27 @@ angular.module('your_app_name.app.controllers', [])
                         myPopup.then(function (res) {
                             console.log('Tapped!', res);
                         });
+                    } else if (err.message === 'Identification is already!') {
+                        var myPopup = $ionicPopup.show({
+                            title: 'ลงทะเบียน',
+                            subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
+                            scope: $scope,
+                            buttons: [{
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                                    // $scope.gotoForm();
+                                    $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                                    $scope.acceptCampaign = {};
+                                }
+                            }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
                     } else if (err.message === 'Privilege is full') {
                         var myPopup = $ionicPopup.show({
                             title: 'ท่านไม่สามารถรับสิทธิ์',
@@ -1923,7 +1944,7 @@ angular.module('your_app_name.app.controllers', [])
             QuizService.getQuizs().then(function (res) {
                 $scope.quizWelcome = res;
                 $ionicLoading.hide();
-                $scope.$broadcast('scroll.refreshComplete');                
+                $scope.$broadcast('scroll.refreshComplete');
             }, function (err) {
                 $ionicLoading.hide();
                 alert(JSON.stringify(err));
