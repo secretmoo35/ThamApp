@@ -482,7 +482,7 @@ angular.module('your_app_name.app.services', [])
             var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
             var data = [];
             $http.put(apiUrl + 'api/quizzes/' + quiz._id, quiz).success(function (database) {
-                dfd.resolve(data);
+                dfd.resolve(database);
             }).error(function (err) {
                 dfd.reject(err);
             });;

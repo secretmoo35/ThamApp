@@ -35,6 +35,8 @@
                 </div>
             </a>
         </div>
+
+        <!--campaign-->
         <div ng-disbled="true" ng-if="campaigns.length > 0">
             <div class="item item-divider shop-section-title">
                 <span class="title-copy">แคมเปญ</span>
@@ -69,7 +71,7 @@
             </div>
             <ion-scroll direction="x" class="wide-as-needed" scroll="true" overflow-scroll="{{scroll === true ? 'true': scroll === false ? 'false' : 'true'}}">
                 <div class="row shop-products-narrow-cards-outer shop-product-cards-scroller">
-                    <div ng-repeat="product in products | filter:{category : cate} | limitTo : 4" style="width: 500px;" class="col col-50 shop-product-narrow-card"
+                    <div ng-repeat="product in products | filter:{category : cate} | limitTo : 4" style="width: 700px;" class="col col-50 shop-product-narrow-card"
                         ui-sref="app.product-detail({productId: product._id})">
                         <div class="list card">
                             <div class="item item-image">

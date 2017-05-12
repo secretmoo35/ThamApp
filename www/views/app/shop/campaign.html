@@ -7,7 +7,29 @@
         </a>-->
     </ion-nav-buttons>
     <ion-content scroll="true">
-        <div class="row shop-products-narrow-cards-outer">
+
+        <div class="row" ng-repeat="campaign in campaigns | orderBy: 'created'">
+            <div class="list col col-100">
+                <a class="item item-icon" ui-sref="app.shop.campaign-detail({campaignId: campaign._id})">
+                    <div class="row">
+                        <div class="col col-20 item item-image">
+                            <pre-img ratio="_1_1" helper-class="main-image">
+                                <img ng-src="{{product.images}}" spinner-on-load>
+                            </pre-img>
+                        </div>
+                        <div class="col col-50">
+                            <h2 class="card-title">{{campaign.name}}</h2>
+                            <p class="card-description">{{campaign.description}}</p>
+                            <p>สิทธิ์คงเหลือ {{campaign.usercount - campaign.listusercampaign.length}} สิทธิ์</p>
+                        </div>
+                        <div class="col col-30 text-right font-30">
+                            <i class="icon ion-ios-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!--<div class="row shop-products-narrow-cards-outer">
             <div ng-repeat="campaign in campaigns | orderBy: 'created'" class="col col-50 shop-product-narrow-card" ui-sref="app.shop.campaign-detail({campaignId: campaign._id})">
                 <div class="list card">
                     <div class="item item-image">
@@ -21,6 +43,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </ion-content>
 </ion-view>

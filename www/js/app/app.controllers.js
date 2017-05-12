@@ -2028,7 +2028,6 @@ angular.module('your_app_name.app.controllers', [])
                 $ionicLoading.hide();
                 alert(JSON.stringify(err));
             });
-            QuizService.saveQuiz()
         };
 
     })
