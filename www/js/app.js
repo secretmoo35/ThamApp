@@ -205,7 +205,7 @@ angular.module('your_app_name', [
                 },
                 // cache: false,
                 views: {
-                    'shop-home': {
+                    'shop-campaigns': {
                         templateUrl: "views/app/shop/campaign.html",
                         controller: 'ShopCtrl'
                     }
@@ -215,7 +215,7 @@ angular.module('your_app_name', [
             .state('app.shop.campaign-detail', {
                 url: "/campaign/:campaignId",
                 views: {
-                    'shop-home': {
+                    'shop-campaigns': {
                         templateUrl: "views/app/shop/campaign-detail.html",
                         controller: 'ShopCtrl'
                     }
@@ -229,7 +229,7 @@ angular.module('your_app_name', [
                 },
                 // cache: false,
                 views: {
-                    'shop-home': {
+                    'shop-campaigns': {
                         templateUrl: "views/app/shop/campaignproduct.html",
                         controller: 'ShopCtrl'
                     }
@@ -422,7 +422,7 @@ angular.module('your_app_name', [
                 url: "/chat",
                 // cache: false,
                 views: {
-                    'shop-chat': {
+                    'shop-home': {
                         templateUrl: "views/app/profile/chat.html",
                         controller: 'ChatCtrl'
                     }
@@ -432,7 +432,7 @@ angular.module('your_app_name', [
             .state('app.shop.chat-detail', {
                 url: "/chat/:chatId",
                 views: {
-                    'shop-chat': {
+                    'shop-home': {
                         templateUrl: "views/app/profile/chat-detail.html",
                         controller: 'ChatDetailCtrl'
                     }
