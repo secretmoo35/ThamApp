@@ -375,7 +375,25 @@ angular.module('your_app_name.app.controllers', [])
             $scope.step = '1';
 
         }
+        $scope.loginFromFacebook = function () {
+            console.log("doing facebbok sign in");
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>' })
+            AuthService.authenticate('facebook');
 
+            $rootScope.$on('userLoggedIn', function (e, data) {
+                $scope.step = '4';
+                $scope.gotoForm($scope.step);
+                $rootScope.loadUser();
+                $ionicLoading.hide();
+            });
+
+            $rootScope.$on('userFailedLogin', function (e, error) {
+                $scope.step = '1';
+                $ionicLoading.hide();
+                alert(error.message);
+            });
+            // $state.go('app.feed');
+        };
         $scope.onPostcodeSelected = function (item) {
             $scope.authentication.address.subdistrict = item.subdistrict;
             $scope.authentication.address.district = item.district;
