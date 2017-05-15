@@ -1,6 +1,6 @@
 angular.module('your_app_name.app.services', [])
 
-    .service('AuthService', function ($q, $http, config) {
+    .service('AuthService', function ($q, $http, config, $rootScope, $auth) {
         var apiUrl = config.apiUrl;
 
         // window.localStorage.removeItem('ionTheme1_cart');
@@ -113,6 +113,22 @@ angular.module('your_app_name.app.services', [])
             })
             return dfd.promise;
         }
+
+        this.authenticate = function (provider) {
+            $auth
+                .authenticate(provider)
+                .then(this.successAuth)
+                .catch(this.failedAuth);
+        };
+
+        this.successAuth = function (data) {
+            window.localStorage.user = JSON.stringify(data.data);
+            $rootScope.$emit('userLoggedIn', data.data);
+        };
+
+        this.failedAuth = function (err) {
+            $rootScope.$emit('userFailedLogin', err.data);
+        };
 
 
     })

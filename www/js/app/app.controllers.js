@@ -298,6 +298,29 @@ angular.module('your_app_name.app.controllers', [])
 
     .controller('ShopCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup, CheckoutService) {
 
+        $rootScope.loadUser = function () {
+            $rootScope.user = AuthService.getUser();
+        };
+        $rootScope.loadUser();
+
+        $rootScope.$on('userLoggedIn', function (e, data) {
+            $rootScope.loadUser();
+            $state.go('app.shop.sale');
+            $ionicLoading.hide();
+        });
+
+        $rootScope.$on('userFailedLogin', function (e, error) {
+            $ionicLoading.hide();
+            alert(error.message);
+        });
+
+        $scope.facebookSignIn = function () {
+            console.log("doing facebbok sign in");
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>' })
+            AuthService.authenticate('facebook');
+            // $state.go('app.feed');
+        };
+
         CheckoutService.getPostcode().then(function (success) {
             $scope.postcodes = success.postcode;
         }, function (err) {
@@ -313,10 +336,7 @@ angular.module('your_app_name.app.controllers', [])
         if ($stateParams.cate) {
             $scope.cate = $stateParams.cate;
         }
-        $rootScope.loadUser = function () {
-            $rootScope.user = AuthService.getUser();
-        };
-        $rootScope.loadUser();
+
         if ($stateParams.campaignId) {
             var campaignId = $stateParams.campaignId;
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>' });
@@ -875,7 +895,7 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, OpenFB) {
+    .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, OpenFB, $rootScope) {
         //$scope.paymentDetails;
 
         $scope.apiUrl = config.apiUrl;
@@ -911,7 +931,10 @@ angular.module('your_app_name.app.controllers', [])
         }, function (err) {
             alert('unsuccess');
         });
-        $scope.user = AuthService.getUser();
+        $scope.loadUser = function () {
+            $scope.user = AuthService.getUser();
+        };
+        $scope.loadUser();
         $scope.onPostcodeSelected = function (item) {
             $scope.authentication.address.subdistrict = item.subdistrict;
             $scope.authentication.address.district = item.district;
@@ -983,8 +1006,29 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.calculate();
 
+
+        $rootScope.$on('userLoggedIn', function (e, data) {
+            $scope.loadUser();
+            $scope.gotoForm('4');
+            $ionicLoading.hide();
+        });
+
+        $rootScope.$on('userFailedLogin', function (e, error) {
+            $ionicLoading.hide();
+            alert(error.message);
+        });
+
+        $scope.facebookSignIn = function () {
+            console.log("doing facebbok sign in");
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>' })
+            AuthService.authenticate('facebook');
+            // $state.go('app.feed');
+        };
+
+
         $scope.gotoForm = function (num) {
             if (num === '4') {
+                alert(JSON.stringify($scope.user));
                 $state.go('app.shop.checkout');
             } else if (num === '3') {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });

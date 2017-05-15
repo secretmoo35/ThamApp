@@ -6,6 +6,7 @@
     "ionic-platform-web-client": "^0.7.1"
   },
   "dependencies": {
-    "angular-socket-io": "^0.7.0"
+    "angular-socket-io": "^0.7.0",
+    "satellizer": "^0.15.5"
   }
 }

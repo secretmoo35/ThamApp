@@ -16,7 +16,8 @@ angular.module('your_app_name', [
     'ngIOS9UIWebViewPatch',
     'autocomplete.directive',
     'openfb',
-    'btford.socket-io'
+    'btford.socket-io',
+    'satellizer'
 ])
 
 
@@ -29,7 +30,11 @@ angular.module('your_app_name', [
     })
 
     .constant('config', {
-        apiUrl: 'https://thamapptest.herokuapp.com/'
+        apiUrl: 'https://thamapptest.herokuapp.com/',
+        redirectUri: 'http://localhost:8100/', // oauth callback url of ionic app example http://localhost:8100/
+        facebook: {
+            clientId: '414384685598077' // your client id from facebook console example 
+        },
         //https://thamapp.herokuapp.com/      for production
         //https://thamapptest.herokuapp.com/  for heroku test
         //http://localhost:3000/              for local
@@ -99,7 +104,25 @@ angular.module('your_app_name', [
         });
     })
 
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, config, $authProvider) {
+
+        var commonConfig = {
+            popupOptions: {
+                location: 'no',
+                toolbar: 'yes',
+                width: window.screen.width,
+                height: window.screen.height
+            }
+        };
+
+        if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
+            commonConfig.redirectUri = config.redirectUri;
+        }
+        $authProvider.facebook(angular.extend({}, commonConfig, {
+            clientId: config.facebook.clientId,
+            url: config.apiUrl + 'api/auth/facebook'
+        }));
+
         $stateProvider
 
             //SIDE MENU ROUTES
@@ -208,6 +231,17 @@ angular.module('your_app_name', [
                     'shop-campaigns': {
                         templateUrl: "views/app/shop/campaign.html",
                         controller: 'ShopCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.campaigns-chat', {
+                url: "/chat",
+                // cache: false,
+                views: {
+                    'shop-campaigns': {
+                        templateUrl: "views/app/profile/chat.html",
+                        controller: 'ChatCtrl'
                     }
                 }
             })

@@ -1,12 +1,12 @@
 <ion-view view-title="แคมเปญ" class="shop-home-view" cache-view="false" ng-init="readProduct()">
     <ion-nav-buttons side="right">
-         <a class="button button-icon" ui-sref="app.shop.chat">
+         <a class="button button-icon" ui-sref="app.shop.campaigns-chat">
             <i class="icon ion-ios-chatbubble-outline"></i>
         </a>
     </ion-nav-buttons>
     <ion-content scroll="true">
 
-        <div class="row" ng-repeat="campaign in campaigns | orderBy: 'created'">
+        <div class="row" ng-if="campaigns.length > 0" ng-repeat="campaign in campaigns | orderBy: 'created'">
             <div class="list col col-100">
                 <a class="item item-icon" ui-sref="app.shop.campaign-detail({campaignId: campaign._id})">
                     <div class="row">
