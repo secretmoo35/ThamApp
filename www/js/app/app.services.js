@@ -25,34 +25,67 @@ angular.module('your_app_name.app.services', [])
 
         this.login = function (user) {
             window.localStorage.credential = JSON.stringify(user);
-            var dfd = $q.defer();
 
-            $http.post(apiUrl + 'api/auth/signin', user).success(function (res) {
-                window.localStorage.user = JSON.stringify(res);
-                dfd.resolve(res);
+            $auth
+                .login(user, { url: config.apiUrl + 'api/auth/signin' })
+                .then(this.successAuth)
+                .catch(this.failedAuth);
 
-            }).error(function (err) {
-                dfd.reject(err);
-            });
+            // var dfd = $q.defer();
 
-            return dfd.promise;
+            // $http.post(apiUrl + 'api/auth/signin', user).success(function (res) {
+            //     window.localStorage.user = JSON.stringify(res);
+            //     dfd.resolve(res);
+
+            // }).error(function (err) {
+            //     dfd.reject(err);
+            // });
+
+            // return dfd.promise;
+
+        };
+
+        this.shippingLogin = function (user) {
+            window.localStorage.credential = JSON.stringify(user);
+
+            $auth
+                .login(user, { url: config.apiUrl + 'api/auth/signin' })
+                .then(this.successAuthShipping)
+                .catch(this.failedAuthShipping);
+
+            // var dfd = $q.defer();
+
+            // $http.post(apiUrl + 'api/auth/signin', user).success(function (res) {
+            //     window.localStorage.user = JSON.stringify(res);
+            //     dfd.resolve(res);
+
+            // }).error(function (err) {
+            //     dfd.reject(err);
+            // });
+
+            // return dfd.promise;
 
         };
 
         this.signup = function (user) {
 
-            var dfd = $q.defer();
+            $auth
+                .signup(user, { url: config.apiUrl + 'api/auth/signup' })
+                .then(this.successAuth)
+                .catch(this.failedAuth);
 
-            $http.post(apiUrl + 'api/auth/signup', user).success(function (res) {
+            // var dfd = $q.defer();
 
-                window.localStorage.user = JSON.stringify(res);
-                dfd.resolve(res);
+            // $http.post(apiUrl + 'api/auth/signup', user).success(function (res) {
 
-            }).error(function (err) {
-                dfd.reject(err);
-            });
+            //     window.localStorage.user = JSON.stringify(res);
+            //     dfd.resolve(res);
 
-            return dfd.promise;
+            // }).error(function (err) {
+            //     dfd.reject(err);
+            // });
+
+            // return dfd.promise;
 
         };
 
@@ -128,6 +161,15 @@ angular.module('your_app_name.app.services', [])
 
         this.failedAuth = function (err) {
             $rootScope.$emit('userFailedLogin', err.data);
+        };
+
+        this.successAuthShipping = function (data) {
+            window.localStorage.user = JSON.stringify(data.data);
+            $rootScope.$emit('userLoggedInShipping', data.data);
+        };
+
+        this.failedAuthShipping = function (err) {
+            $rootScope.$emit('userFailedLoginShipping', err.data);
         };
 
 

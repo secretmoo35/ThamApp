@@ -303,21 +303,21 @@ angular.module('your_app_name.app.controllers', [])
         };
         $rootScope.loadUser();
 
-        $rootScope.$on('userLoggedIn', function (e, data) {
-            $rootScope.loadUser();
-            $state.go('app.shop.sale');
-            $ionicLoading.hide();
-        });
-
-        $rootScope.$on('userFailedLogin', function (e, error) {
-            $ionicLoading.hide();
-            alert(error.message);
-        });
-
         $scope.facebookSignIn = function () {
             console.log("doing facebbok sign in");
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>' })
             AuthService.authenticate('facebook');
+
+            $rootScope.$on('userLoggedIn', function (e, data) {
+                $rootScope.loadUser();
+                $state.go('app.shop.sale');
+                $ionicLoading.hide();
+            });
+
+            $rootScope.$on('userFailedLogin', function (e, error) {
+                $ionicLoading.hide();
+                alert(error.message);
+            });
             // $state.go('app.feed');
         };
 
@@ -386,7 +386,7 @@ angular.module('your_app_name.app.controllers', [])
             $scope.authentication.address.district = '';
             $scope.authentication.address.province = '';
         };
-        $scope.authentication = {};
+        $scope.authentication = $scope.authentication ? $scope.authentication : {};
         $scope.acceptCampaign = {
             status: 'accept'
         };
@@ -408,8 +408,6 @@ angular.module('your_app_name.app.controllers', [])
                             text: '<b>ตกลง</b>',
                             type: 'button-positive',
                             onTap: function (e) {
-                                // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                // $scope.gotoForm();
                                 $scope.acceptCampaign = {};
                             }
                         }
@@ -431,8 +429,6 @@ angular.module('your_app_name.app.controllers', [])
                                 text: '<b>ตกลง</b>',
                                 type: 'button-positive',
                                 onTap: function (e) {
-                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                    // $scope.gotoForm();
                                     $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
                                     $scope.acceptCampaign = {};
                                 }
@@ -452,8 +448,6 @@ angular.module('your_app_name.app.controllers', [])
                                 text: '<b>ตกลง</b>',
                                 type: 'button-positive',
                                 onTap: function (e) {
-                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                    // $scope.gotoForm();
                                     $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
                                     $scope.acceptCampaign = {};
                                 }
@@ -473,8 +467,6 @@ angular.module('your_app_name.app.controllers', [])
                                 text: '<b>ตกลง</b>',
                                 type: 'button-positive',
                                 onTap: function (e) {
-                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                    // $scope.gotoForm();
                                     $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
                                     $scope.acceptCampaign = {};
                                 }
@@ -494,8 +486,6 @@ angular.module('your_app_name.app.controllers', [])
                                 text: '<b>ตกลง</b>',
                                 type: 'button-positive',
                                 onTap: function (e) {
-                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                    // $scope.gotoForm();
                                     $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
                                     $scope.acceptCampaign = {};
                                 }
@@ -515,11 +505,16 @@ angular.module('your_app_name.app.controllers', [])
                 })
             } else if (num === '3') {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-                AuthService.login($scope.authentication).then(function (success) {
+
+                AuthService.login($scope.authentication);
+
+                $rootScope.$on('userLoggedIn', function (e, data) {
                     $scope.step = '4';
                     $rootScope.loadUser();
                     $ionicLoading.hide();
-                }, function (err) {
+                });
+
+                $rootScope.$on('userFailedLogin', function (e, err) {
                     if (err.message === 'Unknown user or invalid password') {
                         var myPopup = $ionicPopup.show({
                             title: 'ผิดพลาด',
@@ -529,8 +524,6 @@ angular.module('your_app_name.app.controllers', [])
                                 text: '<b>ตกลง</b>',
                                 type: 'button-positive',
                                 onTap: function (e) {
-                                    // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                    // $scope.gotoForm();
                                     $scope.authentication.username = '';
                                     $scope.authentication.password = '';
                                 }
@@ -546,31 +539,63 @@ angular.module('your_app_name.app.controllers', [])
                     }
                     $scope.step = '1';
                     $ionicLoading.hide();
-                })
+                });
+
             } else if (num === '2') {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
                 $scope.authentication.username = $scope.authentication.username;
                 $scope.authentication.password = 'Usr#Pass1234';
-                AuthService.login($scope.authentication).then(function (success) {
-                    $scope.step = '4';
-                    $rootScope.loadUser();
-                    $ionicLoading.hide();
-                }, function (err) {
 
-                    $scope.step = num;
+                AuthService.login($scope.authentication);
+
+                $rootScope.$on('userLoggedIn', function (e, data) {
+                    $scope.step = '4';
                     $ionicLoading.hide();
-                })
+                });
+
+                $rootScope.$on('userFailedLogin', function (e, err) {
+                    if (err.message === 'Unknown user or invalid password') {
+                        var myPopup = $ionicPopup.show({
+                            title: 'ลงทะเบียน',
+                            subTitle: 'กรอกข้อมูลเพื่อลงทะเบียน',
+                            scope: $scope,
+                            buttons: [{
+                                text: '<b>ตกลง</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+
+                                }
+                            }
+                            ]
+                        });
+
+                        myPopup.then(function (res) {
+                            console.log('Tapped!', res);
+                        });
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                    $scope.step = '2';
+                    $ionicLoading.hide();
+                });
             } else {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+                // alert($scope.authentication.username);
                 $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
                 $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
                 $scope.authentication.address.tel = $scope.authentication.username;
                 $scope.authentication.password = 'Usr#Pass1234';
-                AuthService.signup($scope.authentication).then(function (res) {
+
+                AuthService.signup($scope.authentication);
+
+                $rootScope.$on('userLoggedIn', function (e, data) {
                     $scope.step = '4';
+                    $scope.loadUser();
                     $rootScope.loadUser();
                     $ionicLoading.hide();
-                }, function (err) {
+                });
+
+                $rootScope.$on('userFailedLogin', function (e, err) {
                     $ionicLoading.hide();
                     if (err.message === 'Username already exists') {
                         var myPopup = $ionicPopup.show({
@@ -596,8 +621,41 @@ angular.module('your_app_name.app.controllers', [])
                     } else {
                         alert(JSON.stringify(err));
                     }
-
                 });
+
+
+                // AuthService.signup($scope.authentication).then(function (res) {
+                //     $scope.step = '4';
+                //     $rootScope.loadUser();
+                //     $ionicLoading.hide();
+                // }, function (err) {
+                //     $ionicLoading.hide();
+                //     if (err.message === 'Username already exists') {
+                //         var myPopup = $ionicPopup.show({
+                //             template: '<input type="text" ng-model="authentication.username">',
+                //             title: 'มีชื่อผู้ใช้งานนี้แล้ว',
+                //             subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
+                //             scope: $scope,
+                //             buttons: [
+                //                 { text: 'ยกเลิก' }, {
+                //                     text: '<b>ตกลง</b>',
+                //                     type: 'button-positive',
+                //                     onTap: function (e) {
+                //                         // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                //                         $scope.gotoForm();
+                //                     }
+                //                 }
+                //             ]
+                //         });
+
+                //         myPopup.then(function (res) {
+                //             console.log('Tapped!', res);
+                //         });
+                //     } else {
+                //         alert(JSON.stringify(err));
+                //     }
+
+                // });
             }
         };
         // alert('user: ' + JSON.stringify($rootScope.user));
@@ -754,11 +812,18 @@ angular.module('your_app_name.app.controllers', [])
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
             $scope.authentication.username = this.username;
             $scope.authentication.password = 'Usr#Pass1234';
-            AuthService.login($scope.authentication).then(function (success) {
-                $rootScope.loadUser();
+
+            $scope.authentication.username = $scope.authentication.username;
+            $scope.authentication.password = 'Usr#Pass1234';
+            AuthService.shippingLogin($scope.authentication);
+
+            $rootScope.$on('userLoggedInShipping', function (e, data) {
+                $scope.loadUser();
                 $ionicLoading.hide();
                 $state.go('app.shop.sale');
-            }, function (err) {
+            });
+
+            $rootScope.$on('userFailedLoginShipping', function (e, error) {
                 $ionicLoading.hide();
                 var myPopup = $ionicPopup.show({
                     title: 'ไม่มีข้อมูลสมาชิก!!',
@@ -768,7 +833,7 @@ angular.module('your_app_name.app.controllers', [])
                         text: '<b>ตกลง</b>',
                         type: 'button-positive',
                         onTap: function (e) {
-                            alert($scope.authentication.username);
+                            // alert($scope.authentication.username);
                             $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
                         }
                     }, {
@@ -780,7 +845,35 @@ angular.module('your_app_name.app.controllers', [])
                         }
                     ]
                 });
-            })
+            });
+
+            // AuthService.login($scope.authentication).then(function (success) {
+            //     $rootScope.loadUser();
+            //     $ionicLoading.hide();
+            //     $state.go('app.shop.sale');
+            // }, function (err) {
+            //     $ionicLoading.hide();
+            //     var myPopup = $ionicPopup.show({
+            //         title: 'ไม่มีข้อมูลสมาชิก!!',
+            //         subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
+            //         scope: $scope,
+            //         buttons: [{
+            //             text: '<b>ตกลง</b>',
+            //             type: 'button-positive',
+            //             onTap: function (e) {
+            //                 alert($scope.authentication.username);
+            //                 $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
+            //             }
+            //         }, {
+            //                 text: '<b>ยกเลิก</b>',
+            //                 onTap: function (e) {
+            //                     this.username = '';
+            //                     $state.go('app.shop.sale');
+            //                 }
+            //             }
+            //         ]
+            //     });
+            // })
         };
 
         $scope.settingRegis = function () {
@@ -792,11 +885,16 @@ angular.module('your_app_name.app.controllers', [])
             $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
             $scope.authentication.address.tel = $scope.authentication.username;
             $scope.authentication.password = 'Usr#Pass1234';
-            AuthService.signup($scope.authentication).then(function (res) {
-                $rootScope.loadUser();
+
+            AuthService.signup($scope.authentication);
+
+            $rootScope.$on('userLoggedIn', function (e, data) {
+                $scope.loadUser();
                 $ionicLoading.hide();
                 $state.go('app.shop.sale');
-            }, function (err) {
+            });
+
+            $rootScope.$on('userFailedLogin', function (e, err) {
                 $ionicLoading.hide();
                 if (err.message === 'Username already exists') {
                     var myPopup = $ionicPopup.show({
@@ -822,8 +920,40 @@ angular.module('your_app_name.app.controllers', [])
                 } else {
                     alert(JSON.stringify(err));
                 }
-
             });
+
+            // AuthService.signup($scope.authentication).then(function (res) {
+            //     $rootScope.loadUser();
+            //     $ionicLoading.hide();
+            //     $state.go('app.shop.sale');
+            // }, function (err) {
+            //     $ionicLoading.hide();
+            //     if (err.message === 'Username already exists') {
+            //         var myPopup = $ionicPopup.show({
+            //             template: '<input type="text" ng-model="authentication.username">',
+            //             title: 'มีชื่อผู้ใช้งานนี้แล้ว',
+            //             subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
+            //             scope: $scope,
+            //             buttons: [
+            //                 { text: 'ยกเลิก' }, {
+            //                     text: '<b>ตกลง</b>',
+            //                     type: 'button-positive',
+            //                     onTap: function (e) {
+            //                         // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+            //                         $scope.settingRegis();
+            //                     }
+            //                 }
+            //             ]
+            //         });
+
+            //         myPopup.then(function (res) {
+            //             console.log('Tapped!', res);
+            //         });
+            //     } else {
+            //         alert(JSON.stringify(err));
+            //     }
+
+            // });
         };
 
     })
@@ -1028,43 +1158,58 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.gotoForm = function (num) {
             if (num === '4') {
-                alert(JSON.stringify($scope.user));
+                // alert(JSON.stringify($scope.user));
                 $state.go('app.shop.checkout');
             } else if (num === '3') {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-                AuthService.login($scope.authentication).then(function (res) {
+                AuthService.shippingLogin($scope.authentication);
+
+                $rootScope.$on('userLoggedInShipping', function (e, data) {
+                    $scope.loadUser();
+                    $scope.step = num;
                     $state.go('app.shop.checkout');
                     $ionicLoading.hide();
-                    $scope.step = num;
-                }, function (err) {
+                });
+
+                $rootScope.$on('userFailedLoginShipping', function (e, error) {
                     $ionicLoading.hide();
-                    alert(JSON.stringify(err));
-                })
+                    alert(JSON.stringify(error));
+                });
             } else if (num === '2') {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
                 $scope.authentication.username = $scope.authentication.username;
                 $scope.authentication.password = 'Usr#Pass1234';
-                AuthService.login($scope.authentication).then(function (success) {
+                AuthService.shippingLogin($scope.authentication);
+
+                $rootScope.$on('userLoggedInShipping', function (e, data) {
+                    $scope.loadUser();
                     $scope.step = '3';
                     $state.go('app.shop.checkout');
                     $ionicLoading.hide();
-                }, function (err) {
+                });
 
+                $rootScope.$on('userFailedLoginShipping', function (e, error) {
                     $scope.step = num;
                     $ionicLoading.hide();
-                })
+                });
             } else {
                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
                 $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
                 $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
                 $scope.authentication.address.tel = $scope.authentication.username;
                 $scope.authentication.password = 'Usr#Pass1234';
-                AuthService.signup($scope.authentication).then(function (res) {
+
+                AuthService.signup($scope.authentication);
+
+                $rootScope.$on('userLoggedIn', function (e, data) {
+                    $scope.loadUser();
                     $scope.state = false;
                     $scope.step = '3';
                     $state.go('app.shop.checkout');
                     $ionicLoading.hide();
-                }, function (err) {
+                });
+
+                $rootScope.$on('userFailedLogin', function (e, err) {
                     $ionicLoading.hide();
                     if (err.message === 'Username already exists') {
                         var myPopup = $ionicPopup.show({
@@ -1090,7 +1235,6 @@ angular.module('your_app_name.app.controllers', [])
                     } else {
                         alert(JSON.stringify(err));
                     }
-
                 });
             }
         };
