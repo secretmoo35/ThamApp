@@ -16,11 +16,12 @@ angular.module('your_app_name.app.services', [])
         };
 
         this.signout = function () {
-
-            window.localStorage.removeItem('user');
-            window.localStorage.removeItem('credential');
-            return true;
-
+            $auth.logout({ url: config.apiUrl + 'api/auth/signout' })
+                .then(function () {
+                    window.localStorage.removeItem('user');
+                    window.localStorage.removeItem('credential');
+                    $rootScope.$emit('userLoggedOut');
+                });
         };
 
         this.login = function (user) {
