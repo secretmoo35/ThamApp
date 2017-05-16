@@ -2222,7 +2222,7 @@ angular.module('your_app_name.app.controllers', [])
     })
 
     .controller('PushNotiCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService) {
-        $scope.welcome = "This is a PushNotification";
+        $scope.welcome = "PushNotification Comingsoon";
     });
 
 

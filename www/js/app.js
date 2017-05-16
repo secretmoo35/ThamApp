@@ -237,8 +237,18 @@ angular.module('your_app_name', [
                 // cache: false,
                 views: {
                     'shop-campaigns': {
-                        templateUrl: "views/app/profile/chat.html",
+                        templateUrl: "views/app/shop/campaign-chat.html",
                         controller: 'ChatCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.campaigns-chatdetail', {
+                url: "/chat/:chatId",
+                views: {
+                    'shop-campaigns': {
+                        templateUrl: "views/app/shop/campaign-chatdetail.html",
+                        controller: 'ChatDetailCtrl'
                     }
                 }
             })
@@ -277,6 +287,28 @@ angular.module('your_app_name', [
                     }
                 }
             })
+
+            .state('app.shop.sale-chat', {
+                url: "/chat",
+                // cache: false,
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/sale-chat.html",
+                        controller: 'ChatCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.sale-chatdetail', {
+                url: "/chat/:chatId",
+                views: {
+                    'shop-sale': {
+                        templateUrl: "views/app/shop/sale-chatdetail.html",
+                        controller: 'ChatDetailCtrl'
+                    }
+                }
+            })
+
 
             .state('app.shop.salelogin', {
                 url: "/sale-login",
@@ -377,6 +409,27 @@ angular.module('your_app_name', [
                 }
             })
 
+            .state('app.shop.quiz-chat', {
+                url: "/chat",
+                // cache: false,
+                views: {
+                    'shop-quiz': {
+                        templateUrl: "views/app/shop/quiz-chat.html",
+                        controller: 'ChatCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.quiz-chatdetail', {
+                url: "/chat/:chatId",
+                views: {
+                    'shop-quiz': {
+                        templateUrl: "views/app/shop/quiz-chatdetail.html",
+                        controller: 'ChatDetailCtrl'
+                    }
+                }
+            })
+
             .state('app.shop.quiz-detail', {
                 url: "/quiz-detail/:quizId",
                 // cache: false,
@@ -411,6 +464,27 @@ angular.module('your_app_name', [
                     'shop-cart': {
                         templateUrl: "views/app/shop/cart.html",
                         controller: 'ShoppingCartCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.cart-chat', {
+                url: "/chat",
+                // cache: false,
+                views: {
+                    'shop-cart': {
+                        templateUrl: "views/app/shop/cart-chat.html",
+                        controller: 'ChatCtrl'
+                    }
+                }
+            })
+
+            .state('app.shop.cart-chatdetail', {
+                url: "/chat/:chatId",
+                views: {
+                    'shop-cart': {
+                        templateUrl: "views/app/shop/cart-chatdetail.html",
+                        controller: 'ChatDetailCtrl'
                     }
                 }
             })

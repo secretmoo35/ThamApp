@@ -1,0 +1,56 @@
+<!--<ion-view view-title="{{title}}">
+    <ion-content class="padding">
+        <label class="item item-input">
+                <span class="input-label">Message :</span>
+                <input type="text" ng-model="message">
+    </label>
+        <button class="button button-full button-positive" ng-click="sendMessage()">
+                send
+            </button>
+        <hr>
+        <div ng-repeat="m in room.messages">
+            <p>{{m.created | date:'dd/MM/yyyy - HH:mm:ss'}}</p>
+            <p>{{m.username}} : {{m.text}}</p>
+        </div>
+    </ion-content>
+</ion-view>-->
+
+
+
+
+
+
+
+<ion-view ng-init="loadRoom()" cache-view="false" view-title="{{title}}">
+
+    <ion-nav-buttons side="right">
+        <!--<a class="button button-icon" ui-sref="app.shop.cart">
+            <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
+        </a>-->
+    </ion-nav-buttons>
+    <ion-content scroll="true" class="content-stable" on-swipe-left="hideTime = false" on-swipe-right="hideTime = true">
+
+        <div ng-repeat="message in room.messages | orderBy: '-'" ng-class="{other: message.username == myId}" class="messages">
+
+            <div class="message" ng-class="{'slide-right': hideTime, '': !hideTime}">
+                <!--<p> {{ message.username }}</p>-->
+                <span1> {{ message.text }}</span1>
+                <div style="color:gray">{{ message.time }}</div>
+
+            </div>
+
+            <div class="time" ng-class="{'slide-right': hideTime, '': !hideTime}"></div>
+
+
+        </div>
+
+    </ion-content>
+
+    <ion-footer-bar class="bar-stable item-input-inset">
+        <label class="item-input-wrapper">
+        <input type="text" placeholder="Input you message" on-return="sendMessage(); closeKeyboard()" ng-model="message" on-focus="inputUp()" on-blur="inputDown()" />
+      </label>
+        <button class="button " style=" width : 60px ;background-color: #007AFF; color:white" ng-click="sendMessage()">
+        Send
+      </button>
+    </ion-footer-bar>

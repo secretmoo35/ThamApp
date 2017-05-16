@@ -1,10 +1,29 @@
-<ion-view view-title="ตั้งค่า" class="cart-view" cache-view="false">
-    <ion-nav-buttons side="right">
-        <!--<a class="button button-icon" ui-sref="app.shop.cart">
-            <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
-        </a>-->
-    </ion-nav-buttons>
-    <ion-content scroll="true">
-        <p class="text-center">Setting Comingsoon</p>
+<ion-view class="profile-likes" view-title="ตั้งค่า">
+     <ion-nav-buttons side="right">
+    <!--<a class="button button-icon" ui-sref="app.shop.chat">
+      <i class="icon ion-ios-chatbubble-outline"></i>
+    </a>-->
+  </ion-nav-buttons>
+    <ion-content>
+        <div class="form-fields-outer list list-inset" ng-if="loggedUser">
+            <div class="row slide-content">
+                <div class="col col-20"></div>
+                <div class="col col-center user-data">
+                    <!-- We need a wrapper with width set for the preload image directive -->
+                    <div class="user-image-outer">
+                        <pre-img ratio="_1_1" helper-class="rounded-image">
+                            <img class="user-image height-100per text-center" id="myImage" ng-src="{{loggedUser.profileImageURL}}" spinner-on-load>
+                        </pre-img>
+                    </div>
+                    <span class="badge badge-assertive icon-image bg-gray badge-cart position-absolute" ng-click="changeImageProfile()">
+                                <i class="icon ion-ios-camera-outline font-30" ></i></span>
+                    <h3 class="user-name text-center">แก้ไขรูป</h3>
+                    <p class="user-resume">
+                    </p>
+                </div>
+                <div class="col col-20"></div>
+            </div>
+        </div>
+        <p class="text-center" ng-if="!loggedUser">กรุณาเข้าสู่ระบบ</p>
     </ion-content>
 </ion-view>

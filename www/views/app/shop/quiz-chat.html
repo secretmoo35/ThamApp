@@ -1,0 +1,25 @@
+<ion-view class="profile-likes" view-title="แชท" cache-view="false">
+    <ion-nav-buttons side="right">
+        <!--<a class="button button-icon" ui-sref="app.shop.cart">
+            <i class="icon ion-ios-cart"><span class="badge badge-assertive badge-cart">{{countProduct.getCountProduct()}}</span></i>
+        </a>-->
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-list ng-if="user">
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats | filter: { users : { _id : user._id } }"
+                type="item-text-wrap" ui-sref="app.shop.quiz-chatdetail({chatId: chat._id})">
+                <img ng-repeat="user in chat.users | filter: { _id : '!' + user._id}" ng-src="{{user.profileImageURL}}">
+                <h2 ng-repeat="user in chat.users | filter: { _id : '!' + user._id}">{{user.displayName}}</h2>
+                <p>{{chat.lastText}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+
+                <!--<ion-option-button class="button-assertive" ng-click="remove(chat)">
+          Delete
+        </ion-option-button>-->
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <!--<ion-footer-bar>
+        <i class="icon ion-android-person-add" style="font-size: 30px;" ui-sref="app.listfriend"></i>
+    </ion-footer-bar>-->
+</ion-view>
