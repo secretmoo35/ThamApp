@@ -1932,19 +1932,25 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ChatCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+    .controller('ChatCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket, $ionicLoading) {
         $scope.listRoom = function () {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });            
             roomService.getrooms().then(function (res) {
                 $scope.chats = res;
+                $ionicLoading.hide();
             }, function (err) {
+                $ionicLoading.hide();                                
                 console.log(err);
             });
         };
         $scope.listRoom();
         $scope.createRoom = function (data) {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });                        
             roomService.createRoom(data).then(function (res) {
                 $scope.listRoom();
+                $ionicLoading.hide();                
             }, function (err) {
+                $ionicLoading.hide();                
                 console.log(err);
             });
         };
@@ -1955,7 +1961,7 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ChatDetailCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, $stateParams, Socket, $ionicScrollDelegate, $timeout) {
+    .controller('ChatDetailCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, $stateParams, Socket, $ionicScrollDelegate, $timeout, $ionicLoading) {
         $scope.user = AuthService.getUser();
         $scope.messages = [];
         $scope.chat = null;
@@ -1967,6 +1973,7 @@ angular.module('your_app_name.app.controllers', [])
         // });
         $scope.loadRoom = function () {
             var roomId = $stateParams.chatId;
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });                                    
             roomService.getRoom(roomId).then(function (res) {
                 res.users.forEach(function (user) {
                     if ($scope.user._id != user._id) {
@@ -1975,7 +1982,9 @@ angular.module('your_app_name.app.controllers', [])
                 });
                 $scope.chat = res;
                 Socket.emit('join', $scope.chat);
+                $ionicLoading.hide();
             }, function (err) {
+                $ionicLoading.hide();
                 console.log(err);
             });
         };
@@ -2082,11 +2091,12 @@ angular.module('your_app_name.app.controllers', [])
         $scope.myId = $scope.user.displayName;
     })
 
-    .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket) {
+    .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket, $ionicLoading) {
         $scope.user = AuthService.getUser();
         $scope.listAccount = function () {
             $scope.listRoom = [];
             $scope.friends = [];
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });                                                
             roomService.getrooms().then(function (rooms) {
                 rooms.forEach(function (room) {
                     room.users.forEach(function (user) {
@@ -2106,7 +2116,9 @@ angular.module('your_app_name.app.controllers', [])
                 }
                 AuthService.getusers().then(function (accounts) {
                     $scope.accounts = accounts;
+                    $ionicLoading.hide();
                 }, function (err) {
+                    $ionicLoading.hide();
                     console.log(err);
                 });
             });
