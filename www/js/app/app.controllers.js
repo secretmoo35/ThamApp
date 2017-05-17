@@ -382,7 +382,7 @@ angular.module('your_app_name.app.controllers', [])
 
             $rootScope.$on('userLoggedIn', function (e, data) {
                 $scope.step = '4';
-                $scope.gotoForm($scope.step);
+                // $scope.gotoForm($scope.step);
                 $rootScope.loadUser();
                 $ionicLoading.hide();
             });
@@ -1045,7 +1045,6 @@ angular.module('your_app_name.app.controllers', [])
 
     .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, $rootScope) {
         //$scope.paymentDetails;
-
         $scope.apiUrl = config.apiUrl;
         $scope.status = true;
 
@@ -1148,7 +1147,9 @@ angular.module('your_app_name.app.controllers', [])
             AuthService.authenticate('facebook');
             // $state.go('app.feed');
         };
-
+        if ($scope.user && !$scope.user.address) {
+            $scope.status = false;
+        }
 
         $scope.gotoForm = function (num) {
             if (num === '4') {
