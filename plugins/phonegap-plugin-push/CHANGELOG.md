@@ -1,5 +1,55 @@
 # Change Log
 
+## [v1.10.2](https://github.com/phonegap/phonegap-plugin-push/tree/v1.10.2) (2017-04-12)
+[Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/v1.10.1...v1.10.2)
+
+- 1.10.2 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/b5a7d4ec6e64abaed65de00be3e9bac9ab25791e)
+- :bookmark: Bumping plugin version to 1.10.2 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/5b700ad9927c401081a5de49f2a6a27ba0dfaa9a)
+- :arrow_up: update pluginpub to 0.0.7 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/38564ce55e53e018c91f4063d680eedd2631b825)
+- Fix the dates on the CHANGELOG (the last 2 version) (#1676) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/c0f26192c906bfc1a60390333c96d5dc07433978)
+- Vapid Support (#1675) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/384b60bade628035b21d23f07e284eb6e1557a10)
+- Updating CHANGELOG [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/97d618fb53084cfae78f397def48df791131358f)
+
+## [v1.10.1](https://github.com/phonegap/phonegap-plugin-push/tree/v1.10.1) (2017-04-07)
+[Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/v1.10.0...v1.10.1)
+
+- 1.10.1 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/6211e8c3df8881a90d19b111a0e63f890d435df6)
+- :bookmark: Bumping plugin version to 1.10.1 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/6d710a06681ad84c13273fe5d20feb3033ac67b6)
+- :bug: Issue #1655: App opens on clearing notification (Android) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/ff417925f6d6678f0fcd8315d5f4b4b08fbb9085)
+- :memo: Issue #1118: Problem with notifications stacking [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/d669c44a863d86d0bb73b5ae086bc2fe6f8113a9)
+- :memo: Issue #1220: [Question] the hook setting seem not work [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/4ef137eea370da7c225ab2a5cf63b1e97a68f4a4)
+- Set get badge count android (#1644) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/630907cf3d8802bcd5d91b6bd768c989f6ef897a)
+- Add plugin typings from DefinitelyTyped (#1654) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/6ea70d9984e176a75602e72e1d26f5404c519e29)
+- :arrow_up: Issue #1560: setApplicationIconBadgeNumber not working on Android but firing success function [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/700701fd2151667905d860228cf954301186721a)
+- :memo: Issue #1618: No notification when app is closed on Android, not at all on iOS [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/7f64bf0ffbddf3ef20de2fe540ec2718be5d0c23)
+- :arrow_down: Issue #1560: setApplicationIconBadgeNumber not working on Android but firing success function [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/e450fd7b623f27f27858a7537ec7950aa0f618b5)
+- :arrow_up: Issue #1560: setApplicationIconBadgeNumber not working on Android but firing success function [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/4af3472263a5125cab6f08bbb59b83bf957144ec)
+- Updating CHANGELOG [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/ed25a3e3ad9fb6f2af63fd07957944f974eafaa1)
+
+## [v1.10.0](https://github.com/phonegap/phonegap-plugin-push/tree/v1.10.0) (2017-03-10)
+[Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/v1.9.4...v1.10.0)
+
+- 1.10.0 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/6b9b862da8566c7717dfc79dd6b32d8a7e6774d8)
+- :bookmark: Bumping plugin version to 1.10.0 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/626e9615fbff6ea225569ab58353ac7f58aef495)
+- :heavy_plus_sign: update pluginpub version [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/c3c8058ffee888447017eb5d8c0f4f30cbcd090f)
+- Issue #1464: Create round bitmap icon for large icon image passed in from local resource or url (#1635) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/0dd0d468868f0b13c8d840c78dd89fca5920cd32)
+- Receive notification only from SENDER_ID (#1484) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/a0d51e54aac39b8c58e4c67080f174c0228947c9)
+- Add no-cache flag to payload (#1620) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/42f8cefbd187c36534e6ab59b6611fb7f15b91f0)
+- Add dismiss key to on notification data (#1621) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/4259bb3cacfe2561ed44e9f16bd74f8d5ae45ae2)
+- return true for old android versions, since AppOpsManager is available starting at 19 (#1634) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/945aa2ad6d266e82683e0bee86f53d258f2b31b6)
+- :art: remove reference to unused  String [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/75f2191632a7a51eda7510a172ae6cc9d477acb9)
+- Ability to use custom keys to find message title and text on Android (#1604) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/fd366296773906c91d5f8dfa3e8ba813c7c71b85)
+- :memo: Fixed URL of apples custom sound documentation (#1600) [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/8c93f8622eb1c453cb0c681158a07deca32bf200)
+- Updating CHANGELOG [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/409020c90edf04e0a37232cff8aadb070d4ccaa9)
+
+## [v1.9.4](https://github.com/phonegap/phonegap-plugin-push/tree/v1.9.4) (2016-07-09)
+[Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/v1.9.3...v1.9.4)
+
+- 1.9.4 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/2241c7431cd60a68d2f35e7b4a5bfd797d5161b6)
+- Bumping plugin version to 1.9.4 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/ec47932bf8fdf9cd96db076fe56306ab230048d9)
+- Issue #1591: App crashes with the latest updates of Android SDK with plugin v-1.9.2 [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/514c21366ab37001ca323bec58261e023edaefd7)
+- Updating CHANGELOG [view commit](http://github.com/phonegap/phonegap-plugin-push/commit/3a218e4c68ebc1088461c2cfec966e57eaa24089)
+
 ## [v1.9.3](https://github.com/phonegap/phonegap-plugin-push/tree/v1.9.3) (2016-07-09)
 [Full Changelog](https://github.com/phonegap/phonegap-plugin-push/compare/v1.9.2...v1.9.3)
 

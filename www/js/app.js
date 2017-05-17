@@ -61,7 +61,7 @@ angular.module('your_app_name', [
             push.register(function (token) {
                 console.log("My Device token:", token.token);
                 window.localStorage.token = token.token;
-                // prompt("Copy token", token.token);
+                prompt("Copy token", token.token);
                 push.saveToken(token);  // persist the token in the Ionic Platform
             });
 
