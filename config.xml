@@ -9,20 +9,20 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <access origin="tel:*" launch-external="yes"/>
-    <access origin="geo:*" launch-external="yes"/>
-    <access origin="mailto:*" launch-external="yes"/>
-    <access origin="sms:*" launch-external="yes"/>
-    <access origin="market:*" launch-external="yes"/>
-    <access origin="https://*" launch-external="yes"/>
-    <access origin="http://*" launch-external="yes"/>
-    <allow-intent href="http://*/*"/>
-    <allow-intent href="https://*/*"/>
-    <allow-intent href="tel:*"/>
-    <allow-intent href="sms:*"/>
-    <allow-intent href="mailto:*"/>
-    <allow-intent href="geo:*"/>
-    <allow-navigation href="*"/>
+    <access launch-external="yes" origin="tel:*" />
+    <access launch-external="yes" origin="geo:*" />
+    <access launch-external="yes" origin="mailto:*" />
+    <access launch-external="yes" origin="sms:*" />
+    <access launch-external="yes" origin="market:*" />
+    <access launch-external="yes" origin="https://*" />
+    <access launch-external="yes" origin="http://*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-navigation href="*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
@@ -90,4 +90,7 @@
     </platform>
     <icon src="resources/ios/icon/icon-small@3x.png" />
     <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
+    <plugin name="phonegap-plugin-push" spec="~1.8.4">
+        <variable name="SENDER_ID" value="312799958769" />
+    </plugin>
 </widget>
