@@ -5,9 +5,7 @@
             "id": "phonegap-plugin-push@~1.8.4"
         },
         "is_top_level": true,
-        "variables": {
-            "SENDER_ID": "312799958769"
-        }
+        "variables": {}
     },
     "cordova-plugin-device": {
         "source": {
@@ -94,7 +92,7 @@
     "cordova-plugin-file": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-file"
+            "id": "cordova-plugin-file@~4.3.3"
         },
         "is_top_level": true,
         "variables": {}
@@ -102,7 +100,7 @@
     "cordova-plugin-file-transfer": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-file-transfer"
+            "id": "cordova-plugin-file-transfer@~1.6.3"
         },
         "is_top_level": true,
         "variables": {}
@@ -110,9 +108,17 @@
     "cordova-plugin-geolocation": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-geolocation"
+            "id": "cordova-plugin-geolocation@~2.4.3"
         },
         "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-compat": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-compat"
+        },
+        "is_top_level": false,
         "variables": {}
     }
 }
