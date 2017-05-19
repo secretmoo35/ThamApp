@@ -93,4 +93,8 @@
     <plugin name="phonegap-plugin-push" spec="~1.8.4">
         <variable name="SENDER_ID" value="312799958769" />
     </plugin>
+    <plugin name="cordova-plugin-image-picker" spec="https://github.com/wymsee/cordova-imagePicker.git">
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value=" " />
+    </plugin>
+    <plugin name="cordova-plugin-file" spec="~4.3.3" />
 </widget>
