@@ -1,0 +1,44 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "phonegap-plugin-push": {
+            "SENDER_ID": "312799958769",
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        }
+    },
+    "dependent_plugins": {
+        "es6-promise-plugin": {
+            "PACKAGE_NAME": "com.thumturakit.yakkajon"
+        }
+    }
+}
