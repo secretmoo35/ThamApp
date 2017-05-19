@@ -29,7 +29,7 @@ angular.module('your_app_name', [
     })
 
     .constant('config', {
-        apiUrl: 'https://thamapp.herokuapp.com/',
+        apiUrl: 'https://thamapptest.herokuapp.com/',
         redirectUri: 'http://localhost:8100/', // oauth callback url of ionic app example http://localhost:8100/
         facebook: {
             clientId: '414384685598077' // your client id from facebook console example 
