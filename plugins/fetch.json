@@ -5,7 +5,9 @@
             "id": "phonegap-plugin-push@~1.8.4"
         },
         "is_top_level": true,
-        "variables": {}
+        "variables": {
+            "SENDER_ID": "312799958769"
+        }
     },
     "cordova-plugin-device": {
         "source": {
