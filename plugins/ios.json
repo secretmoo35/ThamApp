@@ -1,0 +1,44 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "312799958769",
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        }
+    },
+    "dependent_plugins": {
+        "es6-promise-plugin": {
+            "PACKAGE_NAME": "com.thumturakit.thamapp"
+        }
+    }
+}
