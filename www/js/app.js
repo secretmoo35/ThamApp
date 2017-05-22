@@ -50,10 +50,11 @@ angular.module('your_app_name', [
             if (window.StatusBar) {
                 StatusBar.styleDefault();
             }
-            if (window.localStorage.credential) {
-                var user = JSON.parse(window.localStorage.credential);
-                AuthService.login(user);
-            }
+            // if (window.localStorage.credential) {
+            //     alert('localStorage');
+            //     var user = JSON.parse(window.localStorage.credential);
+            //     AuthService.login(user);
+            // }
             var push = new Ionic.Push({
                 "debug": true
             });

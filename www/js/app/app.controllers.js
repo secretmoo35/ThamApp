@@ -19,13 +19,14 @@ angular.module('your_app_name.app.controllers', [])
             });
 
     })
-    .controller('LoginCtrl', function ($scope, $state, AuthService, $ionicLoading, $rootScope, $stateParams) {
+
+    .controller('LoginCtrl', function ($scope, $state, AuthService, $ionicLoading, $rootScope, $stateParams, $ionicPopup) {
 
         // alert('redirectUrl');
-       var parmRedirect = $stateParams.redirectUrl;
+        var parmRedirect = $stateParams.redirectUrl;
         // alert(parmRedirect);
         // $state.go(parmRedirect);
-        
+
         $scope.choice = true;
 
         $scope.settingLogin = function () {
@@ -40,32 +41,35 @@ angular.module('your_app_name.app.controllers', [])
             $rootScope.$on('userLoggedInShipping', function (e, data) {
                 // $scope.loadUser();
                 $ionicLoading.hide();
-                 $state.go(parmRedirect);
+                $state.go(parmRedirect);
             });
 
-            // $rootScope.$on('userFailedLoginShipping', function (e, error) {
-            //     $ionicLoading.hide();
-            //     var myPopup = $ionicPopup.show({
-            //         title: 'ไม่มีข้อมูลสมาชิก!!',
-            //         subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
-            //         scope: $scope,
-            //         buttons: [{
-            //             text: '<b>ตกลง</b>',
-            //             type: 'button-positive',
-            //             onTap: function (e) {
-            //                 // alert($scope.authentication.username);
-            //                 $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
-            //             }
-            //         }, {
-            //             text: '<b>ยกเลิก</b>',
-            //             onTap: function (e) {
-            //                 this.username = '';
-            //                 $state.go('app.shop.sale');
-            //             }
-            //         }
-            //         ]
-            //     });
-            // });
+
+
+            $rootScope.$on('userFailedLoginShipping', function (e, error) {
+                alert('login ctrl');
+                $ionicLoading.hide();
+                var myPopup = $ionicPopup.show({
+                    title: 'ไม่มีข้อมูลสมาชิก!!',
+                    subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
+                    scope: $scope,
+                    buttons: [{
+                        text: '<b>ตกลง</b>',
+                        type: 'button-positive',
+                        onTap: function (e) {
+                            // alert($scope.authentication.username);
+                            $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
+                        }
+                    }, {
+                            text: '<b>ยกเลิก</b>',
+                            onTap: function (e) {
+                                this.username = '';
+                                $state.go(parmRedirect);
+                            }
+                        }
+                    ]
+                });
+            });
 
             // AuthService.login($scope.authentication).then(function (success) {
             //     $rootScope.loadUser();
@@ -94,6 +98,25 @@ angular.module('your_app_name.app.controllers', [])
             //         ]
             //     });
             // })
+        };
+
+        $scope.facebookSignIn = function () {
+            console.log("doing facebbok sign in");
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>' })
+            AuthService.authenticate('facebook');
+
+            $rootScope.$on('userLoggedIn', function (e, data) {
+                $rootScope.loadUser();
+                $ionicLoading.hide();
+                $state.go(parmRedirect);
+                
+            });
+
+            $rootScope.$on('userFailedLogin', function (e, error) {
+                $ionicLoading.hide();
+                alert(error.message);
+            });
+            // $state.go('app.feed');
         };
 
     })
@@ -375,29 +398,13 @@ angular.module('your_app_name.app.controllers', [])
     })
 
     .controller('ShopCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup, CheckoutService) {
-        // alert('login');
+        alert('ShopCtrl');
         $rootScope.loadUser = function () {
             $rootScope.user = AuthService.getUser();
         };
         $rootScope.loadUser();
 
-        $scope.facebookSignIn = function () {
-            console.log("doing facebbok sign in");
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>' })
-            AuthService.authenticate('facebook');
 
-            $rootScope.$on('userLoggedIn', function (e, data) {
-                $rootScope.loadUser();
-                $state.go('app.shop.sale');
-                $ionicLoading.hide();
-            });
-
-            $rootScope.$on('userFailedLogin', function (e, error) {
-                $ionicLoading.hide();
-                alert(error.message);
-            });
-            // $state.go('app.feed');
-        };
 
         CheckoutService.getPostcode().then(function (success) {
             $scope.postcodes = success.postcode;
@@ -904,73 +911,7 @@ angular.module('your_app_name.app.controllers', [])
                 })
         };
 
-        $scope.settingLogin = function () {
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-            $scope.authentication.username = this.username;
-            $scope.authentication.password = 'Usr#Pass1234';
-
-            $scope.authentication.username = $scope.authentication.username;
-            $scope.authentication.password = 'Usr#Pass1234';
-            AuthService.shippingLogin($scope.authentication);
-
-            $rootScope.$on('userLoggedInShipping', function (e, data) {
-                $scope.loadUser();
-                $ionicLoading.hide();
-                $state.go('app.shop.sale');
-            });
-
-            $rootScope.$on('userFailedLoginShipping', function (e, error) {
-                $ionicLoading.hide();
-                var myPopup = $ionicPopup.show({
-                    title: 'ไม่มีข้อมูลสมาชิก!!',
-                    subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
-                    scope: $scope,
-                    buttons: [{
-                        text: '<b>ตกลง</b>',
-                        type: 'button-positive',
-                        onTap: function (e) {
-                            // alert($scope.authentication.username);
-                            $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
-                        }
-                    }, {
-                        text: '<b>ยกเลิก</b>',
-                        onTap: function (e) {
-                            this.username = '';
-                            $state.go('app.shop.sale');
-                        }
-                    }
-                    ]
-                });
-            });
-
-            // AuthService.login($scope.authentication).then(function (success) {
-            //     $rootScope.loadUser();
-            //     $ionicLoading.hide();
-            //     $state.go('app.shop.sale');
-            // }, function (err) {
-            //     $ionicLoading.hide();
-            //     var myPopup = $ionicPopup.show({
-            //         title: 'ไม่มีข้อมูลสมาชิก!!',
-            //         subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
-            //         scope: $scope,
-            //         buttons: [{
-            //             text: '<b>ตกลง</b>',
-            //             type: 'button-positive',
-            //             onTap: function (e) {
-            //                 alert($scope.authentication.username);
-            //                 $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
-            //             }
-            //         }, {
-            //                 text: '<b>ยกเลิก</b>',
-            //                 onTap: function (e) {
-            //                     this.username = '';
-            //                     $state.go('app.shop.sale');
-            //                 }
-            //             }
-            //         ]
-            //     });
-            // })
-        };
+        
 
         $scope.settingRegis = function () {
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
@@ -1055,6 +996,7 @@ angular.module('your_app_name.app.controllers', [])
     })
 
     .controller('ShoppingCartCtrl', function ($scope, $rootScope, $state, $stateParams, ShopService, AuthService, $ionicActionSheet, _, config) {
+       
         $scope.state = $stateParams.state;
         $scope.apiUrl = config.apiUrl;
         $scope.products = ShopService.getCartProducts();
