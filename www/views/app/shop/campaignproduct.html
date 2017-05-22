@@ -27,43 +27,13 @@
         <div class="item item-body">
             <p class="product-description">ลงทะเบียนรับสิทธิ์</p>
             <div class="list" ng-if="step === '1'">
-                <ion-list>
-                    <ion-radio ng-model="choice" ng-value="true">ดำเนินการต่อโดยไม่ต้องใช้รหัสผ่าน</ion-radio>
-                    <ion-radio ng-model="choice" ng-value="false">ฉันมีบัญชีผู้ใช้อยู่แล้ว</ion-radio>
-                </ion-list>
-                <div class="margin-top-8" ng-if="choice === true">
-                    <label class="item item-input">
-                    <span class="input-label">เบอร์โทร*</span>
-                    <input type="text" ng-model="authentication.username">
-                </label>
-                    <div class="row padding ">
-                        <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('2')" ng-disabled="!authentication.username">
-                        ดำเนินการต่อ
-                    </button>
-                    </div>
-                </div>
-                <div class="list margin-top-8" ng-if="choice === false">
-                    <label class="item item-input">
-                    <span class="input-label">ชื่อผู้ใช้</span>
-                    <input type="text" ng-model="authentication.username">
-                </label>
-                    <label class="item item-input">
-                    <span class="input-label">รหัสผ่าน</span>
-                    <input type="password" ng-model="authentication.password">
-                </label>
-                    <div class="row padding">
-                        <button class="button button-block button-energized checkout-btn" ng-click="gotoForm('3')" ng-disabled="!authentication.username || !authentication.password">
-                        ดำเนินการต่อ
-                    </button>
-                    </div>
-                </div>
-                <div class="bottom-content row">
-                    <div class="col col-bottom" ng-click="loginFromFacebook()">
-                        <a class="facebook-sign-in button button-block button-facebook">
-            Sign In with Facebook
+                <div class="col col-bottom">
+                    <a class="button button-block button-energized checkout-btn" ui-sref="app.shop.salelogin({redirectUrl: 'app.shop.campaignproduct', campID:campaign._id, prodID:product._id})">
+            เข้าสู่ระบบ
           </a>
-                        <!--ng-click="loginFacebook()"-->
-                    </div>
+                    <!--<ion-list>
+                    <ion-radio ng-model="choice" ng-value="true" ui-sref="app.shop.salelogin({redirectUrl: 'app.shop.campaignproduct', campID:campaign._id, prodID:product._id})">เข้าสู่ระบบ</ion-radio>
+                </ion-list>-->
                 </div>
             </div>
             <div class="list" ng-if="step === '2'">

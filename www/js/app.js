@@ -312,7 +312,7 @@ angular.module('your_app_name', [
 
 
             .state('app.shop.salelogin', {
-                url: "/sale-login/:redirectUrl",
+                url: "/sale-login/:redirectUrl/:campID/:prodID",
                 // cache: false,
                 views: {
                     'shop-sale': {
@@ -323,12 +323,12 @@ angular.module('your_app_name', [
             })
 
             .state('app.shop.saleregis', {
-                url: "/sale-regis/:setusername",
+                url: "/sale-regis/:setusername/:redirect",
                 // cache: false,
                 views: {
                     'shop-sale': {
                         templateUrl: "views/app/shop/shop-sale-register.html",
-                        controller: 'ShopCtrl'
+                        controller: 'LoginCtrl'
                     }
                 }
             })
