@@ -19,6 +19,84 @@ angular.module('your_app_name.app.controllers', [])
             });
 
     })
+    .controller('LoginCtrl', function ($scope, $state, AuthService, $ionicLoading, $rootScope, $stateParams) {
+
+        // alert('redirectUrl');
+       var parmRedirect = $stateParams.redirectUrl;
+        // alert(parmRedirect);
+        // $state.go(parmRedirect);
+        
+        $scope.choice = true;
+
+        $scope.settingLogin = function () {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
+            $scope.authentication.username = this.username;
+            $scope.authentication.password = 'Usr#Pass1234';
+
+            $scope.authentication.username = $scope.authentication.username;
+            $scope.authentication.password = 'Usr#Pass1234';
+            AuthService.shippingLogin($scope.authentication);
+
+            $rootScope.$on('userLoggedInShipping', function (e, data) {
+                // $scope.loadUser();
+                $ionicLoading.hide();
+                 $state.go(parmRedirect);
+            });
+
+            // $rootScope.$on('userFailedLoginShipping', function (e, error) {
+            //     $ionicLoading.hide();
+            //     var myPopup = $ionicPopup.show({
+            //         title: 'ไม่มีข้อมูลสมาชิก!!',
+            //         subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
+            //         scope: $scope,
+            //         buttons: [{
+            //             text: '<b>ตกลง</b>',
+            //             type: 'button-positive',
+            //             onTap: function (e) {
+            //                 // alert($scope.authentication.username);
+            //                 $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
+            //             }
+            //         }, {
+            //             text: '<b>ยกเลิก</b>',
+            //             onTap: function (e) {
+            //                 this.username = '';
+            //                 $state.go('app.shop.sale');
+            //             }
+            //         }
+            //         ]
+            //     });
+            // });
+
+            // AuthService.login($scope.authentication).then(function (success) {
+            //     $rootScope.loadUser();
+            //     $ionicLoading.hide();
+            //     $state.go('app.shop.sale');
+            // }, function (err) {
+            //     $ionicLoading.hide();
+            //     var myPopup = $ionicPopup.show({
+            //         title: 'ไม่มีข้อมูลสมาชิก!!',
+            //         subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
+            //         scope: $scope,
+            //         buttons: [{
+            //             text: '<b>ตกลง</b>',
+            //             type: 'button-positive',
+            //             onTap: function (e) {
+            //                 alert($scope.authentication.username);
+            //                 $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
+            //             }
+            //         }, {
+            //                 text: '<b>ยกเลิก</b>',
+            //                 onTap: function (e) {
+            //                     this.username = '';
+            //                     $state.go('app.shop.sale');
+            //                 }
+            //             }
+            //         ]
+            //     });
+            // })
+        };
+
+    })
 
     .controller('ProfileCtrl', function ($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer, $ionicPopup) {
 
@@ -297,7 +375,7 @@ angular.module('your_app_name.app.controllers', [])
     })
 
     .controller('ShopCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup, CheckoutService) {
-
+        // alert('login');
         $rootScope.loadUser = function () {
             $rootScope.user = AuthService.getUser();
         };
@@ -855,12 +933,12 @@ angular.module('your_app_name.app.controllers', [])
                             $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
                         }
                     }, {
-                            text: '<b>ยกเลิก</b>',
-                            onTap: function (e) {
-                                this.username = '';
-                                $state.go('app.shop.sale');
-                            }
+                        text: '<b>ยกเลิก</b>',
+                        onTap: function (e) {
+                            this.username = '';
+                            $state.go('app.shop.sale');
                         }
+                    }
                     ]
                 });
             });
@@ -1934,23 +2012,23 @@ angular.module('your_app_name.app.controllers', [])
 
     .controller('ChatCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket, $ionicLoading) {
         $scope.listRoom = function () {
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });            
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
             roomService.getrooms().then(function (res) {
                 $scope.chats = res;
                 $ionicLoading.hide();
             }, function (err) {
-                $ionicLoading.hide();                                
+                $ionicLoading.hide();
                 console.log(err);
             });
         };
         $scope.listRoom();
         $scope.createRoom = function (data) {
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });                        
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
             roomService.createRoom(data).then(function (res) {
                 $scope.listRoom();
-                $ionicLoading.hide();                
+                $ionicLoading.hide();
             }, function (err) {
-                $ionicLoading.hide();                
+                $ionicLoading.hide();
                 console.log(err);
             });
         };
@@ -1973,7 +2051,7 @@ angular.module('your_app_name.app.controllers', [])
         // });
         $scope.loadRoom = function () {
             var roomId = $stateParams.chatId;
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });                                    
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
             roomService.getRoom(roomId).then(function (res) {
                 res.users.forEach(function (user) {
                     if ($scope.user._id != user._id) {
@@ -2096,7 +2174,7 @@ angular.module('your_app_name.app.controllers', [])
         $scope.listAccount = function () {
             $scope.listRoom = [];
             $scope.friends = [];
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });                                                
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
             roomService.getrooms().then(function (rooms) {
                 rooms.forEach(function (room) {
                     room.users.forEach(function (user) {

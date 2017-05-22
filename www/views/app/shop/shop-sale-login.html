@@ -6,7 +6,11 @@
     </ion-nav-buttons>
     <ion-content scroll="true">
         <div class="list">
-            <div class="margin-top-8">
+            <ion-list>
+                <ion-radio ng-model="choice" ng-value="true">เข้าสู่ระบบด้วยเบอร์โทร</ion-radio>
+                <ion-radio ng-model="choice" ng-value="false">เข้าสู่ระบบด้วยเฟสบุ๊ค</ion-radio>
+            </ion-list>
+            <div class="margin-top-8" ng-if="choice === true">
                 <label class="item item-input">
                     <span class="input-label">เบอร์โทร*</span>
                     <input type="text" ng-model="username">
@@ -17,7 +21,7 @@
                     </button>
                 </div>
             </div>
-            <div class="bottom-content row">
+            <div class="bottom-content row" ng-if="choice === false">
                 <div class="col col-bottom">
                     <a class="facebook-sign-in button button-block button-facebook" ng-click="facebookSignIn()">
             Sign In with Facebook

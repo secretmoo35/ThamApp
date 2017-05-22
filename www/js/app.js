@@ -311,12 +311,12 @@ angular.module('your_app_name', [
 
 
             .state('app.shop.salelogin', {
-                url: "/sale-login",
+                url: "/sale-login/:redirectUrl",
                 // cache: false,
                 views: {
                     'shop-sale': {
                         templateUrl: "views/app/shop/shop-sale-login.html",
-                        controller: 'ShopCtrl'
+                        controller: 'LoginCtrl'
                     }
                 }
             })
