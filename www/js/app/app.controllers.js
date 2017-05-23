@@ -380,6 +380,7 @@ angular.module('your_app_name.app.controllers', [])
 
         var productId = $stateParams.productId;
         $scope.apiUrl = config.apiUrl;
+        $scope.showError = false;
 
         $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>', duration: 2000 });
         ShopService.getProduct(productId).then(function (product) {
@@ -413,6 +414,8 @@ angular.module('your_app_name.app.controllers', [])
             qty: 1
         };
 
+        // $rootScope.rootProdQTY = $scope.productGotoCart.qty;
+
         $rootScope.shakeitCart = function () {
 
             var cartElem = angular.element(document.getElementsByClassName("ion-ios-cart"));
@@ -424,13 +427,24 @@ angular.module('your_app_name.app.controllers', [])
             }, 2000);
         }
 
-        $scope.$watch('productGotoCart.qty', function (newValue, oldValue) {
-            if (newValue !== undefined) {
-                $scope.productGotoCart.qty = parseInt(newValue);
-            } else {
-                $scope.productGotoCart.qty = parseInt(oldValue);
-            }
-        });
+        // $scope.$watch('qty', function (newValue, oldValue) {
+        //     if (newValue && (newValue !== undefined || newValue.toString() !== '.')) {
+        //         $scope.productGotoCart.qty = parseInt(newValue);
+        //     } else {
+        //         $scope.productGotoCart.qty = parseInt(oldValue);
+        //     }
+        // });
+        // $scope.prodValue = function (value) {
+        //     $rootScope.rootProdQTY = 11111;
+        // if (value === undefined) {
+        //     $rootScope.rootProdQTY = $scope.productGotoCart.qty;
+        // } else if (value.toString() === 'e' || value.toString() === '-' || value.toString() === '.' || value.toString() === '+') {
+        //     $scope.productGotoCart.qty.splice($scope.productGotoCart.qty.length, 1);
+        // }
+        // $scope.productGotoCart.qty = value;
+
+        // }
+
         // show add to cart popup on button click
         $scope.showAddToCartPopup = function (product, now) {
             $scope.data = {};
@@ -481,13 +495,20 @@ angular.module('your_app_name.app.controllers', [])
                         { text: '', type: 'close-popup ion-ios-close-outline' }, {
                             text: 'ตกลง',
                             onTap: function (e) {
-                                return $scope.data;
+                                if ($scope.productGotoCart.qty) {
+                                    $scope.showError = false;                                    
+                                    return $scope.data;
+                                } else {
+                                    e.preventDefault();
+                                    $scope.showError = true;
+                                }
                             }
                         }
                     ]
                 });
                 myPopup.then(function (res) {
                     if (res) {
+                        // if ($scope.productGotoCart.qty) {
                         $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ใส่ตะกร้า</p>', duration: 1000 });
                         $scope.productGotoCart.product = res.product;
                         $scope.productGotoCart.amount = res.product.price * $scope.productGotoCart.qty;
@@ -495,7 +516,10 @@ angular.module('your_app_name.app.controllers', [])
                         ShopService.addProductToCart($scope.productGotoCart);
                         console.log('Item added to cart!', $scope.productGotoCart);
                         $rootScope.shakeitCart();
+                        // } else {
 
+                        //     alert('asdf');
+                        // }
                     } else {
                         console.log('Popup closed');
                     }
