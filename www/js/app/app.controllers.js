@@ -228,6 +228,27 @@ angular.module('your_app_name.app.controllers', [])
 
         };
 
+        $scope.chkNumber = function (numID) {
+            var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            var status = false;
+            nums.forEach(function (num) {
+                if (numID.length > 1) {
+                    if (numID.substr(numID.length - 1) === num) {
+                        status = true;
+                    }
+                } else {
+                    if (numID === num) {
+                        status = true;
+                    }
+                }
+
+            });
+
+            if (!status) {
+                this.username = this.username.slice(0, this.username.length - 1);
+            }
+        }
+
     })
 
     .controller('ProfileCtrl', function ($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer, $ionicPopup) {

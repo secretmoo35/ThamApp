@@ -13,7 +13,7 @@
             <div class="margin-top-8" ng-if="choice === true">
                 <label class="item item-input">
                     <span class="input-label">เบอร์โทร*</span>
-                    <input type="text" ng-model="username">
+                    <input type="text" ng-model="username" maxlength="10" ng-change="chkNumber(username)">
                 </label>
                 <div class="row padding ">
                     <button class="button button-block button-energized checkout-btn" ng-disabled="!username" ng-click="settingLogin(username)">
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="list" ng-if="user">
-          <a class="item item-icon-left" ng-click="goBack()">
+            <a class="item item-icon-left" ng-click="goBack()">
                  ประวัติส่วนตัว
                 <i class="icon ion-ios-arrow-back"></i>
             </a>
