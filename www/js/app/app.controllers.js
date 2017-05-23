@@ -507,6 +507,10 @@ angular.module('your_app_name.app.controllers', [])
                     }
                 }
             } else {
+                $scope.showError = false;
+                $scope.productGotoCart = {
+                    qty: 1
+                };
                 var myPopup = $ionicPopup.show({
                     cssClass: 'add-to-cart-popup',
                     templateUrl: 'views/app/shop/partials/add-to-cart-popup.html',
