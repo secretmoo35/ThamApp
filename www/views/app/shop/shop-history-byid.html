@@ -15,18 +15,18 @@
                         <h2>หมายเลขสั่งซื้อ {{historyById.docno}}</h2>
                         <p>สั่งซื้อเมื่อ {{historyById.docdate | date:'dd MMMM yyyy'}}</p>
                     </div>
-                    <div class="col col-25 text-right item-expand-footer" ng-click="showConfirm(historyById)" ng-if="(historyById.deliverystatus === 'confirmed' || historyById.deliverystatus === 'wait deliver' || historyById.deliverystatus === 'reject') && historyById.deliverystatus !== 'cancel'">
+                    <!--<div class="col col-25 text-right item-expand-footer" ng-click="showConfirm(historyById)" ng-if="(historyById.deliverystatus === 'confirmed' || historyById.deliverystatus === 'wait deliver' || historyById.deliverystatus === 'reject') && historyById.deliverystatus !== 'cancel'">
                         ยกเลิก <i class="icon ion-ios-close-outline danger-coler-text"></i>
-                    </div>
-                    <div class="col col-25 text-right item-expand-footer" ng-if="historyById.deliverystatus === 'cancel'">
+                    </div>-->
+                    <!--<div class="col col-25 text-right item-expand-footer" ng-if="historyById.deliverystatus === 'cancel'">
                         ยกเลิกแล้ว</i>
-                    </div>
-                    <div class="col col-25 text-right item-expand-footer" ng-if="historyById.deliverystatus === 'accept'">
+                    </div>-->
+                    <!--<div class="col col-25 text-right item-expand-footer" ng-if="historyById.deliverystatus === 'accept'">
                         ดำเนินการ
                     </div>
                     <div class="col col-25 text-right item-expand-footer" ng-if="historyById.deliverystatus === 'complete'">
                         เสร็จสิ้น
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="item">

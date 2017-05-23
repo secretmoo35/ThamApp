@@ -15,10 +15,10 @@
             <h2>หมายเลขสั่งซื้อ {{item.docno}}</h2>
             <p>สั่งซื้อเมื่อ {{item.docdate | date:'dd MMMM yyyy'}}</p>
           </div>
-          <div class="col col-25 text-right item-expand-footer" ng-click="showConfirm(item)" ng-if="(item.deliverystatus === 'confirmed' || item.deliverystatus === 'wait deliver' || item.deliverystatus === 'reject') && item.deliverystatus !== 'cancel'">
+          <!--<div class="col col-25 text-right item-expand-footer" ng-click="showConfirm(item)" ng-if="(item.deliverystatus === 'confirmed' || item.deliverystatus === 'wait deliver' || item.deliverystatus === 'reject') && item.deliverystatus !== 'cancel'">
             ยกเลิก <i class="icon ion-ios-close-outline danger-coler-text"></i>
-          </div>
-          <div class="col col-25 text-right item-expand-footer" ng-if="item.deliverystatus === 'cancel'" ui-sref="app.shop.historybyid({hisId: item._id})">
+          </div>-->
+          <!--<div class="col col-25 text-right item-expand-footer" ng-if="item.deliverystatus === 'cancel'" ui-sref="app.shop.historybyid({hisId: item._id})">
             ยกเลิกแล้ว
           </div>
           <div class="col col-25 text-right item-expand-footer" ng-if="item.deliverystatus === 'accept'" ui-sref="app.shop.historybyid({hisId: item._id})">
@@ -26,7 +26,7 @@
           </div>
           <div class="col col-25 text-right item-expand-footer" ng-if="item.deliverystatus === 'complete'" ui-sref="app.shop.historybyid({hisId: item._id})">
             เสร็จสิ้น
-          </div>
+          </div>-->
           <div class="col text-right item-expand-footer" ui-sref="app.shop.historybyid({hisId: item._id})">
             <i class="icon ion-ios-arrow-right"></i>
           </div>
