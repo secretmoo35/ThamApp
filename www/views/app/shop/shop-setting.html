@@ -1,10 +1,16 @@
-<ion-view class="profile-likes" view-title="ตั้งค่า">
-     <ion-nav-buttons side="right">
-    <!--<a class="button button-icon" ui-sref="app.shop.chat">
+<ion-view class="profile-likes" view-title="ตั้งค่า" cache-view="false">
+    <ion-nav-buttons side="right">
+        <!--<a class="button button-icon" ui-sref="app.shop.chat">
       <i class="icon ion-ios-chatbubble-outline"></i>
     </a>-->
-  </ion-nav-buttons>
+    </ion-nav-buttons>
     <ion-content>
+        <div class="list" ng-if="!loggedUser">
+            <a class="item item-icon-left" ui-sref="app.shop.salelogin ({redirectUrl : 'app.shop.setting'})">
+                 กรุณาเข้าสู่ระบบ
+                <i class="icon ion-ios-information-outline"></i>
+            </a>
+        </div>
         <div class="form-fields-outer list list-inset" ng-if="loggedUser">
             <div class="row slide-content">
                 <div class="col col-20"></div>
@@ -24,6 +30,6 @@
                 <div class="col col-20"></div>
             </div>
         </div>
-        <p class="text-center" ng-if="!loggedUser">กรุณาเข้าสู่ระบบ</p>
+        <!--<p class="text-center" ng-if="!loggedUser">กรุณาเข้าสู่ระบบ</p>-->
     </ion-content>
 </ion-view>

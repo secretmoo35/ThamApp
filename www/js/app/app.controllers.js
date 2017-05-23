@@ -517,8 +517,13 @@ angular.module('your_app_name.app.controllers', [])
                             text: 'ตกลง',
                             onTap: function (e) {
                                 if ($scope.productGotoCart.qty) {
-                                    $scope.showError = false;
-                                    return $scope.data;
+                                    if ($scope.productGotoCart.qty.toString().indexOf('.') !== -1) {
+                                        e.preventDefault();
+                                        $scope.showError = true;
+                                    } else {
+                                        $scope.showError = false;
+                                        return $scope.data;
+                                    }
                                 } else {
                                     e.preventDefault();
                                     $scope.showError = true;
