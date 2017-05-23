@@ -1,14 +1,4 @@
 {
-    "phonegap-plugin-push": {
-        "source": {
-            "type": "registry",
-            "id": "phonegap-plugin-push@~1.8.4"
-        },
-        "is_top_level": true,
-        "variables": {
-            "SENDER_ID": "312799958769"
-        }
-    },
     "cordova-plugin-device": {
         "source": {
             "type": "registry",
@@ -77,7 +67,7 @@
     "cordova-plugin-inappbrowser": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-inappbrowser@1.7.1"
+            "id": "cordova-plugin-inappbrowser@~1.7.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -121,6 +111,14 @@
             "id": "cordova-plugin-compat"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "phonegap-plugin-push": {
+        "source": {
+            "type": "registry",
+            "id": "phonegap-plugin-push@~1.8.4"
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }
