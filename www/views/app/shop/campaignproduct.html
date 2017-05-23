@@ -40,18 +40,18 @@
                 <div class="margin-top-8">
                     <label class="item item-input">
                     <span class="input-label">รหัสบัตรประชาชน*</span>
-                    <input type="text" ng-model="acceptCampaign.identification" maxlength="13">
+                    <input type="text" ng-model="acceptCampaign.identification" maxlength="13" ng-change="chkNumber(acceptCampaign.identification)">
                 </label>
                 </div>
                 <div class="margin-top-8">
                     <label class="item item-input">
-                    <span class="input-label">Line ID*</span>
+                    <span class="input-label">Line ID</span>
                     <input type="text" ng-model="acceptCampaign.lineid">
                 </label>
                 </div>
                 <div class="margin-top-8">
                     <label class="item item-input">
-                    <span class="input-label">Facebook*</span>
+                    <span class="input-label">Facebook</span>
                     <input type="text" ng-model="acceptCampaign.facebook">
                 </label>
                 </div>
