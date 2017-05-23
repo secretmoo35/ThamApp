@@ -12,7 +12,13 @@
     </ion-nav-buttons>
     <ion-content scroll="true">
         <div class="list" ng-if="step === '1'">
-            <ion-list>
+            <div class="col col-bottom">
+                <a class="button button-block button-energized checkout-btn" ui-sref="app.shop.salelogin({redirectUrl: 'app.shop.cart'})">
+            เข้าสู่ระบบ
+          </a>
+            </div>
+
+            <!--<ion-list>
                 <ion-radio ng-model="choice" ng-value="true">ดำเนินการต่อโดยไม่ต้องใช้รหัสผ่าน</ion-radio>
                 <ion-radio ng-model="choice" ng-value="false">ฉันมีบัญชีผู้ใช้อยู่แล้ว</ion-radio>
             </ion-list>
@@ -47,9 +53,8 @@
                     <a class="facebook-sign-in button button-block button-facebook" ng-click="facebookSignIn()">
             Sign In with Facebook
           </a>
-                    <!--<button ng-click="signOutFacebook()">logout by facebook</button>-->
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="list" ng-if="step === '2'">
             <div class="item item-divider shop-section-title">

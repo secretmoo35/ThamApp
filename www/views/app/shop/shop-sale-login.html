@@ -5,11 +5,15 @@
         </a>-->
     </ion-nav-buttons>
     <ion-content scroll="true">
-        <div class="list">
-            <div class="margin-top-8">
+        <div class="list" ng-if="!user">
+            <ion-list>
+                <ion-radio ng-model="choice" ng-value="true">เข้าสู่ระบบด้วยเบอร์โทร</ion-radio>
+                <ion-radio ng-model="choice" ng-value="false">เข้าสู่ระบบด้วยเฟสบุ๊ค</ion-radio>
+            </ion-list>
+            <div class="margin-top-8" ng-if="choice === true">
                 <label class="item item-input">
                     <span class="input-label">เบอร์โทร*</span>
-                    <input type="text" ng-model="username">
+                    <input type="text" ng-model="username" maxlength="10" ng-change="chkNumber(username)">
                 </label>
                 <div class="row padding ">
                     <button class="button button-block button-energized checkout-btn" ng-disabled="!username" ng-click="settingLogin(username)">
@@ -17,7 +21,7 @@
                     </button>
                 </div>
             </div>
-            <div class="bottom-content row">
+            <div class="bottom-content row" ng-if="choice === false">
                 <div class="col col-bottom">
                     <a class="facebook-sign-in button button-block button-facebook" ng-click="facebookSignIn()">
             Sign In with Facebook
@@ -25,6 +29,12 @@
                     <!--<button ng-click="signOutFacebook()">logout by facebook</button>-->
                 </div>
             </div>
+        </div>
+        <div class="list" ng-if="user">
+            <a class="item item-icon-left" ng-click="goBack()">
+                 ประวัติส่วนตัว
+                <i class="icon ion-ios-arrow-back"></i>
+            </a>
         </div>
     </ion-content>
 </ion-view>
