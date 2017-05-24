@@ -50,7 +50,7 @@
         </label>
         <label class="item item-input">
           <span class="input-label">เบอร์โทร*</span>
-          <input type="text" ng-model="order.shipping.tel">
+          <input type="text" ng-model="order.shipping.tel" maxlength="10" ng-change="chkShippingTel(order.shipping.tel)">
         </label>
       </div>
     </div>
