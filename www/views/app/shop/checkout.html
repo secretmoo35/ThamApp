@@ -49,7 +49,7 @@
           <input type="text" ng-model="order.shipping.address">
         </label>
         <label class="item item-input">
-          <span class="input-label">เบอร์โทร</span>
+          <span class="input-label">เบอร์โทร*</span>
           <input type="text" ng-model="order.shipping.tel">
         </label>
       </div>
@@ -86,7 +86,7 @@
         <span class="order-total-value section-action"><h2>฿{{order.totalamount}}</h2></span>
       </div>
       <div class="row padding">
-        <button class="button button-block button-energized checkout-btn" ng-click="confirm(status)" ng-disabled="!status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName)">
+        <button class="button button-block button-energized checkout-btn" ng-click="confirm(status)" ng-disabled="!status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName) || status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName)">
           ดำเนินการต่อ
         </button>
       </div>

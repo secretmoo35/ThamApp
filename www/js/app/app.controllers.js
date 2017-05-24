@@ -20,13 +20,21 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('LoginCtrl', function ($scope, $state, AuthService, $ionicLoading, $rootScope, $stateParams, $ionicPopup, $window) {
+    .controller('LoginCtrl', function ($scope, $state, AuthService, $ionicLoading, $rootScope, $stateParams, $ionicPopup, $window, CheckoutService, $timeout) {
         // alert('redirectUrl');
         var parmRedirect = $stateParams.redirectUrl;
         $scope.goBack = function () {
             $state.go('app.shop.sale');
-            $window.location.reload('app.shop.sale');
+            $timeout(function () {
+                $window.location.reload('app.shop.sale');
+            }, 1000);
         };
+
+        CheckoutService.getPostcode().then(function (success) {
+            $scope.postcodes = success.postcode;
+        }, function (err) {
+            alert('unsuccess');
+        });
         // alert(parmRedirect);
         // $state.go(parmRedirect);
         if ($stateParams.campID) {
@@ -134,12 +142,13 @@ angular.module('your_app_name.app.controllers', [])
             // $state.go('app.feed');
         };
 
-        $scope.settingRegis = function () {
+        $scope.settingRegis = function (username) {
             // alert('parmRedirect' + $stateParams.redirect);
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
             if ($stateParams.setusername) {
-                $scope.authentication.username = $stateParams.setusername;
+                $scope.authentication.username = username ? username : $stateParams.setusername;
             }
+
             $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
             $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
             $scope.authentication.address.tel = $scope.authentication.username;
@@ -158,7 +167,7 @@ angular.module('your_app_name.app.controllers', [])
                 $ionicLoading.hide();
                 if (err.message === 'Username already exists') {
                     var myPopup = $ionicPopup.show({
-                        template: '<input type="text" ng-model="authentication.username">',
+                        template: '<input type="text" ng-model="authentication.username" maxlength="10" ng-change="chkPopupNumber(authentication.username)">',
                         title: 'มีชื่อผู้ใช้งานนี้แล้ว',
                         subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
                         scope: $scope,
@@ -168,7 +177,8 @@ angular.module('your_app_name.app.controllers', [])
                                 type: 'button-positive',
                                 onTap: function (e) {
                                     // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                    $scope.settingRegis();
+                                    var username = $scope.authentication.username;
+                                    $scope.settingRegis(username);
                                 }
                             }
                         ]
@@ -247,7 +257,39 @@ angular.module('your_app_name.app.controllers', [])
             if (!status) {
                 this.username = this.username.slice(0, this.username.length - 1);
             }
-        }
+        };
+
+        $scope.chkPopupNumber = function (numID) {
+            var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            var status = false;
+            nums.forEach(function (num) {
+                if (numID.length > 1) {
+                    if (numID.substr(numID.length - 1) === num) {
+                        status = true;
+                    }
+                } else {
+                    if (numID === num) {
+                        status = true;
+                    }
+                }
+
+            });
+
+            if (!status) {
+                $scope.authentication.username = $scope.authentication.username.slice(0, $scope.authentication.username.length - 1);
+            }
+        };
+
+        $scope.onPostcodeSelected = function (item) {
+            $scope.authentication.address.subdistrict = item.subdistrict;
+            $scope.authentication.address.district = item.district;
+            $scope.authentication.address.province = item.province;
+        };
+        $scope.onPostcodeInvalid = function () {
+            $scope.authentication.address.subdistrict = '';
+            $scope.authentication.address.district = '';
+            $scope.authentication.address.province = '';
+        };
 
     })
 
