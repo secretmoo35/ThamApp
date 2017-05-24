@@ -473,6 +473,34 @@ angular.module('your_app_name.app.controllers', [])
             //     });
         };
 
+
+        $scope.shareProduct = function () {
+
+            var widget = window.document.getElementById('widget');
+            console.log(widget.clientHeight);
+            widget.ownerDocument.defaultView.innerHeight = widget.scrollHeight + 100;
+            widget.ownerDocument.defaultView.innerWidth = widget.scrollWidth;
+            html2canvas(widget, {
+
+                onrendered: function (canvas) {
+                    theCanvas = canvas;
+
+                    $cordovaSocialSharing
+                        .share('Download \n\n For Android : https://play.google.com/store/apps/details?id=com.ionicframework.ecommerce449980 \n For IOS : https://itunes.apple.com/th/app/%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%98-%E0%B8%A3%E0%B8%81-%E0%B8%88/id1201598434?l=th&mt=8 \n', 'ธรรมธุรกิจ', canvas.toDataURL(), 'https://thamapptest.herokuapp.com/products/' + $scope.product._id) // Share via native share sheet
+                        .then(function (result) {
+                            // Success!
+                            // alert(JSON.stringify(result));
+                        }, function (err) {
+                            alert(JSON.stringify(err));
+                            // An error occured. Show a message to the user
+                        });
+
+                }
+            });
+
+        }
+
+
         $scope.productGotoCart = {
             qty: 1
         };
@@ -1015,7 +1043,7 @@ angular.module('your_app_name.app.controllers', [])
             if (user) {
                 $state.go('app.shop.checkout');
             } else {
-                $state.go('app.shop.shipping-address');
+                $state.go('app.shop.salelogin', { redirectUrl: 'app.shop.cart' });
             }
         };
 

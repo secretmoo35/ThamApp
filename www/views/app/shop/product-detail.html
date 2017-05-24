@@ -12,40 +12,42 @@
         </a>
     </ion-nav-buttons>
     <ion-content overflow-scroll="true">
-        <div class="product-card-content">
-            <div class="item item-image">
-                <pre-img helper-class="main-image" ratio="_1_1">
-                    <img ng-src="{{product.images}}" spinner-on-load>
-                </pre-img>
+        <div id="widget">
+            <div class="product-card-content">
+                <div class="item item-image">
+                    <pre-img helper-class="main-image" ratio="_1_1">
+                        <img ng-src="{{product.images}}" spinner-on-load>
+                    </pre-img>
+                </div>
+                <div class="item item-body">
+                    <div class="row">
+                        <h2 class="product-title">{{product.name}}</h2>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <p class="product-price thamma-ore-style">฿{{product.price}}</p>
+                        </div>
+                        <div class="col col-95 text-right">
+                            <a class="button button-icon icon ion-android-share-alt" ng-click="shareProduct()"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row item">
+                    <div class="col col-30">
+                        <button class="button button-block button-thamma checkout-btn" ng-click="showAddToCartPopup(product)">ใส่ตะกร้า</button>
+                    </div>
+                    <div class="col col-70">
+                        <button class="button button-block button-energized checkout-btn" ng-click="showAddToCartPopup(product,true)">สั่งซื้อทันที</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item item-body" ng-if="product.promotions.length > 0">
+                <p class="product-description">โปรโมชั่น</p>
+                <p class="product-description" ng-repeat="promotion in product.promotions">- {{promotion.description}}</p>
             </div>
             <div class="item item-body">
-                <div class="row">
-                    <h2 class="product-title">{{product.name}}</h2>
-                </div>
-                <div class="row">
-                    <div>
-                        <p class="product-price thamma-ore-style">฿{{product.price}}</p>
-                    </div>
-                    <div class="col col-95 text-right">
-                        <a class="button button-icon icon ion-android-share-alt" ng-click="shares()"></a>
-                    </div>
-                </div>
+                <p class="product-description paragraph">{{product.description}}</p>
             </div>
-            <div class="row item">
-                <div class="col col-30">
-                    <button class="button button-block button-thamma checkout-btn" ng-click="showAddToCartPopup(product)">ใส่ตะกร้า</button>
-                </div>
-                <div class="col col-70">
-                    <button class="button button-block button-energized checkout-btn" ng-click="showAddToCartPopup(product,true)">สั่งซื้อทันที</button>
-                </div>
-            </div>
-        </div>
-        <div class="item item-body" ng-if="product.promotions.length > 0">
-            <p class="product-description">โปรโมชั่น</p>
-            <p class="product-description" ng-repeat="promotion in product.promotions">- {{promotion.description}}</p>
-        </div>
-        <div class="item item-body">
-            <p class="product-description paragraph">{{product.description}}</p>
         </div>
     </ion-content>
 </ion-view>
