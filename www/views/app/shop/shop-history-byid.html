@@ -11,7 +11,7 @@
         <div class="list">
             <div class="item">
                 <div class="row">
-                    <div class="col col-75">
+                    <div class="col">
                         <h2>หมายเลขสั่งซื้อ {{historyById.docno}}</h2>
                         <p>สั่งซื้อเมื่อ {{historyById.docdate | date:'dd MMMM yyyy'}}</p>
                     </div>
@@ -33,7 +33,7 @@
                 <div class="row">
                     <div class="col col-100">
                         <h2>{{historyById.totalamount}} บาท</h2>
-                        <h2>การชำระเงิน : ชำระเงินปลายทางกับคนส่งข้าว</h2>
+                        <h2 class="text-not-warp-history">การชำระเงิน : ชำระเงินปลายทางกับคนส่งข้าว</h2>
                     </div>
                 </div>
             </div>

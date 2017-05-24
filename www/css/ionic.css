@@ -695,3 +695,7 @@ span1 {
     background-color: #ffffff !important;
 }
 textarea::-webkit-input-placeholder {  color: #999;}
+
+.text-not-warp-history {
+    white-space: normal !important;
+}
