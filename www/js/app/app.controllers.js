@@ -473,15 +473,11 @@ angular.module('your_app_name.app.controllers', [])
             //     });
         };
 
-
         $scope.shareProduct = function () {
 
             var widget = window.document.getElementById('widget');
-            console.log(widget.clientHeight);
-            widget.ownerDocument.defaultView.innerHeight = widget.scrollHeight + 100;
-            widget.ownerDocument.defaultView.innerWidth = widget.scrollWidth;
             html2canvas(widget, {
-
+                useCORS: true,
                 onrendered: function (canvas) {
                     theCanvas = canvas;
 
