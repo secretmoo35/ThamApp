@@ -1188,11 +1188,12 @@ angular.module('your_app_name.app.controllers', [])
                     $scope.order.shipping.sharelocation.longitude = $scope.order.user.address.sharelocation.longitude;
                     CheckoutService.saveOrder($scope.order).then(function (res) {
                         // alert(JSON.stringify(res));                                
-                        $ionicLoading.hide();
                         $state.go('app.complete', {
                             order: JSON.stringify(res)
                         });
+                        $ionicLoading.hide();
                     }, function (err) {
+                        $ionicLoading.hide();
                         alert(err.data.message);
                     });
                 } else {
@@ -1224,11 +1225,12 @@ angular.module('your_app_name.app.controllers', [])
                                     //     if (distance.rows[0].elements[0].distance.value) {
                                     CheckoutService.saveOrder($scope.order).then(function (res) {
                                         // alert(JSON.stringify(res));                                
-                                        $ionicLoading.hide();
                                         $state.go('app.complete', {
                                             order: JSON.stringify(res)
                                         });
+                                        $ionicLoading.hide();
                                     }, function (err) {
+                                        $ionicLoading.hide();
                                         alert(err.data.message);
                                     });
                                     //     } else {
@@ -1334,12 +1336,13 @@ angular.module('your_app_name.app.controllers', [])
                                     //     if (distance.rows[0].elements[0].distance.value) {
                                     CheckoutService.saveOrder($scope.order).then(function (res) {
                                         // alert(JSON.stringify(res));                                
-                                        $ionicLoading.hide();
                                         console.log(res);
                                         $state.go('app.complete', {
                                             order: JSON.stringify(res)
                                         });
+                                        $ionicLoading.hide();
                                     }, function (err) {
+                                        $ionicLoading.hide();
                                         alert(err.data.message);
                                     });
                                 }
@@ -1348,11 +1351,13 @@ angular.module('your_app_name.app.controllers', [])
                                     $state.go('complete', {
                                         orderId: res._id
                                     });
+                                    $ionicLoading.hide();
                                 }
                                 function errorCallback(res) {
                                     vm.error = res.data.message;
                                 }
                             }).error(function (err) {
+                                $ionicLoading.hide();
                                 console.log(err);
                             });
 
@@ -1377,12 +1382,13 @@ angular.module('your_app_name.app.controllers', [])
                                     //     if (distance.rows[0].elements[0].distance.value) {
                                     CheckoutService.saveOrder($scope.order).then(function (res) {
                                         // alert(JSON.stringify(res));
-                                        $ionicLoading.hide();
                                         console.log(res);
                                         $state.go('app.complete', {
                                             order: JSON.stringify(res)
                                         });
+                                        $ionicLoading.hide();
                                     }, function (err) {
+                                        $ionicLoading.hide();
                                         alert(err.data.message);
                                     });
                                     //     } else {
@@ -1488,12 +1494,13 @@ angular.module('your_app_name.app.controllers', [])
                                     //     if (distance.rows[0].elements[0].distance.value) {
                                     CheckoutService.saveOrder($scope.order).then(function (res) {
                                         // alert(JSON.stringify(res));                                
-                                        $ionicLoading.hide();
                                         console.log(res);
                                         $state.go('app.complete', {
                                             order: JSON.stringify(res)
                                         });
+                                        $ionicLoading.hide();
                                     }, function (err) {
+                                        $ionicLoading.hide();
                                         alert(err.data.message);
                                     });
                                 }
@@ -1546,10 +1553,10 @@ angular.module('your_app_name.app.controllers', [])
                                 //     if (distance.rows[0].elements[0].distance.value) {
                                 CheckoutService.saveOrder($scope.order).then(function (res) {
                                     // alert(JSON.stringify(res));                                
-                                    $ionicLoading.hide();
                                     $state.go('app.complete', {
                                         order: JSON.stringify(res)
                                     });
+                                    $ionicLoading.hide();
                                 }, function (err) {
                                     alert(err.data.message);
                                 });
@@ -1656,11 +1663,11 @@ angular.module('your_app_name.app.controllers', [])
                                 //     if (distance.rows[0].elements[0].distance.value) {
                                 CheckoutService.saveOrder($scope.order).then(function (res) {
                                     // alert(JSON.stringify(res));                                
-                                    $ionicLoading.hide();
                                     console.log(res);
                                     $state.go('app.complete', {
                                         order: JSON.stringify(res)
                                     });
+                                    $ionicLoading.hide();
                                 }, function (err) {
                                     alert(err.data.message);
                                 });
@@ -1670,11 +1677,14 @@ angular.module('your_app_name.app.controllers', [])
                                 $state.go('complete', {
                                     orderId: res._id
                                 });
+                                $ionicLoading.hide();
                             }
                             function errorCallback(res) {
+                                $ionicLoading.hide();
                                 vm.error = res.data.message;
                             }
                         }).error(function (err) {
+                            $ionicLoading.hide();
                             console.log(err);
                         });
 
@@ -1699,12 +1709,13 @@ angular.module('your_app_name.app.controllers', [])
                                 //     if (distance.rows[0].elements[0].distance.value) {
                                 CheckoutService.saveOrder($scope.order).then(function (res) {
                                     // alert(JSON.stringify(res));
-                                    $ionicLoading.hide();
                                     console.log(res);
                                     $state.go('app.complete', {
                                         order: JSON.stringify(res)
                                     });
+                                    $ionicLoading.hide();
                                 }, function (err) {
+                                    $ionicLoading.hide();
                                     alert(err.data.message);
                                 });
                                 //     } else {
@@ -1810,12 +1821,13 @@ angular.module('your_app_name.app.controllers', [])
                                 //     if (distance.rows[0].elements[0].distance.value) {
                                 CheckoutService.saveOrder($scope.order).then(function (res) {
                                     // alert(JSON.stringify(res));                                
-                                    $ionicLoading.hide();
                                     console.log(res);
                                     $state.go('app.complete', {
                                         order: JSON.stringify(res)
                                     });
+                                    $ionicLoading.hide();
                                 }, function (err) {
+                                    $ionicLoading.hide();
                                     alert(err.data.message);
                                 });
                             }
@@ -1861,117 +1873,113 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('ChatCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket, $ionicLoading) {
-        $scope.listRoom = function () {
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-            roomService.getrooms().then(function (res) {
-                $scope.chats = res;
-                $ionicLoading.hide();
-            }, function (err) {
-                $ionicLoading.hide();
-                console.log(err);
-            });
-        };
-        $scope.listRoom();
-        $scope.createRoom = function (data) {
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-            roomService.createRoom(data).then(function (res) {
-                $scope.listRoom();
-                $ionicLoading.hide();
-            }, function (err) {
-                $ionicLoading.hide();
-                console.log(err);
-            });
-        };
-
-        Socket.on('invite', function (res) {
-            $scope.listRoom();
-        });
+    .controller('ChatCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, $ionicLoading) {
+        // $scope.listRoom = function () {
+        //     $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+        //     roomService.getrooms().then(function (res) {
+        //         $scope.chats = res;
+        //         $ionicLoading.hide();
+        //     }, function (err) {
+        //         $ionicLoading.hide();
+        //         console.log(err);
+        //     });
+        // };
+        // $scope.listRoom();
+        // $scope.createRoom = function (data) {
+        //     $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+        //     roomService.createRoom(data).then(function (res) {
+        //         $scope.listRoom();
+        //         $ionicLoading.hide();
+        //     }, function (err) {
+        //         $ionicLoading.hide();
+        //         console.log(err);
+        //     });
+        // };
 
     })
 
-    .controller('ChatDetailCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, $stateParams, Socket, $ionicScrollDelegate, $timeout, $ionicLoading) {
-        $scope.user = AuthService.getUser();
-        $scope.messages = [];
-        $scope.chat = null;
-        $scope.room = {};
-        Socket.connect();
-        // ทดสอบ mobile connect
-        // Socket.on('mobile', function (message) {
-        //   $scope.messages.unshift(message);
+    .controller('ChatDetailCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, $stateParams, $ionicScrollDelegate, $timeout, $ionicLoading) {
+        // $scope.user = AuthService.getUser();
+        // $scope.messages = [];
+        // $scope.chat = null;
+        // $scope.room = {};
+        // // Socket.connect();
+        // // ทดสอบ mobile connect
+        // // Socket.on('mobile', function (message) {
+        // //   $scope.messages.unshift(message);
+        // // });
+        // $scope.loadRoom = function () {
+        //     var roomId = $stateParams.chatId;
+        //     $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+        //     roomService.getRoom(roomId).then(function (res) {
+        //         res.users.forEach(function (user) {
+        //             if ($scope.user._id != user._id) {
+        //                 $scope.title = user.displayName;
+        //             }
+        //         });
+        //         $scope.chat = res;
+        //         // Socket.emit('join', $scope.chat);
+        //         $ionicLoading.hide();
+        //     }, function (err) {
+        //         $ionicLoading.hide();
+        //         console.log(err);
+        //     });
+        // };
+
+        // // Add an event listener to the 'invite' event
+        // Socket.on('invite', function (res) {
+        //     // alert('invite : ' + JSON.stringify(data));
+        //     Socket.emit('join', res);
         // });
-        $scope.loadRoom = function () {
-            var roomId = $stateParams.chatId;
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-            roomService.getRoom(roomId).then(function (res) {
-                res.users.forEach(function (user) {
-                    if ($scope.user._id != user._id) {
-                        $scope.title = user.displayName;
-                    }
-                });
-                $scope.chat = res;
-                Socket.emit('join', $scope.chat);
-                $ionicLoading.hide();
-            }, function (err) {
-                $ionicLoading.hide();
-                console.log(err);
-            });
-        };
 
-        // Add an event listener to the 'invite' event
-        Socket.on('invite', function (res) {
-            // alert('invite : ' + JSON.stringify(data));
-            Socket.emit('join', res);
-        });
+        // // Add an event listener to the 'joinsuccess' event
+        // Socket.on('joinsuccess', function (data) {
+        //     $scope.room = data;
+        //     $scope.pageDown();
+        //     // alert('joinsuccess : ' + JSON.stringify(data));
+        // });
 
-        // Add an event listener to the 'joinsuccess' event
-        Socket.on('joinsuccess', function (data) {
-            $scope.room = data;
-            $scope.pageDown();
-            // alert('joinsuccess : ' + JSON.stringify(data));
-        });
+        // // Add an event listener to the 'chatMessage' event
+        // Socket.on('chatMessage', function (data) {
+        //     // alert(JSON.stringify(data));
+        //     $scope.room = data;
+        // });
+        // $scope.hideTime = true;
+        // var alternate,
+        //     isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+        // // Create a controller method for sending messages
+        // $scope.sendMessage = function () {
+        //     // alternate = !alternate
+        //     // if (!$scope.room.messages) {
+        //     //     $scope.room.messages = [];
+        //     $scope.room.messages.unshift({
+        //         type: 'message',
+        //         created: Date.now(),
+        //         profileImageURL: $scope.user.profileImageURL,
+        //         username: $scope.user.displayName,
+        //         text: this.message
+        //     });
+        //     // } else {
+        //     //     $scope.room.messages.unshift({
+        //     //         type: 'message',
+        //     //         created: Date.now(),
+        //     //         profileImageURL: $scope.user.profileImageURL,
+        //     //         username: $scope.user.username,
+        //     //         text: this.message
+        //     //     });
+        //     // }
+        //     $ionicScrollDelegate.scrollBottom(true);
 
-        // Add an event listener to the 'chatMessage' event
-        Socket.on('chatMessage', function (data) {
-            // alert(JSON.stringify(data));
-            $scope.room = data;
-        });
-        $scope.hideTime = true;
-        var alternate,
-            isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-        // Create a controller method for sending messages
-        $scope.sendMessage = function () {
-            // alternate = !alternate
-            // if (!$scope.room.messages) {
-            //     $scope.room.messages = [];
-            $scope.room.messages.unshift({
-                type: 'message',
-                created: Date.now(),
-                profileImageURL: $scope.user.profileImageURL,
-                username: $scope.user.displayName,
-                text: this.message
-            });
-            // } else {
-            //     $scope.room.messages.unshift({
-            //         type: 'message',
-            //         created: Date.now(),
-            //         profileImageURL: $scope.user.profileImageURL,
-            //         username: $scope.user.username,
-            //         text: this.message
-            //     });
-            // }
-            $ionicScrollDelegate.scrollBottom(true);
-
-            Socket.emit('chatMessage', $scope.room);
-            this.message = '';
-        };
+        //     Socket.emit('chatMessage', $scope.room);
+        //     this.message = '';
+        // };
 
 
-        $scope.pageDown = function () {
-            $timeout(function () {
-                $ionicScrollDelegate.scrollBottom(true);
-            }, 300);
-        };
+        // $scope.pageDown = function () {
+        //     $timeout(function () {
+        //         $ionicScrollDelegate.scrollBottom(true);
+        //     }, 300);
+        // };
 
 
 
@@ -1998,70 +2006,70 @@ angular.module('your_app_name.app.controllers', [])
 
         // };
 
-        $scope.inputUp = function () {
-            // if (isIOS) $scope.room.keyboardHeight = 216;
-            $timeout(function () {
-                $ionicScrollDelegate.scrollBottom(true);
-            }, 300);
+        // $scope.inputUp = function () {
+        //     // if (isIOS) $scope.room.keyboardHeight = 216;
+        //     $timeout(function () {
+        //         $ionicScrollDelegate.scrollBottom(true);
+        //     }, 300);
 
-        };
+        // };
 
-        $scope.inputDown = function () {
-            // if (isIOS) $scope.room.keyboardHeight = 0;
-            $ionicScrollDelegate.resize();
-        };
+        // $scope.inputDown = function () {
+        //     // if (isIOS) $scope.room.keyboardHeight = 0;
+        //     $ionicScrollDelegate.resize();
+        // };
 
-        $scope.closeKeyboard = function () {
-            // cordova.plugins.Keyboard.close();
-        };
+        // $scope.closeKeyboard = function () {
+        //     // cordova.plugins.Keyboard.close();
+        // };
 
 
-        $scope.data = {};
-        $scope.myId = $scope.user.displayName;
+        // $scope.data = {};
+        // $scope.myId = $scope.user.displayName;
     })
 
-    .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService, Socket, $ionicLoading) {
-        $scope.user = AuthService.getUser();
-        $scope.listAccount = function () {
-            $scope.listRoom = [];
-            $scope.friends = [];
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-            roomService.getrooms().then(function (rooms) {
-                rooms.forEach(function (room) {
-                    room.users.forEach(function (user) {
-                        if ($scope.user._id === user._id) {
-                            $scope.listRoom.push(room);
-                        }
-                    });
-                });
-                if ($scope.listRoom.length > 0) {
-                    $scope.listRoom.forEach(function (room) {
-                        room.users.forEach(function (user) {
-                            if ($scope.user._id !== user._id) {
-                                $scope.friends.push(user);
-                            }
-                        });
-                    });
-                }
-                AuthService.getusers().then(function (accounts) {
-                    $scope.accounts = accounts;
-                    $ionicLoading.hide();
-                }, function (err) {
-                    $ionicLoading.hide();
-                    console.log(err);
-                });
-            });
-        };
-        $scope.listAccount();
-        $scope.addFriend = function (user) {
-            var data = {
-                name: $scope.user.username + '' + user.username,
-                type: 'P',
-                users: [$scope.user, user],
-                user: $scope.user
-            };
-            Socket.emit('createroom', data);
-        };
+    .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, $ionicLoading) {
+        // $scope.user = AuthService.getUser();
+        // $scope.listAccount = function () {
+        //     $scope.listRoom = [];
+        //     $scope.friends = [];
+        //     $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+        //     roomService.getrooms().then(function (rooms) {
+        //         rooms.forEach(function (room) {
+        //             room.users.forEach(function (user) {
+        //                 if ($scope.user._id === user._id) {
+        //                     $scope.listRoom.push(room);
+        //                 }
+        //             });
+        //         });
+        //         if ($scope.listRoom.length > 0) {
+        //             $scope.listRoom.forEach(function (room) {
+        //                 room.users.forEach(function (user) {
+        //                     if ($scope.user._id !== user._id) {
+        //                         $scope.friends.push(user);
+        //                     }
+        //                 });
+        //             });
+        //         }
+        //         AuthService.getusers().then(function (accounts) {
+        //             $scope.accounts = accounts;
+        //             $ionicLoading.hide();
+        //         }, function (err) {
+        //             $ionicLoading.hide();
+        //             console.log(err);
+        //         });
+        //     });
+        // };
+        // $scope.listAccount();
+        // $scope.addFriend = function (user) {
+        //     var data = {
+        //         name: $scope.user.username + '' + user.username,
+        //         type: 'P',
+        //         users: [$scope.user, user],
+        //         user: $scope.user
+        //     };
+        //     Socket.emit('createroom', data);
+        // };
     })
 
     .controller('QuizCtrl', function ($scope, $stateParams, $ionicModal, AuthService, $rootScope, QuizService, $ionicLoading, $state) {
@@ -2159,11 +2167,11 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('PolicyCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService) {
+    .controller('PolicyCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope) {
 
     })
 
-    .controller('PushNotiCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, roomService) {
+    .controller('PushNotiCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope) {
         $scope.welcome = "PushNotification Comingsoon";
     });
 
