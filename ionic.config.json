@@ -1,4 +1,8 @@
 {
   "name": "ธรรมธุรกิจ",
-  "app_id": "dac9f19a"
+  "app_id": "dac9f19a",
+  "type": "ionic1",
+  "watchPatterns": [
+    "scss/**/*"
+  ]
 }

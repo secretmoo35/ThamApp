@@ -1,5 +1,5 @@
 {
-  "name": "ธรรมธุรกิจ",
+  "name": "thamapp",
   "version": "1.1.1",
   "description": "ธรรมธุรกิจ",
   "dependencies": {
@@ -24,6 +24,8 @@
     "phonegap-plugin-push": "^1.10.4"
   },
   "devDependencies": {
+    "@ionic/cli-plugin-gulp": "1.0.1",
+    "@ionic/cli-plugin-ionic1": "2.0.0",
     "bower": "^1.3.3",
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
