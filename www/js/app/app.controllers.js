@@ -1134,6 +1134,7 @@ angular.module('your_app_name.app.controllers', [])
             $scope.step = '3';
         }
         $scope.calculate = function () {
+            $scope.confirmedOrder = false;
             $scope.order.amount = 0;
             $scope.order.totalamount = 0;
             $scope.order.deliveryamount = 0;
@@ -1165,6 +1166,7 @@ angular.module('your_app_name.app.controllers', [])
 
         $scope.confirm = function (status) {
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+            $scope.confirmedOrder = true;
             $scope.order.docno = (+new Date());
             $scope.order.docdate = new Date();
             if (window.localStorage.platform) {

@@ -86,7 +86,7 @@
         <span class="order-total-value section-action"><h2>฿{{order.totalamount}}</h2></span>
       </div>
       <div class="row padding">
-        <button class="button button-block button-energized checkout-btn" ng-click="confirm(status)" ng-disabled="!status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName) || status && (!user.address.tel)">
+        <button class="button button-block button-energized checkout-btn" ng-click="confirm(status)" ng-disabled="!status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName) || status && (!user.address.tel) || confirmedOrder">
           ดำเนินการต่อ
         </button>
       </div>
