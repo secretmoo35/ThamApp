@@ -11,7 +11,7 @@
       <div class="item item-divider shop-section-title">
         <span class="title-copy">ที่อยู่ที่จะจัดส่ง</span>
       </div>
-      <ion-toggle toggle-class="toggle-energized" ng-model="status">ใช้ที่อยู่เดิม</ion-toggle>
+      <ion-toggle toggle-class="toggle-energized" ng-model="status" ng-change="checkStatus(status)">ใช้ที่อยู่เดิม</ion-toggle>
       <div class="item" ng-if="status">
         <p>{{user.address.address}} {{user.address.district}} {{user.address.subdistrict}}</p>
         <p>{{user.address.province}} {{user.address.postcode}}</p>
@@ -86,7 +86,7 @@
         <span class="order-total-value section-action"><h2>฿{{order.totalamount}}</h2></span>
       </div>
       <div class="row padding">
-        <button class="button button-block button-energized checkout-btn" ng-click="confirm(status)" ng-disabled="!status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName) || status && (!user.address.tel) || confirmedOrder">
+        <button class="button button-block button-energized checkout-btn" ng-click="checkArea(status)" ng-disabled="!status && (!order.shipping.address || !order.shipping.province || !order.shipping.district || !order.shipping.postcode || !order.shipping.lastName || !order.shipping.firstName) || status && (!user.address.tel) || confirmedOrder">
           ดำเนินการต่อ
         </button>
       </div>
@@ -104,4 +104,91 @@
       </div>
     </div>
   </ion-content>
+
+  <script id="templates/modal.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar align-title="center" class="bar-balanced">
+                <!--<div class="buttons">
+                    <button class="button button-clear button-primary" ng-click="cancelOrder()">ยกเลิก</button>
+                </div>-->
+                <h1 class="title">คุณอยู่นอกพื้นที่จัดส่ง</h1>
+                <!--<div class="buttons">
+                    <button class="button button-clear" ng-click="confirm(status)">บันทึก</button>
+                </div>-->
+            </ion-header-bar>
+
+            <ion-content class="padding">
+                <div class="row">
+                  <div class="col">
+                    <img src="img/123.png" width="100%">
+                  </div>
+                </div>
+
+                <div class="list">
+      <div class="item item-divider shop-section-title">
+        <span class="title-copy">สรุปราคาสั่งซื้อ</span>
+      </div>
+      <div class="item row padding totals">
+        <div class="col col-50">
+          <div class="row">
+            <div class="col">
+              ราคาสินค้า
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              ค่าจัดส่ง
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              ส่วนลด
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              ราคารวม
+              </div>
+          </div>
+        </div>
+        <div class="col col-50 totals-numbers text-right">
+          <div class="row">
+            <div class="col">
+              {{order.amount}} บาท
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              {{order.deliveryamount}} บาท
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              {{order.discountpromotion}} บาท
+              </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              {{order.totalamount}} บาท
+              </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col col-50">
+          <button class="button button-block button-energized" ng-click="confirm(status)">ยืนยันการสั่งซื้อ</button>
+      </div>
+      <div class="col col-50">
+          <button class="button button-block button-balanced" ng-click="cancelOrder()">ยกเลิก</button>
+      </div>
+    </div>
+
+                
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
 </ion-view>

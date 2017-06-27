@@ -207,7 +207,7 @@ angular.module('your_app_name.app.services', [])
     //         return dfd.promise;
     //     };
     // })
-    
+
     .service('ShopService', function ($http, $q, _, config) {
 
         var apiUrl = config.apiUrl;
@@ -269,7 +269,6 @@ angular.module('your_app_name.app.services', [])
         };
 
         this.getPromotion = function (product) {
-
             for (var i = 0; i < product.product.promotions.length; i++) {
                 var sumQtyCheckCondition = parseInt(product.qty / product.product.promotions[i].condition);
                 product.discountamount = sumQtyCheckCondition * product.product.promotions[i].discount.fixBath;
@@ -390,6 +389,17 @@ angular.module('your_app_name.app.services', [])
             }).error(function (err) {
                 dfd.reject(err);
             });;
+            return dfd.promise;
+        }
+
+        this.checkPostcode = function (postcode) {
+            var dfd = $q.defer();
+            var user = (window.localStorage.user) ? JSON.parse(window.localStorage.user) : null;
+            $http.get(apiUrl + 'api/checkPostcode/' + postcode).success(function (database) {
+                dfd.resolve(database);
+            }).error(function (err) {
+                dfd.reject(err);
+            });
             return dfd.promise;
         }
 
@@ -515,5 +525,5 @@ angular.module('your_app_name.app.services', [])
     //         }
     //     };
     // })
-    
+
     ;

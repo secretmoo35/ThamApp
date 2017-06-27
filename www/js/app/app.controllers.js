@@ -1045,7 +1045,7 @@ angular.module('your_app_name.app.controllers', [])
 
     })
 
-    .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, $rootScope) {
+    .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, $rootScope, $ionicModal) {
         //$scope.paymentDetails;
         $scope.apiUrl = config.apiUrl;
         $scope.status = true;
@@ -1149,9 +1149,18 @@ angular.module('your_app_name.app.controllers', [])
             $scope.order.deliveryamount = allDeliverycost;
             $scope.order.discountpromotion = allDiscountAmount;
             $scope.order.totalamount = $scope.order.amount + $scope.order.deliveryamount - $scope.order.discountpromotion;
+            console.log($scope.order.totalamount);
         };
 
-        $scope.calculate();
+        $scope.checkStatus = function (status) {
+            $scope.status = status;
+        };
+
+        $ionicModal.fromTemplateUrl('templates/modal.html', {
+            scope: $scope
+        }).then(function (modal) {
+            $scope.modal = modal;
+        });
 
         if ($scope.user && !$scope.user.address) {
             $scope.status = false;
@@ -1164,7 +1173,52 @@ angular.module('your_app_name.app.controllers', [])
             }
         };
 
+        $scope.checkArea = function (status) {
+            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+            var chkPostcode = '';
+            var province = '';
+            if (status) {
+                chkPostcode = $scope.user.address.postcode ? $scope.user.address.postcode : '';
+                province = $scope.user.address.province ? $scope.user.address.province : '';
+            } else {
+                chkPostcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
+                province = $scope.order.shipping.province ? $scope.order.shipping.province : '';
+            }
+            if (province === 'กรุงเทพมหานคร') {
+                $scope.order.inarea = true;
+                $scope.confirm(status);
+            } else {
+                ShopService.checkPostcode(chkPostcode).then(function (res) {
+                    $scope.order.inarea = res.area;
+                    if (res.area) {
+                        $scope.confirm(status);
+                    } else {
+                        if ($scope.order.items.length > 0) {
+                            $scope.order.items.forEach(function (itm) {
+                                itm.deliverycost += (itm.qty * 150) - itm.deliverycost;
+                            });
+                            $scope.calculate();
+                        }
+                        $scope.modal.show();
+                        $ionicLoading.hide();
+                        // $scope.confirm(status);                        
+                    }
+                }, function (err) {
+                    $ionicLoading.hide();
+                    alert('err : ' + err.message);
+                });
+            }
+        };
+
+        $scope.cancelOrder = function () {
+            $scope.order = {};
+            $scope.modal.hide();
+            window.localStorage.removeItem('ionTheme1_cart');
+            $state.go('app.shop.cart');
+        };
+
         $scope.confirm = function (status) {
+            $scope.modal.hide();
             $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
             $scope.confirmedOrder = true;
             $scope.order.docno = (+new Date());
