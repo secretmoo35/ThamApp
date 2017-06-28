@@ -441,7 +441,6 @@ angular.module('your_app_name.app.controllers', [])
             var reNumber = '';
             var regex = /(\d+)/g;
             var reNum = telnumber.match(regex);
-            alert(reNum);
             reNum.forEach(function (item) {
                 reNumber += item
             });
