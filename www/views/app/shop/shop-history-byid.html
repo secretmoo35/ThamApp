@@ -31,19 +31,27 @@
             </div>
             <div class="item">
                 <div class="row">
+                    <div class="col col-100 item-text-wrap">
+                        <p><b>{{historyById.shipping.firstname}} {{historyById.shipping.lastname}}</b></p>
+                        <p>{{historyById.shipping.address}} {{historyById.shipping.district}} {{historyById.shipping.subdistrict}}
+                            {{historyById.shipping.province}} {{historyById.shipping.postcode}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="row">
                     <div class="col col-100">
                         <h2>{{historyById.totalamount}} บาท</h2>
                         <h2 class="text-not-warp-history">การชำระเงิน : ชำระเงินปลายทางกับคนส่งข้าว</h2>
                     </div>
                 </div>
             </div>
-            <div class="item">
+            <div class="item" ng-if="historyById.namedeliver">
                 <div class="row">
-                    <div class="col col-100 item-text-wrap">
-                        <p><b>{{historyById.shipping.firstname}} {{historyById.shipping.lastname}}</b></p>
-                        <p>{{historyById.shipping.address}} {{historyById.shipping.district}} {{historyById.shipping.subdistrict}}
-                            {{historyById.shipping.province}} {{historyById.shipping.postcode}}
-                        </p>
+                    <div class="col col-100 item-text-wrap" ng-click="tel('{{historyById.namedeliver.address.tel}}')">
+                        <p><b>ผู้จัดส่ง : {{historyById.namedeliver.displayName}}</b></p>
+                        <p>โทร : {{historyById.namedeliver.address.tel}}</p>
                     </div>
                 </div>
             </div>
@@ -53,7 +61,7 @@
             <div class="item bg-color-brow">
                 <div class="row">
                     <div class="col col-50">
-                        <p><b>การจัดส่ง {{historyById.items.length}}</b></p>
+                        <p><b>การจัดส่ง</b></p>
                         <p>{{historyById.items.length}} สินค้า</p>
                     </div>
                     <div class="col col-10">
@@ -134,7 +142,7 @@
             <div class="item">
                 <div class="row">
                     <div class="col col-50">
-                       <h2>ราคาสุทธิ</h2>
+                        <h2>ราคาสุทธิ</h2>
                     </div>
                     <div class="col col-50 text-right">
                         {{historyById.totalamount}} บาท

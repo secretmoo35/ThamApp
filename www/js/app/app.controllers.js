@@ -437,6 +437,18 @@ angular.module('your_app_name.app.controllers', [])
                 });
         }
 
+        $scope.tel = function (telnumber) {
+            var reNumber = '';
+            var regex = /(\d+)/g;
+            var reNum = telnumber.match(regex);
+            alert(reNum);
+            reNum.forEach(function (item) {
+                reNumber += item
+            });
+            // alert(reNumber);
+            window.location = 'tel:' + reNumber;
+        };
+
     })
 
     .controller('ProductCtrl', function ($scope, $timeout, $rootScope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config, $cordovaSocialSharing) {
