@@ -33,8 +33,7 @@
                 <div class="row">
                     <div class="col col-100 item-text-wrap">
                         <p><b>{{historyById.shipping.firstname}} {{historyById.shipping.lastname}}</b></p>
-                        <p>{{historyById.shipping.address}} {{historyById.shipping.district}} {{historyById.shipping.subdistrict}}
-                            {{historyById.shipping.province}} {{historyById.shipping.postcode}}
+                        <p>{{historyById.shipping.address}} {{historyById.shipping.district}} {{historyById.shipping.subdistrict}} {{historyById.shipping.province}} {{historyById.shipping.postcode}}
                         </p>
                     </div>
                 </div>
@@ -43,7 +42,8 @@
                 <div class="row">
                     <div class="col col-100">
                         <h2>{{historyById.totalamount}} บาท</h2>
-                        <h2 class="text-not-warp-history">การชำระเงิน : ชำระเงินปลายทางกับคนส่งข้าว</h2>
+                        <h2 class="text-not-warp-history">วิธีการชำระเงิน </h2>
+                        <p class="text-not-warp-history"> สินค้าข้าวจ่ายเงินสดกับคนส่งข้าว สินค้าอื่นโอนเงินก่อนและส่งใบโอนเงินทาง ไลน์@thamturakit</p>
                     </div>
                 </div>
             </div>
@@ -76,14 +76,12 @@
                 </div>
             </div>
             <div class="item">
-                <div class="row" ng-if="(historyById.deliverystatus === 'confirmed' || historyById.deliverystatus === 'wait deliver' || historyById.deliverystatus === 'reject') && historyById.deliverystatus !== 'cancel'"
-                    ng-click="showConfirm(historyById)">
+                <div class="row" ng-if="(historyById.deliverystatus === 'confirmed' || historyById.deliverystatus === 'wait deliver' || historyById.deliverystatus === 'reject') && historyById.deliverystatus !== 'cancel'" ng-click="showConfirm(historyById)">
                     <div class="col col-100 text-center">
                         <h2 class="danger-coler-text">ยกเลิก</h2>
                     </div>
                 </div>
-                <div class="row" ng-if="(historyById.deliverystatus === 'confirmed' || historyById.deliverystatus === 'wait deliver' || historyById.deliverystatus === 'reject') && historyById.deliverystatus !== 'cancel'"
-                    ng-click="showConfirm(historyById)">
+                <div class="row" ng-if="(historyById.deliverystatus === 'confirmed' || historyById.deliverystatus === 'wait deliver' || historyById.deliverystatus === 'reject') && historyById.deliverystatus !== 'cancel'" ng-click="showConfirm(historyById)">
                     <div class="col col-100 text-center">
                         <i class="icon ion-ios-close-outline font-30 danger-coler-text text-center"></i>
                     </div>
@@ -104,9 +102,7 @@
                 </div>
                 <div class="row">
                     <div class="col col-100">
-                        <p>สถานะ : {{historyById.deliverystatus === 'accept' ? 'กำลังดำเนินการจัดส่ง' : historyById.deliverystatus
-                            === 'complete' ? 'ได้รับสินค้าเรียบร้อยแล้ว' : historyById.deliverystatus === 'cancel' ? 'รายการถูกยกเลิกแล้ว'
-                            : 'กำลังดำเนินการ'}}</p>
+                        <p>สถานะ : {{historyById.deliverystatus === 'accept' ? 'กำลังดำเนินการจัดส่ง' : historyById.deliverystatus === 'complete' ? 'ได้รับสินค้าเรียบร้อยแล้ว' : historyById.deliverystatus === 'cancel' ? 'รายการถูกยกเลิกแล้ว' : 'กำลังดำเนินการ'}}</p>
                     </div>
                 </div>
             </div>
