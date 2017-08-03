@@ -4,7 +4,6 @@
   "description": "ธรรมธุรกิจ",
   "dependencies": {
     "cordova-android": "^6.2.3",
-    "cordova-ios": "^4.4.0",
     "cordova-plugin-console": "~1.0.4",
     "cordova-plugin-device": "~1.1.3",
     "cordova-plugin-file": "~4.3.3",
@@ -66,8 +65,7 @@
       "phonegap-plugin-push": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "android"
     ]
   }
 }
