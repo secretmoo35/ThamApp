@@ -811,7 +811,9 @@ angular.module('your_app_name.app.controllers', [])
     $scope.products = [];
     $scope.popular_products = [];
     $scope.scroll = $scope.scroll ? $scope.scroll : true;
-    $scope.images = ['img/1.png', 'img/2.png'];
+    $scope.images = ['https://thamapptest.herokuapp.com/1.png', 'https://thamapptest.herokuapp.com/2.png']; //com.ionicframework.ecommerce449980
+
+    // $scope.images = ['img/1.png', 'img/2.png'];
     $scope.readProduct = function() {
         $scope.category = [];
         $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>' });
