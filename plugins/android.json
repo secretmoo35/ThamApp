@@ -1,59 +1,58 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-console": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
     },
-    "config_munge": {
-        "files": {}
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
     },
-    "installed_plugins": {
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-image-picker": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "cordova-plugin-x-socialsharing": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "phonegap-plugin-push": {
-            "SENDER_ID": "85075801930",
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        }
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
     },
-    "dependent_plugins": {
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        },
-        "es6-promise-plugin": {
-            "PACKAGE_NAME": "com.thumturakit.thamapp"
-        }
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "cordova-plugin-image-picker": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "ionic-plugin-keyboard": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "onesignal-cordova-plugin": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
     }
+  },
+  "dependent_plugins": {
+    "cordova-plugin-compat": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    },
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.ionicframework.ecommerce449980"
+    }
+  }
 }

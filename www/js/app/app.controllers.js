@@ -1,380 +1,394 @@
 angular.module('your_app_name.app.controllers', [])
 
 
-.controller('AppCtrl', function($scope, AuthService, config, $ionicSideMenuDelegate, ShopService) {
+  .controller('AppCtrl', function ($scope, AuthService, config, $ionicSideMenuDelegate, ShopService) {
 
     $scope.apiUrl = config.apiUrl;
     //this will represent our logged user
     $scope.countProduct = ShopService;
     // $
     // $scope.countProduct
-    $scope.$watch(function() {
-            return $ionicSideMenuDelegate.isOpenLeft();
-        },
-        function(isOpen) {
-            if (isOpen) {
-                console.log("open");
-                $scope.loggedUser = AuthService.getUser();
-            }
-        });
+    $scope.$watch(function () {
+        return $ionicSideMenuDelegate.isOpenLeft();
+      },
+      function (isOpen) {
+        if (isOpen) {
+          console.log("open");
+          $scope.loggedUser = AuthService.getUser();
+        }
+      });
 
-})
+  })
 
-.controller('LoginCtrl', function($scope, $state, AuthService, $ionicLoading, $rootScope, $stateParams, $ionicPopup, $window, CheckoutService, $timeout) {
+  .controller('LoginCtrl', function ($scope, $state, AuthService, $ionicLoading, $rootScope, $stateParams, $ionicPopup, $window, CheckoutService, $timeout) {
     // alert('redirectUrl');
     var parmRedirect = $stateParams.redirectUrl;
-    $scope.goBack = function() {
-        $state.go('app.shop.sale');
-        $timeout(function() {
-            $window.location.reload('app.shop.sale');
-        }, 1000);
+    $scope.goBack = function () {
+      $state.go('app.shop.sale');
+      $timeout(function () {
+        $window.location.reload('app.shop.sale');
+      }, 1000);
     };
 
-    CheckoutService.getPostcode().then(function(success) {
-        $scope.postcodes = success.postcode;
-    }, function(err) {
-        alert('unsuccess');
+    CheckoutService.getPostcode().then(function (success) {
+      $scope.postcodes = success.postcode;
+    }, function (err) {
+      alert('unsuccess');
     });
     // alert(parmRedirect);
     // $state.go(parmRedirect);
     if ($stateParams.campID) {
-        var campID = $stateParams.campID;
+      var campID = $stateParams.campID;
     }
     if ($stateParams.prodID) {
-        var prodID = $stateParams.prodID;
+      var prodID = $stateParams.prodID;
     }
 
     $scope.choice = true;
 
-    $scope.settingLogin = function() {
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-        $scope.authentication.username = this.username;
-        $scope.authentication.password = 'Usr#Pass1234';
+    $scope.settingLogin = function () {
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>'
+      });
+      $scope.authentication.username = this.username;
+      $scope.authentication.password = 'Usr#Pass1234';
 
-        $scope.authentication.username = $scope.authentication.username;
-        $scope.authentication.password = 'Usr#Pass1234';
-        AuthService.shippingLogin($scope.authentication);
+      $scope.authentication.username = $scope.authentication.username;
+      $scope.authentication.password = 'Usr#Pass1234';
+      AuthService.shippingLogin($scope.authentication);
 
-        $rootScope.$on('userLoggedInShipping', function(e, data) {
-            // $scope.loadUser();
-            $ionicLoading.hide();
-            $scope.user = AuthService.getUser();
-            $scope.redirect(parmRedirect);
-        });
+      $rootScope.$on('userLoggedInShipping', function (e, data) {
+        // $scope.loadUser();
+        $ionicLoading.hide();
+        $scope.user = AuthService.getUser();
+        $scope.redirect(parmRedirect);
+      });
 
 
 
-        $rootScope.$on('userFailedLoginShipping', function(e, error) {
-            $ionicLoading.hide();
-            var myPopup = $ionicPopup.show({
-                title: 'ไม่มีข้อมูลสมาชิก!!',
-                subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
-                scope: $scope,
-                buttons: [{
-                    text: '<b>ตกลง</b>',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        // alert($scope.authentication.username);
-                        $state.go('app.shop.saleregis', {
-                            setusername: $scope.authentication.username,
-                            redirect: parmRedirect
-                        });
-                    }
-                }, {
-                    text: '<b>ยกเลิก</b>',
-                    onTap: function(e) {
-                        this.username = '';
-                        $scope.redirect(parmRedirect);
-
-                        // $state.go(parmRedirect);
-                    }
-                }]
-            });
-        });
-
-        // AuthService.login($scope.authentication).then(function (success) {
-        //     $rootScope.loadUser();
-        //     $ionicLoading.hide();
-        //     $state.go('app.shop.sale');
-        // }, function (err) {
-        //     $ionicLoading.hide();
-        //     var myPopup = $ionicPopup.show({
-        //         title: 'ไม่มีข้อมูลสมาชิก!!',
-        //         subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
-        //         scope: $scope,
-        //         buttons: [{
-        //             text: '<b>ตกลง</b>',
-        //             type: 'button-positive',
-        //             onTap: function (e) {
-        //                 alert($scope.authentication.username);
-        //                 $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
-        //             }
-        //         }, {
-        //                 text: '<b>ยกเลิก</b>',
-        //                 onTap: function (e) {
-        //                     this.username = '';
-        //                     $state.go('app.shop.sale');
-        //                 }
-        //             }
-        //         ]
-        //     });
-        // })
-    };
-
-    $scope.facebookSignIn = function() {
-        console.log("doing facebbok sign in");
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>' })
-        AuthService.authenticate('facebook');
-
-        $rootScope.$on('userLoggedIn', function(e, data) {
-            $rootScope.loadUser();
-            $ionicLoading.hide();
-            $scope.user = AuthService.getUser();
-            $scope.redirect(parmRedirect);
-
-        });
-
-        $rootScope.$on('userFailedLogin', function(e, error) {
-            $ionicLoading.hide();
-            alert(error.message);
-        });
-        // $state.go('app.feed');
-    };
-
-    $scope.settingRegis = function(username) {
-        // alert('parmRedirect' + $stateParams.redirect);
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-        if ($stateParams.setusername) {
-            $scope.authentication.username = username ? username : $stateParams.setusername;
-        }
-
-        $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
-        $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-        $scope.authentication.address.tel = $scope.authentication.username;
-        $scope.authentication.password = 'Usr#Pass1234';
-
-        AuthService.signup($scope.authentication);
-
-        $rootScope.$on('userLoggedIn', function(e, data) {
-            $scope.loadUser();
-            $ionicLoading.hide();
-            $scope.user = AuthService.getUser();
-            $scope.redirect($stateParams.redirect);
-        });
-
-        $rootScope.$on('userFailedLogin', function(e, err) {
-            $ionicLoading.hide();
-            if (err.message === 'Username already exists') {
-                var myPopup = $ionicPopup.show({
-                    template: '<input type="text" ng-model="authentication.username" maxlength="10" ng-change="chkPopupNumber(authentication.username)">',
-                    title: 'มีชื่อผู้ใช้งานนี้แล้ว',
-                    subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
-                    scope: $scope,
-                    buttons: [
-                        { text: 'ยกเลิก' }, {
-                            text: '<b>ตกลง</b>',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-                                var username = $scope.authentication.username;
-                                $scope.settingRegis(username);
-                            }
-                        }
-                    ]
-                });
-
-                myPopup.then(function(res) {
-                    console.log('Tapped!', res);
-                });
-            } else {
-                alert(JSON.stringify(err));
+      $rootScope.$on('userFailedLoginShipping', function (e, error) {
+        $ionicLoading.hide();
+        var myPopup = $ionicPopup.show({
+          title: 'ไม่มีข้อมูลสมาชิก!!',
+          subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
+          scope: $scope,
+          buttons: [{
+            text: '<b>ตกลง</b>',
+            type: 'button-positive',
+            onTap: function (e) {
+              // alert($scope.authentication.username);
+              $state.go('app.shop.saleregis', {
+                setusername: $scope.authentication.username,
+                redirect: parmRedirect
+              });
             }
+          }, {
+            text: '<b>ยกเลิก</b>',
+            onTap: function (e) {
+              this.username = '';
+              $scope.redirect(parmRedirect);
+
+              // $state.go(parmRedirect);
+            }
+          }]
         });
+      });
 
-        // AuthService.signup($scope.authentication).then(function (res) {
-        //     $rootScope.loadUser();
-        //     $ionicLoading.hide();
-        //     $state.go('app.shop.sale');
-        // }, function (err) {
-        //     $ionicLoading.hide();
-        //     if (err.message === 'Username already exists') {
-        //         var myPopup = $ionicPopup.show({
-        //             template: '<input type="text" ng-model="authentication.username">',
-        //             title: 'มีชื่อผู้ใช้งานนี้แล้ว',
-        //             subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
-        //             scope: $scope,
-        //             buttons: [
-        //                 { text: 'ยกเลิก' }, {
-        //                     text: '<b>ตกลง</b>',
-        //                     type: 'button-positive',
-        //                     onTap: function (e) {
-        //                         // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
-        //                         $scope.settingRegis();
-        //                     }
-        //                 }
-        //             ]
-        //         });
-
-        //         myPopup.then(function (res) {
-        //             console.log('Tapped!', res);
-        //         });
-        //     } else {
-        //         alert(JSON.stringify(err));
-        //     }
-
-        // });
+      // AuthService.login($scope.authentication).then(function (success) {
+      //     $rootScope.loadUser();
+      //     $ionicLoading.hide();
+      //     $state.go('app.shop.sale');
+      // }, function (err) {
+      //     $ionicLoading.hide();
+      //     var myPopup = $ionicPopup.show({
+      //         title: 'ไม่มีข้อมูลสมาชิก!!',
+      //         subTitle: 'คุณต้องการลงทะเบียนหรือไม่?',
+      //         scope: $scope,
+      //         buttons: [{
+      //             text: '<b>ตกลง</b>',
+      //             type: 'button-positive',
+      //             onTap: function (e) {
+      //                 alert($scope.authentication.username);
+      //                 $state.go('app.shop.saleregis', { setusername: $scope.authentication.username });
+      //             }
+      //         }, {
+      //                 text: '<b>ยกเลิก</b>',
+      //                 onTap: function (e) {
+      //                     this.username = '';
+      //                     $state.go('app.shop.sale');
+      //                 }
+      //             }
+      //         ]
+      //     });
+      // })
     };
 
-    $scope.redirect = function(res) {
-        if (campID) {
-            $state.go(res, {
-                campaign: campID,
-                product: prodID
-            });
+    $scope.facebookSignIn = function () {
+      console.log("doing facebbok sign in");
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่...</p>'
+      })
+      AuthService.authenticate('facebook');
+
+      $rootScope.$on('userLoggedIn', function (e, data) {
+        $rootScope.loadUser();
+        $ionicLoading.hide();
+        $scope.user = AuthService.getUser();
+        $scope.redirect(parmRedirect);
+
+      });
+
+      $rootScope.$on('userFailedLogin', function (e, error) {
+        $ionicLoading.hide();
+        alert(error.message);
+      });
+      // $state.go('app.feed');
+    };
+
+    $scope.settingRegis = function (username) {
+      // alert('parmRedirect' + $stateParams.redirect);
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>'
+      });
+      if ($stateParams.setusername) {
+        $scope.authentication.username = username ? username : $stateParams.setusername;
+      }
+
+      $scope.authentication.address.postcode = $scope.authentication.address.postcode ? $scope.authentication.address.postcode.toString() : null;
+      $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+      $scope.authentication.address.tel = $scope.authentication.username;
+      $scope.authentication.password = 'Usr#Pass1234';
+
+      AuthService.signup($scope.authentication);
+
+      $rootScope.$on('userLoggedIn', function (e, data) {
+        $scope.loadUser();
+        $ionicLoading.hide();
+        $scope.user = AuthService.getUser();
+        $scope.redirect($stateParams.redirect);
+      });
+
+      $rootScope.$on('userFailedLogin', function (e, err) {
+        $ionicLoading.hide();
+        if (err.message === 'Username already exists') {
+          var myPopup = $ionicPopup.show({
+            template: '<input type="text" ng-model="authentication.username" maxlength="10" ng-change="chkPopupNumber(authentication.username)">',
+            title: 'มีชื่อผู้ใช้งานนี้แล้ว',
+            subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
+            scope: $scope,
+            buttons: [{
+              text: 'ยกเลิก'
+            }, {
+              text: '<b>ตกลง</b>',
+              type: 'button-positive',
+              onTap: function (e) {
+                // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+                var username = $scope.authentication.username;
+                $scope.settingRegis(username);
+              }
+            }]
+          });
+
+          myPopup.then(function (res) {
+            console.log('Tapped!', res);
+          });
         } else {
-            $state.go(res);
+          alert(JSON.stringify(err));
         }
+      });
 
+      // AuthService.signup($scope.authentication).then(function (res) {
+      //     $rootScope.loadUser();
+      //     $ionicLoading.hide();
+      //     $state.go('app.shop.sale');
+      // }, function (err) {
+      //     $ionicLoading.hide();
+      //     if (err.message === 'Username already exists') {
+      //         var myPopup = $ionicPopup.show({
+      //             template: '<input type="text" ng-model="authentication.username">',
+      //             title: 'มีชื่อผู้ใช้งานนี้แล้ว',
+      //             subTitle: 'กรุณากรอกชื่อผู้ใช้งานใหม่',
+      //             scope: $scope,
+      //             buttons: [
+      //                 { text: 'ยกเลิก' }, {
+      //                     text: '<b>ตกลง</b>',
+      //                     type: 'button-positive',
+      //                     onTap: function (e) {
+      //                         // $scope.authentication.email = $scope.authentication.username + '@thamapp.com';
+      //                         $scope.settingRegis();
+      //                     }
+      //                 }
+      //             ]
+      //         });
+
+      //         myPopup.then(function (res) {
+      //             console.log('Tapped!', res);
+      //         });
+      //     } else {
+      //         alert(JSON.stringify(err));
+      //     }
+
+      // });
     };
 
-    $scope.chkNumber = function(numID) {
-        var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        var status = false;
-        nums.forEach(function(num) {
-            if (numID.length > 1) {
-                if (numID.substr(numID.length - 1) === num) {
-                    status = true;
-                }
-            } else {
-                if (numID === num) {
-                    status = true;
-                }
-            }
-
+    $scope.redirect = function (res) {
+      if (campID) {
+        $state.go(res, {
+          campaign: campID,
+          product: prodID
         });
+      } else {
+        $state.go(res);
+      }
 
-        if (!status) {
-            this.username = this.username.slice(0, this.username.length - 1);
+    };
+
+    $scope.chkNumber = function (numID) {
+      var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      var status = false;
+      nums.forEach(function (num) {
+        if (numID.length > 1) {
+          if (numID.substr(numID.length - 1) === num) {
+            status = true;
+          }
+        } else {
+          if (numID === num) {
+            status = true;
+          }
         }
+
+      });
+
+      if (!status) {
+        this.username = this.username.slice(0, this.username.length - 1);
+      }
     };
 
-    $scope.chkPopupNumber = function(numID) {
-        var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        var status = false;
-        nums.forEach(function(num) {
-            if (numID.length > 1) {
-                if (numID.substr(numID.length - 1) === num) {
-                    status = true;
-                }
-            } else {
-                if (numID === num) {
-                    status = true;
-                }
-            }
-
-        });
-
-        if (!status) {
-            $scope.authentication.username = $scope.authentication.username.slice(0, $scope.authentication.username.length - 1);
+    $scope.chkPopupNumber = function (numID) {
+      var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      var status = false;
+      nums.forEach(function (num) {
+        if (numID.length > 1) {
+          if (numID.substr(numID.length - 1) === num) {
+            status = true;
+          }
+        } else {
+          if (numID === num) {
+            status = true;
+          }
         }
+
+      });
+
+      if (!status) {
+        $scope.authentication.username = $scope.authentication.username.slice(0, $scope.authentication.username.length - 1);
+      }
     };
 
-    $scope.onPostcodeSelected = function(item) {
-        $scope.authentication.address.subdistrict = item.subdistrict;
-        $scope.authentication.address.district = item.district;
-        $scope.authentication.address.province = item.province;
+    $scope.onPostcodeSelected = function (item) {
+      $scope.authentication.address.subdistrict = item.subdistrict;
+      $scope.authentication.address.district = item.district;
+      $scope.authentication.address.province = item.province;
     };
-    $scope.onPostcodeInvalid = function() {
-        $scope.authentication.address.subdistrict = '';
-        $scope.authentication.address.district = '';
-        $scope.authentication.address.province = '';
+    $scope.onPostcodeInvalid = function () {
+      $scope.authentication.address.subdistrict = '';
+      $scope.authentication.address.district = '';
+      $scope.authentication.address.province = '';
     };
 
-})
+  })
 
-.controller('ProfileCtrl', function($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer, $ionicPopup) {
+  .controller('ProfileCtrl', function ($scope, $stateParams, AuthService, config, ShopService, $ionicHistory, $ionicLoading, $state, $ionicScrollDelegate, $cordovaImagePicker, $cordovaFileTransfer, $ionicPopup) {
 
     $scope.apiUrl = config.apiUrl;
-    $scope.getCompleteOrderById = function(id) {
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-        ShopService.getCompleteOrderById(id).then(function(res) {
-            $scope.historyById = res;
-            $ionicLoading.hide();
-        }, function(err) {
-            $ionicLoading.hide();
-            alert(JSON.stringify(err));
-        });
+    $scope.getCompleteOrderById = function (id) {
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'
+      });
+      ShopService.getCompleteOrderById(id).then(function (res) {
+        $scope.historyById = res;
+        $ionicLoading.hide();
+      }, function (err) {
+        $ionicLoading.hide();
+        alert(JSON.stringify(err));
+      });
     }
 
     if ($stateParams.hisId) {
-        $scope.hisId = $stateParams.hisId;
-        $scope.getCompleteOrderById($scope.hisId);
+      $scope.hisId = $stateParams.hisId;
+      $scope.getCompleteOrderById($scope.hisId);
     };
     $scope.loggedUser = AuthService.getUser();
     if ($scope.loggedUser) {
-        $scope.history = [];
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-        ShopService.getCompleteOrder().then(function(res) {
-            $scope.history = res;
-            $ionicLoading.hide();
-        }, function(err) {
-            $ionicLoading.hide();
-            alert(JSON.stringify(err));
-        });
+      $scope.history = [];
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'
+      });
+      ShopService.getCompleteOrder().then(function (res) {
+        $scope.history = res;
+        $ionicLoading.hide();
+      }, function (err) {
+        $ionicLoading.hide();
+        alert(JSON.stringify(err));
+      });
     }
 
-    $scope.getNewData = function() {
-        $scope.history = [];
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-        ShopService.getCompleteOrder().then(function(res) {
-            $scope.history = res;
-            $ionicLoading.hide();
-        }, function(err) {
-            $ionicLoading.hide();
-            alert(JSON.stringify(err));
-        });
+    $scope.getNewData = function () {
+      $scope.history = [];
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'
+      });
+      ShopService.getCompleteOrder().then(function (res) {
+        $scope.history = res;
+        $ionicLoading.hide();
+      }, function (err) {
+        $ionicLoading.hide();
+        alert(JSON.stringify(err));
+      });
     }
 
-    $scope.showConfirm = function(item) {
-        var confirmPopup = $ionicPopup.confirm({
-            title: 'ยกเลิกรายการ',
-            template: 'คุณต้องการยกเลิกรายการสั่งซื้อนี้ใช้หรือไม่ ?!'
-        });
+    $scope.showConfirm = function (item) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'ยกเลิกรายการ',
+        template: 'คุณต้องการยกเลิกรายการสั่งซื้อนี้ใช้หรือไม่ ?!'
+      });
 
-        confirmPopup.then(function(res) {
-            if (res) {
-                $scope.cancelOrder(item);
-                console.log('You are sure');
-            } else {
-                console.log('You are not sure');
-            }
-        });
+      confirmPopup.then(function (res) {
+        if (res) {
+          $scope.cancelOrder(item);
+          console.log('You are sure');
+        } else {
+          console.log('You are not sure');
+        }
+      });
     };
 
-    $scope.cancelOrder = function(order) {
-        if (order.deliverystatus === 'confirmed' || order.deliverystatus === 'wait deliver') {
-            order.deliverystatus = 'cancel';
-            var historystatus = {
-                status: 'cancel',
-                datestatus: new Date()
-            };
-            order.historystatus.push(historystatus);
-            ShopService.cancelOrder(order).then(function(res) {
-                $scope.getNewData();
-                if ($stateParams.hisId) {
-                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-                    ShopService.getCompleteOrderById($stateParams.hisId).then(function(res) {
-                        $scope.getCompleteOrderById(res._id);
-                        $ionicLoading.hide();
-                    }, function(err) {
-                        $ionicLoading.hide();
-                        alert(JSON.stringify(err));
-                    });
-                }
-            }, function(err) {
-                alert(JSON.stringify(err));
+    $scope.cancelOrder = function (order) {
+      if (order.deliverystatus === 'confirmed' || order.deliverystatus === 'wait deliver') {
+        order.deliverystatus = 'cancel';
+        var historystatus = {
+          status: 'cancel',
+          datestatus: new Date()
+        };
+        order.historystatus.push(historystatus);
+        ShopService.cancelOrder(order).then(function (res) {
+          $scope.getNewData();
+          if ($stateParams.hisId) {
+            $ionicLoading.show({
+              template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'
             });
-        }
+            ShopService.getCompleteOrderById($stateParams.hisId).then(function (res) {
+              $scope.getCompleteOrderById(res._id);
+              $ionicLoading.hide();
+            }, function (err) {
+              $ionicLoading.hide();
+              alert(JSON.stringify(err));
+            });
+          }
+        }, function (err) {
+          alert(JSON.stringify(err));
+        });
+      }
     };
 
     $scope.tabs = 'H';
@@ -382,146 +396,151 @@ angular.module('your_app_name.app.controllers', [])
     $scope.myProfile = $scope.loggedUser;
     $scope.user = {};
     var options = {
+      maximumImagesCount: 1,
+      width: 800,
+      height: 800,
+      quality: 80
+    };
+
+    $scope.getHistory = function (H) {
+      $scope.tabs = H;
+    };
+
+    $scope.getProfile = function (P) {
+      $scope.tabs = P;
+    };
+
+    $scope.toggleItem = function (item) {
+      if ($scope.isItemShown(item)) {
+        $scope.shownItem = null;
+      } else {
+        $scope.shownItem = item;
+      }
+    };
+
+    $scope.changeImageProfile = function () {
+      var optionsImg = {
         maximumImagesCount: 1,
-        width: 800,
-        height: 800,
+        width: 600,
+        height: 600,
         quality: 80
-    };
+      };
 
-    $scope.getHistory = function(H) {
-        $scope.tabs = H;
-    };
+      var options = {
+        fileKey: "newProfilePicture",
+        httpMethod: "POST",
+        mimeType: "image/jpeg",
+        chunkedMode: true
+      };
 
-    $scope.getProfile = function(P) {
-        $scope.tabs = P;
-    };
-
-    $scope.toggleItem = function(item) {
-        if ($scope.isItemShown(item)) {
-            $scope.shownItem = null;
-        } else {
-            $scope.shownItem = item;
-        }
-    };
-
-    $scope.changeImageProfile = function() {
-        var optionsImg = {
-            maximumImagesCount: 1,
-            width: 600,
-            height: 600,
-            quality: 80
-        };
-
-        var options = {
-            fileKey: "newProfilePicture",
-            httpMethod: "POST",
-            mimeType: "image/jpeg",
-            chunkedMode: true
-        };
-
-        $cordovaImagePicker.getPictures(optionsImg)
-            .then(function(results) {
-                var user = AuthService.getUser();
-                $cordovaFileTransfer.upload($scope.apiUrl + 'api/users/picture', results[0], options).then(function(result) {
-                    $scope.loggedUser = AuthService.updateUser(result.response);
-                    $ionicLoading.hide();
-                }, function(err) {
-                    $ionicLoading.hide();
-                    alert("ERROR: " + JSON.stringify(err));
-                }, function(progress) {
-                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังอัพโหลดรูปภาพ</p>' });
-                });
-            }, function(error) {
-                alert("ERROR: " + JSON.stringify(error));
+      $cordovaImagePicker.getPictures(optionsImg)
+        .then(function (results) {
+          var user = AuthService.getUser();
+          $cordovaFileTransfer.upload($scope.apiUrl + 'api/users/picture', results[0], options).then(function (result) {
+            $scope.loggedUser = AuthService.updateUser(result.response);
+            $ionicLoading.hide();
+          }, function (err) {
+            $ionicLoading.hide();
+            alert("ERROR: " + JSON.stringify(err));
+          }, function (progress) {
+            $ionicLoading.show({
+              template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังอัพโหลดรูปภาพ</p>'
             });
+          });
+        }, function (error) {
+          alert("ERROR: " + JSON.stringify(error));
+        });
     }
 
-    $scope.tel = function(telnumber) {
-        var reNumber = '';
-        var regex = /(\d+)/g;
-        var reNum = telnumber.match(regex);
-        reNum.forEach(function(item) {
-            reNumber += item
-        });
-        // alert(reNumber);
-        window.location = 'tel:' + reNumber;
+    $scope.tel = function (telnumber) {
+      var reNumber = '';
+      var regex = /(\d+)/g;
+      var reNum = telnumber.match(regex);
+      reNum.forEach(function (item) {
+        reNumber += item
+      });
+      // alert(reNumber);
+      window.location = 'tel:' + reNumber;
     };
 
-})
+  })
 
-.controller('ProductCtrl', function($scope, $timeout, $rootScope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config, $cordovaSocialSharing) {
+  .controller('ProductCtrl', function ($scope, $timeout, $rootScope, $state, $stateParams, ShopService, $ionicPopup, $ionicLoading, config, $cordovaSocialSharing) {
 
     var productId = $stateParams.productId;
     $scope.apiUrl = config.apiUrl;
     $scope.showError = false;
 
-    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>', duration: 2000 });
-    ShopService.getProduct(productId).then(function(product) {
-        $scope.product = product;
+    $ionicLoading.show({
+      template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>',
+      duration: 2000
+    });
+    ShopService.getProduct(productId).then(function (product) {
+      $scope.product = product;
 
-        $timeout(function() {
-            $ionicLoading.hide();
-        }, 500);
+      $timeout(function () {
+        $ionicLoading.hide();
+      }, 500);
     });
 
-    $scope.shares = function() {
+    $scope.shares = function () {
 
-        $cordovaSocialSharing
-            .share($scope.product.name, 'ธรรมธุรกิจ', null, 'https://thamapptest.herokuapp.com/products/' + $scope.product._id) // Share via native share sheet
-            .then(function(result) {
-                // Success!
-            }, function(err) {
-                // An error occured. Show a message to the user
-            });
+      $cordovaSocialSharing
+        .share($scope.product.name, 'ธรรมธุรกิจ', null, 'https://thamapptest.herokuapp.com/products/' + $scope.product._id) // Share via native share sheet
+        .then(function (result) {
+          // Success!
+        }, function (err) {
+          // An error occured. Show a message to the user
+        });
 
-        // $cordovaSocialSharing
-        //     .shareViaFacebook($scope.product.name, $scope.product.images, 'https://thamapptest.herokuapp.com/products/' + $scope.product._id)
-        //     .then(function (result) {
-        //         // Success!
-        //     }, function (err) {
-        //         // An error occurred. Show a message to the user
-        //     });
+      // $cordovaSocialSharing
+      //     .shareViaFacebook($scope.product.name, $scope.product.images, 'https://thamapptest.herokuapp.com/products/' + $scope.product._id)
+      //     .then(function (result) {
+      //         // Success!
+      //     }, function (err) {
+      //         // An error occurred. Show a message to the user
+      //     });
     };
 
-    $scope.shareProduct = function() {
+    $scope.shareProduct = function () {
 
-        var widget = window.document.getElementById('widget');
-        html2canvas(widget, {
-            useCORS: true,
-            onrendered: function(canvas) {
-                theCanvas = canvas;
+      var widget = window.document.getElementById('widget');
+      html2canvas(widget, {
+        useCORS: true,
+        onrendered: function (canvas) {
+          theCanvas = canvas;
 
-                $cordovaSocialSharing
-                    .share('Download \n\n For Android : https://play.google.com/store/apps/details?id=com.ionicframework.ecommerce449980 \n For IOS : https://itunes.apple.com/th/app/%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%98-%E0%B8%A3%E0%B8%81-%E0%B8%88/id1201598434?l=th&mt=8 \n', 'ธรรมธุรกิจ', canvas.toDataURL(), 'https://thamapptest.herokuapp.com/products/' + $scope.product._id) // Share via native share sheet
-                    .then(function(result) {
-                        // Success!
-                        // alert(JSON.stringify(result));
-                    }, function(err) {
-                        alert(JSON.stringify(err));
-                        // An error occured. Show a message to the user
-                    });
+          $cordovaSocialSharing
+            .share('Download \n\n For Android : https://play.google.com/store/apps/details?id=com.ionicframework.ecommerce449980 \n For IOS : https://itunes.apple.com/th/app/%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%98-%E0%B8%A3%E0%B8%81-%E0%B8%88/id1201598434?l=th&mt=8 \n', 'ธรรมธุรกิจ', canvas.toDataURL(), 'https://thamapptest.herokuapp.com/products/' + $scope.product._id) // Share via native share sheet
+            .then(function (result) {
+              // Success!
+              // alert(JSON.stringify(result));
+            }, function (err) {
+              alert(JSON.stringify(err));
+              // An error occured. Show a message to the user
+            });
 
-            }
-        });
+        }
+      });
 
     }
 
 
     $scope.productGotoCart = {
-        qty: 1
+      qty: 1
     };
 
     // $rootScope.rootProdQTY = $scope.productGotoCart.qty;
 
-    $rootScope.shakeitCart = function() {
+    $rootScope.shakeitCart = function () {
 
-        var cartElem = angular.element(document.getElementsByClassName("ion-ios-cart"));
-        setTimeout(function() {
-            cartElem.addClass('shakeit');
-        }, 1000);
-        setTimeout(function() {
-            cartElem.removeClass('shakeit');
-        }, 2000);
+      var cartElem = angular.element(document.getElementsByClassName("ion-ios-cart"));
+      setTimeout(function () {
+        cartElem.addClass('shakeit');
+      }, 1000);
+      setTimeout(function () {
+        cartElem.removeClass('shakeit');
+      }, 2000);
     }
 
     // $scope.$watch('qty', function (newValue, oldValue) {
@@ -543,267 +562,302 @@ angular.module('your_app_name.app.controllers', [])
     // }
 
     // show add to cart popup on button click
-    $scope.showAddToCartPopup = function(product, now) {
-        $scope.data = {};
-        $scope.data.product = product;
-        $scope.data.productOption = 1;
-        $scope.data.productQuantity = 1;
+    $scope.showAddToCartPopup = function (product, now) {
+      $scope.data = {};
+      $scope.data.product = product;
+      $scope.data.productOption = 1;
+      $scope.data.productQuantity = 1;
 
-        if (now) {
-            if (ShopService.getCartProducts().length === 0) {
-                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
-                $scope.productGotoCart.product = product;
-                $scope.productGotoCart.qty = 1;
-                $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
-                $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
-                ShopService.addProductToCart($scope.productGotoCart);
-                console.log('Shop now!', $scope.productGotoCart);
-                $state.go('app.shop.cart');
-                $rootScope.shakeitCart();
-            } else {
-                var cartQty = 0;
-                ShopService.getCartProducts().forEach(function(cart) {
-                    if (product._id === cart.product._id) {
-                        cartQty = cart.qty;
-                    }
-                });
-
-                if (cartQty > 0) {
-                    $state.go('app.shop.cart');
-                } else {
-                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>', duration: 1000 });
-                    $scope.productGotoCart.product = product;
-                    $scope.productGotoCart.qty = 1;
-                    $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
-                    $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
-                    ShopService.addProductToCart($scope.productGotoCart);
-                    console.log('Shop now!', $scope.productGotoCart);
-                    $state.go('app.shop.cart');
-                    $rootScope.shakeitCart();
-                }
-            }
+      if (now) {
+        if (ShopService.getCartProducts().length === 0) {
+          $ionicLoading.show({
+            template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>',
+            duration: 1000
+          });
+          $scope.productGotoCart.product = product;
+          $scope.productGotoCart.qty = 1;
+          $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
+          $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
+          ShopService.addProductToCart($scope.productGotoCart);
+          console.log('Shop now!', $scope.productGotoCart);
+          $state.go('app.shop.cart');
+          $rootScope.shakeitCart();
         } else {
-            $scope.showError = false;
-            $scope.productGotoCart = {
-                qty: 1
-            };
-            var myPopup = $ionicPopup.show({
-                cssClass: 'add-to-cart-popup',
-                templateUrl: 'views/app/shop/partials/add-to-cart-popup.html',
-                title: 'ใส่ตะกร้า',
-                scope: $scope,
-                buttons: [
-                    { text: '', type: 'close-popup ion-ios-close-outline' }, {
-                        text: 'ตกลง',
-                        onTap: function(e) {
-                            if ($scope.productGotoCart.qty) {
-                                if ($scope.productGotoCart.qty.toString().indexOf('.') !== -1) {
-                                    e.preventDefault();
-                                    $scope.showError = true;
-                                } else {
-                                    $scope.showError = false;
-                                    return $scope.data;
-                                }
-                            } else {
-                                e.preventDefault();
-                                $scope.showError = true;
-                            }
-                        }
-                    }
-                ]
-            });
-            myPopup.then(function(res) {
-                if (res) {
-                    // if ($scope.productGotoCart.qty) {
-                    $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ใส่ตะกร้า</p>', duration: 1000 });
-                    $scope.productGotoCart.product = res.product;
-                    $scope.productGotoCart.amount = res.product.price * $scope.productGotoCart.qty;
-                    $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
-                    ShopService.addProductToCart($scope.productGotoCart);
-                    console.log('Item added to cart!', $scope.productGotoCart);
-                    $rootScope.shakeitCart();
-                    // } else {
+          var cartQty = 0;
+          ShopService.getCartProducts().forEach(function (cart) {
+            if (product._id === cart.product._id) {
+              cartQty = cart.qty;
+            }
+          });
 
-                    //     alert('asdf');
-                    // }
-                } else {
-                    console.log('Popup closed');
-                }
+          if (cartQty > 0) {
+            $state.go('app.shop.cart');
+          } else {
+            $ionicLoading.show({
+              template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ซื้อทันที</p>',
+              duration: 1000
             });
+            $scope.productGotoCart.product = product;
+            $scope.productGotoCart.qty = 1;
+            $scope.productGotoCart.amount = product.price * $scope.productGotoCart.qty;
+            $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
+            ShopService.addProductToCart($scope.productGotoCart);
+            console.log('Shop now!', $scope.productGotoCart);
+            $state.go('app.shop.cart');
+            $rootScope.shakeitCart();
+          }
         }
+      } else {
+        $scope.showError = false;
+        $scope.productGotoCart = {
+          qty: 1
+        };
+        var myPopup = $ionicPopup.show({
+          cssClass: 'add-to-cart-popup',
+          templateUrl: 'views/app/shop/partials/add-to-cart-popup.html',
+          title: 'ใส่ตะกร้า',
+          scope: $scope,
+          buttons: [{
+            text: '',
+            type: 'close-popup ion-ios-close-outline'
+          }, {
+            text: 'ตกลง',
+            onTap: function (e) {
+              if ($scope.productGotoCart.qty) {
+                if ($scope.productGotoCart.qty.toString().indexOf('.') !== -1) {
+                  e.preventDefault();
+                  $scope.showError = true;
+                } else {
+                  $scope.showError = false;
+                  return $scope.data;
+                }
+              } else {
+                e.preventDefault();
+                $scope.showError = true;
+              }
+            }
+          }]
+        });
+        myPopup.then(function (res) {
+          if (res) {
+            // if ($scope.productGotoCart.qty) {
+            $ionicLoading.show({
+              template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">ใส่ตะกร้า</p>',
+              duration: 1000
+            });
+            $scope.productGotoCart.product = res.product;
+            $scope.productGotoCart.amount = res.product.price * $scope.productGotoCart.qty;
+            $scope.productGotoCart.qty = parseInt($scope.productGotoCart.qty);
+            ShopService.addProductToCart($scope.productGotoCart);
+            console.log('Item added to cart!', $scope.productGotoCart);
+            $rootScope.shakeitCart();
+            // } else {
+
+            //     alert('asdf');
+            // }
+          } else {
+            console.log('Popup closed');
+          }
+        });
+      }
 
     };
 
-})
+  })
 
-.controller('ShopCtrl', function($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup, CheckoutService) {
-    $rootScope.loadUser = function() {
-        $rootScope.user = AuthService.getUser();
+  .controller('ShopCtrl', function ($scope, $rootScope, $stateParams, $ionicLoading, $timeout, ShopService, config, AuthService, $state, $window, $ionicScrollDelegate, $cordovaGeolocation, $ionicPopup, CheckoutService) {
+    $rootScope.loadUser = function () {
+      $rootScope.user = AuthService.getUser();
+      if ($rootScope.user) {
+        if (window.OneSignal) {
+          window.plugins.OneSignal.getIds(function (ids) {
+            var userStore = JSON.parse(window.localStorage.user);
+            var push_usr = {
+              user_id: userStore._id,
+              user_name: userStore.username,
+              role: 'user',
+              device_token: ids.userId
+            };
+            AuthService.saveUserPushNoti(push_usr)
+              .then(function (res) {
+                console.log('success');
+              });
+          });
+        }
+      }
     };
     $rootScope.loadUser();
 
-    ShopService.getMarketplans().then(function(success) {
-        $scope.marketplans = success;
-    }, function(err) {
-        alert('getMarketplans unsuccess');
+    ShopService.getMarketplans().then(function (success) {
+      $scope.marketplans = success;
+    }, function (err) {
+      alert('getMarketplans unsuccess');
     });
 
     if ($stateParams.cate) {
-        $scope.cate = $stateParams.cate;
+      $scope.cate = $stateParams.cate;
     }
 
     if ($stateParams.campaignId) {
-        var campaignId = $stateParams.campaignId;
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>' });
-        ShopService.getCampaign(campaignId).then(function(campaign) {
-            $scope.campaign = campaign;
-            $timeout(function() {
-                $ionicLoading.hide();
-            }, 500);
-        });
+      var campaignId = $stateParams.campaignId;
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>'
+      });
+      ShopService.getCampaign(campaignId).then(function (campaign) {
+        $scope.campaign = campaign;
+        $timeout(function () {
+          $ionicLoading.hide();
+        }, 500);
+      });
     }
 
     if ($stateParams.campaign) {
-        var campaignId = $stateParams.campaign;
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>' });
-        ShopService.getCampaign(campaignId).then(function(campaign) {
-            $scope.campaign = campaign;
-            $timeout(function() {
-                $ionicLoading.hide();
-            }, 500);
-        });
+      var campaignId = $stateParams.campaign;
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>'
+      });
+      ShopService.getCampaign(campaignId).then(function (campaign) {
+        $scope.campaign = campaign;
+        $timeout(function () {
+          $ionicLoading.hide();
+        }, 500);
+      });
     }
 
     if ($stateParams.product) {
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>' });
-        ShopService.getProduct($stateParams.product).then(function(product) {
-            $scope.product = product;
-            $timeout(function() {
-                $ionicLoading.hide();
-            }, 500);
-        });
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลแคมเปญ</p>'
+      });
+      ShopService.getProduct($stateParams.product).then(function (product) {
+        $scope.product = product;
+        $timeout(function () {
+          $ionicLoading.hide();
+        }, 500);
+      });
     }
 
     if ($rootScope.user) {
-        $scope.step = '4';
+      $scope.step = '4';
     } else {
-        $scope.step = '1';
+      $scope.step = '1';
     }
 
     $scope.authentication = $scope.authentication ? $scope.authentication : {};
     $scope.acceptCampaign = {
-        status: 'accept'
+      status: 'accept'
     };
 
-    $scope.gotoForm = function(num) {
-        if (num === '4') {
-            $scope.acceptCampaign.user = $rootScope.user;
-            $scope.campaign = $scope.campaign ? $scope.campaign : {};
-            $scope.campaign.listusercampaign = $scope.campaign.listusercampaign ? $scope.campaign.listusercampaign : [];
-            $scope.campaign.listusercampaign.push($scope.acceptCampaign);
-            $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>' });
-            ShopService.acceptCampaign($scope.campaign).then(function(res) {
-                $ionicLoading.hide();
-                $scope.step = num;
-                var myPopup = $ionicPopup.show({
-                    title: 'ลงทะเบียนเรียบร้อยแล้ว!!',
-                    subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
-                    scope: $scope,
-                    buttons: [{
-                        text: '<b>ตกลง</b>',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            $scope.acceptCampaign = {};
-                        }
-                    }]
-                });
-
-                myPopup.then(function(res) {
-                    console.log('Tapped!', res);
-                });
-            }, function(err) {
+    $scope.gotoForm = function (num) {
+      if (num === '4') {
+        $scope.acceptCampaign.user = $rootScope.user;
+        $scope.campaign = $scope.campaign ? $scope.campaign : {};
+        $scope.campaign.listusercampaign = $scope.campaign.listusercampaign ? $scope.campaign.listusercampaign : [];
+        $scope.campaign.listusercampaign.push($scope.acceptCampaign);
+        $ionicLoading.show({
+          template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังเข้าสู่ระบบ</p>'
+        });
+        ShopService.acceptCampaign($scope.campaign).then(function (res) {
+          $ionicLoading.hide();
+          $scope.step = num;
+          var myPopup = $ionicPopup.show({
+            title: 'ลงทะเบียนเรียบร้อยแล้ว!!',
+            subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
+            scope: $scope,
+            buttons: [{
+              text: '<b>ตกลง</b>',
+              type: 'button-positive',
+              onTap: function (e) {
                 $scope.acceptCampaign = {};
-                $ionicLoading.hide();
-                if (err.message === 'Your identification is Invalid!' || err.message === 'Wrong Identification!') {
-                    var myPopup = $ionicPopup.show({
-                        title: 'ผิดพลาด',
-                        subTitle: 'รหัสบัตรประชาชนของคุณไม่ถูกต้อง',
-                        scope: $scope,
-                        buttons: [{
-                            text: '<b>ตกลง</b>',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
-                                $scope.acceptCampaign = {};
-                            }
-                        }]
-                    });
+              }
+            }]
+          });
 
-                    myPopup.then(function(res) {
-                        console.log('Tapped!', res);
-                    });
-                } else if (err.message === 'Identification is already!') {
-                    var myPopup = $ionicPopup.show({
-                        title: 'ลงทะเบียน',
-                        subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
-                        scope: $scope,
-                        buttons: [{
-                            text: '<b>ตกลง</b>',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
-                                $scope.acceptCampaign = {};
-                            }
-                        }]
-                    });
-
-                    myPopup.then(function(res) {
-                        console.log('Tapped!', res);
-                    });
-                } else if (err.message === 'Privilege is full') {
-                    var myPopup = $ionicPopup.show({
-                        title: 'ท่านไม่สามารถรับสิทธิ์',
-                        subTitle: 'จำนวนสิทธิ์คงเหลือเต็มแล้ว',
-                        scope: $scope,
-                        buttons: [{
-                            text: '<b>ตกลง</b>',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
-                                $scope.acceptCampaign = {};
-                            }
-                        }]
-                    });
-
-                    myPopup.then(function(res) {
-                        console.log('Tapped!', res);
-                    });
-                } else if (err.message === '') {
-                    var myPopup = $ionicPopup.show({
-                        title: 'ผิดพลาด',
-                        subTitle: 'กรุณาลองใหม่อีกครั้ง',
-                        scope: $scope,
-                        buttons: [{
-                            text: '<b>ตกลง</b>',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
-                                $scope.acceptCampaign = {};
-                            }
-                        }]
-                    });
-
-                    myPopup.then(function(res) {
-                        console.log('Tapped!', res);
-                    });
-                } else {
-                    alert(JSON.stringify(err));
-                    $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
-                    $scope.acceptCampaign = {};
+          myPopup.then(function (res) {
+            console.log('Tapped!', res);
+          });
+        }, function (err) {
+          $scope.acceptCampaign = {};
+          $ionicLoading.hide();
+          if (err.message === 'Your identification is Invalid!' || err.message === 'Wrong Identification!') {
+            var myPopup = $ionicPopup.show({
+              title: 'ผิดพลาด',
+              subTitle: 'รหัสบัตรประชาชนของคุณไม่ถูกต้อง',
+              scope: $scope,
+              buttons: [{
+                text: '<b>ตกลง</b>',
+                type: 'button-positive',
+                onTap: function (e) {
+                  $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                  $scope.acceptCampaign = {};
                 }
+              }]
+            });
 
-            })
-        }
+            myPopup.then(function (res) {
+              console.log('Tapped!', res);
+            });
+          } else if (err.message === 'Identification is already!') {
+            var myPopup = $ionicPopup.show({
+              title: 'ลงทะเบียน',
+              subTitle: 'คุณได้ลงทะเบียนเรียบร้อยแล้ว',
+              scope: $scope,
+              buttons: [{
+                text: '<b>ตกลง</b>',
+                type: 'button-positive',
+                onTap: function (e) {
+                  $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                  $scope.acceptCampaign = {};
+                }
+              }]
+            });
+
+            myPopup.then(function (res) {
+              console.log('Tapped!', res);
+            });
+          } else if (err.message === 'Privilege is full') {
+            var myPopup = $ionicPopup.show({
+              title: 'ท่านไม่สามารถรับสิทธิ์',
+              subTitle: 'จำนวนสิทธิ์คงเหลือเต็มแล้ว',
+              scope: $scope,
+              buttons: [{
+                text: '<b>ตกลง</b>',
+                type: 'button-positive',
+                onTap: function (e) {
+                  $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                  $scope.acceptCampaign = {};
+                }
+              }]
+            });
+
+            myPopup.then(function (res) {
+              console.log('Tapped!', res);
+            });
+          } else if (err.message === '') {
+            var myPopup = $ionicPopup.show({
+              title: 'ผิดพลาด',
+              subTitle: 'กรุณาลองใหม่อีกครั้ง',
+              scope: $scope,
+              buttons: [{
+                text: '<b>ตกลง</b>',
+                type: 'button-positive',
+                onTap: function (e) {
+                  $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+                  $scope.acceptCampaign = {};
+                }
+              }]
+            });
+
+            myPopup.then(function (res) {
+              console.log('Tapped!', res);
+            });
+          } else {
+            alert(JSON.stringify(err));
+            $scope.campaign.listusercampaign.splice($scope.campaign.listusercampaign.length - 1, 1);
+            $scope.acceptCampaign = {};
+          }
+
+        })
+      }
     };
 
     // alert('user: ' + JSON.stringify($rootScope.user));
@@ -814,75 +868,77 @@ angular.module('your_app_name.app.controllers', [])
     $scope.images = ['https://thamapptest.herokuapp.com/1.png', 'https://thamapptest.herokuapp.com/2.png']; //com.ionicframework.ecommerce449980
 
     // $scope.images = ['img/1.png', 'img/2.png'];
-    $scope.readProduct = function() {
-        $scope.category = [];
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>' });
-        ShopService.getProducts().then(function(products) {
-            $scope.products = products;
-            for (var i = 0; i < $scope.products.length; i++) {
-                if ($scope.category.indexOf($scope.products[i].category) == -1) {
-                    $scope.category.push($scope.products[i].category);
-                }
-            }
-            $timeout(function() {
-                $ionicLoading.hide();
-            }, 500);
-        });
-        ShopService.getCampaigns().then(function(campaigns) {
-            $scope.campaigns = campaigns;
-        });
+    $scope.readProduct = function () {
+      $scope.category = [];
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูลสินค้า</p>'
+      });
+      ShopService.getProducts().then(function (products) {
+        $scope.products = products;
+        for (var i = 0; i < $scope.products.length; i++) {
+          if ($scope.category.indexOf($scope.products[i].category) == -1) {
+            $scope.category.push($scope.products[i].category);
+          }
+        }
+        $timeout(function () {
+          $ionicLoading.hide();
+        }, 500);
+      });
+      ShopService.getCampaigns().then(function (campaigns) {
+        $scope.campaigns = campaigns;
+      });
     }
 
-    $scope.getNewData = function() {
-        ShopService.getProducts().then(function(products) {
-            $scope.products = products;
-            $scope.$broadcast('scroll.refreshComplete');
-        });
+    $scope.getNewData = function () {
+      ShopService.getProducts().then(function (products) {
+        $scope.products = products;
+        $scope.$broadcast('scroll.refreshComplete');
+      });
     }
 
-    $scope.signout = function() {
-        $rootScope.user = null;
-        $rootScope.loadUser();
-        AuthService.signout();
-        $window.location.reload('app.shop.home');
-        // $location.path('/app/shop/home');
-        // $state.go('app.shop.home')
+    $scope.signout = function () {
+      $rootScope.user = null;
+      $rootScope.loadUser();
+      AuthService.signout();
+      $window.location.reload('app.shop.home');
+      // $location.path('/app/shop/home');
+      // $state.go('app.shop.home')
     }
-    $scope.onSwipeRight = function() {
-        $scope.scroll = false;
-        console.log('right');
+    $scope.onSwipeRight = function () {
+      $scope.scroll = false;
+      console.log('right');
     }
-    $scope.onSwipeLeft = function() {
-        $scope.scroll = false;
-        console.log('left');
+    $scope.onSwipeLeft = function () {
+      $scope.scroll = false;
+      console.log('left');
     }
-    $scope.onSwipeUp = function() {
-        $scope.scroll = true;
-        console.log('up');
+    $scope.onSwipeUp = function () {
+      $scope.scroll = true;
+      console.log('up');
     }
-    $scope.onSwipeDown = function() {
-        $scope.scroll = true;
-        console.log('down');
+    $scope.onSwipeDown = function () {
+      $scope.scroll = true;
+      console.log('down');
     }
 
-    $scope.successAlert = function() {
-        var alertPopup = $ionicPopup.alert({
-            title: 'บันทึกข้อมูล',
-            template: 'บันทึกตำแหน่งที่ตั้งของคุณเรียบร้อยแล้ว'
-        });
-        alertPopup.then(function(res) {
+    $scope.successAlert = function () {
+      var alertPopup = $ionicPopup.alert({
+        title: 'บันทึกข้อมูล',
+        template: 'บันทึกตำแหน่งที่ตั้งของคุณเรียบร้อยแล้ว'
+      });
+      alertPopup.then(function (res) {
 
-        });
+      });
     };
 
-    $scope.errorAlert = function() {
-        var alertPopup = $ionicPopup.alert({
-            title: 'ผิดพลาด!',
-            template: 'กรุณาเปิด GPS ในมือถือของท่าน!'
-        });
-        alertPopup.then(function(res) {
+    $scope.errorAlert = function () {
+      var alertPopup = $ionicPopup.alert({
+        title: 'ผิดพลาด!',
+        template: 'กรุณาเปิด GPS ในมือถือของท่าน!'
+      });
+      alertPopup.then(function (res) {
 
-        });
+      });
     };
 
     // var myLatlng = new google.maps.LatLng(13.757884, 100.485148);
@@ -894,235 +950,243 @@ angular.module('your_app_name.app.controllers', [])
     // var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
 
-    $scope.getNewLocation = function() {
-        // $scope.loadLocation = '';
-        var posOptions = {
-            timeout: 10000,
-            enableHighAccuracy: true
-        };
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังตรวจสอบ GPS ของท่าน</p>' });
-        $cordovaGeolocation
-            .getCurrentPosition(posOptions)
-            .then(function(position) {
-                $ionicLoading.hide();
-                $scope.loadLocation = 'success';
-                lat = position.coords.latitude
-                long = position.coords.longitude
-                var myLatlng = new google.maps.LatLng(lat, long);
-                var mapOptions = {
-                    center: myLatlng,
-                    zoom: 16,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: myLatlng,
-                })
+    $scope.getNewLocation = function () {
+      // $scope.loadLocation = '';
+      var posOptions = {
+        timeout: 10000,
+        enableHighAccuracy: true
+      };
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังตรวจสอบ GPS ของท่าน</p>'
+      });
+      $cordovaGeolocation
+        .getCurrentPosition(posOptions)
+        .then(function (position) {
+          $ionicLoading.hide();
+          $scope.loadLocation = 'success';
+          lat = position.coords.latitude
+          long = position.coords.longitude
+          var myLatlng = new google.maps.LatLng(lat, long);
+          var mapOptions = {
+            center: myLatlng,
+            zoom: 16,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+          var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+          var marker = new google.maps.Marker({
+            map: map,
+            position: myLatlng,
+          })
 
-                $scope.map = map;
-            }, function(err) {
-                $ionicLoading.hide();
-                $scope.loadLocation = 'error';
-            });
-    };
-
-
-    $scope.updateLocation = function() {
-        var posOptions = {
-            timeout: 10000,
-            enableHighAccuracy: true
-        };
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังตรวจสอบ GPS ของท่าน</p>' });
-        $cordovaGeolocation
-            .getCurrentPosition(posOptions)
-            .then(function(position) {
-                $ionicLoading.hide();
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
-                $rootScope.user.address = $rootScope.user.address ? $rootScope.user.address : {};
-                $rootScope.user.address.sharelocation = $rootScope.user.address.sharelocation ? $rootScope.user.address.sharelocation : {};
-                $rootScope.user.address.sharelocation.latitude = lat;
-                $rootScope.user.address.sharelocation.longitude = lng;
-                $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังบันทึกข้อมูล</p>' });
-                AuthService.updateProfile($rootScope.user).then(function(res) {
-                    $ionicLoading.hide();
-                    $scope.successAlert();
-                }, function(err) {
-                    $ionicLoading.hide();
-                    alert(JSON.stringify(err));
-                })
-            }, function(err) {
-                $ionicLoading.hide();
-                $scope.errorAlert();
-            })
-    };
-
-    $scope.chkNumber = function(numID) {
-        var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        var status = false;
-        nums.forEach(function(num) {
-            if (numID.length > 1) {
-                if (numID.substr(numID.length - 1) === num) {
-                    status = true;
-                }
-            } else {
-                if (numID === num) {
-                    status = true;
-                }
-            }
-
+          $scope.map = map;
+        }, function (err) {
+          $ionicLoading.hide();
+          $scope.loadLocation = 'error';
         });
+    };
 
-        if (!status) {
-            $scope.acceptCampaign.identification = $scope.acceptCampaign.identification.slice(0, $scope.acceptCampaign.identification.length - 1);
+
+    $scope.updateLocation = function () {
+      var posOptions = {
+        timeout: 10000,
+        enableHighAccuracy: true
+      };
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังตรวจสอบ GPS ของท่าน</p>'
+      });
+      $cordovaGeolocation
+        .getCurrentPosition(posOptions)
+        .then(function (position) {
+          $ionicLoading.hide();
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          $rootScope.user.address = $rootScope.user.address ? $rootScope.user.address : {};
+          $rootScope.user.address.sharelocation = $rootScope.user.address.sharelocation ? $rootScope.user.address.sharelocation : {};
+          $rootScope.user.address.sharelocation.latitude = lat;
+          $rootScope.user.address.sharelocation.longitude = lng;
+          $ionicLoading.show({
+            template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังบันทึกข้อมูล</p>'
+          });
+          AuthService.updateProfile($rootScope.user).then(function (res) {
+            $ionicLoading.hide();
+            $scope.successAlert();
+          }, function (err) {
+            $ionicLoading.hide();
+            alert(JSON.stringify(err));
+          })
+        }, function (err) {
+          $ionicLoading.hide();
+          $scope.errorAlert();
+        })
+    };
+
+    $scope.chkNumber = function (numID) {
+      var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      var status = false;
+      nums.forEach(function (num) {
+        if (numID.length > 1) {
+          if (numID.substr(numID.length - 1) === num) {
+            status = true;
+          }
+        } else {
+          if (numID === num) {
+            status = true;
+          }
         }
 
+      });
+
+      if (!status) {
+        $scope.acceptCampaign.identification = $scope.acceptCampaign.identification.slice(0, $scope.acceptCampaign.identification.length - 1);
+      }
+
     };
 
 
 
-})
+  })
 
-.controller('ShoppingCartCtrl', function($scope, $rootScope, $state, $stateParams, ShopService, AuthService, $ionicActionSheet, _, config) {
+  .controller('ShoppingCartCtrl', function ($scope, $rootScope, $state, $stateParams, ShopService, AuthService, $ionicActionSheet, _, config) {
 
     $scope.state = $stateParams.state;
     $scope.apiUrl = config.apiUrl;
     $scope.products = ShopService.getCartProducts();
-    $rootScope.shakeitCart = function() {
+    $rootScope.shakeitCart = function () {
 
-        var cartElem = angular.element(document.getElementsByClassName("ion-ios-cart"));
-        setTimeout(function() {
-            cartElem.addClass('shakeit');
-        }, 1000);
-        setTimeout(function() {
-            cartElem.removeClass('shakeit');
-        }, 2000);
+      var cartElem = angular.element(document.getElementsByClassName("ion-ios-cart"));
+      setTimeout(function () {
+        cartElem.addClass('shakeit');
+      }, 1000);
+      setTimeout(function () {
+        cartElem.removeClass('shakeit');
+      }, 2000);
     }
-    $scope.getTotal = function() {
-        $scope.total = 0;
-        var alldiscountamount = 0;
-        var alldeliverycost = 0;
-        var subTotal = 0;
-        $scope.products.forEach(function(item) {
-            alldiscountamount += item.discountamount;
-            alldeliverycost += item.deliverycost;
-            subTotal += item.amount;
-        });
-        $scope.total = subTotal + alldeliverycost - alldiscountamount;
+    $scope.getTotal = function () {
+      $scope.total = 0;
+      var alldiscountamount = 0;
+      var alldeliverycost = 0;
+      var subTotal = 0;
+      $scope.products.forEach(function (item) {
+        alldiscountamount += item.discountamount;
+        alldeliverycost += item.deliverycost;
+        subTotal += item.amount;
+      });
+      $scope.total = subTotal + alldeliverycost - alldiscountamount;
     };
 
     $scope.getTotal();
 
-    $scope.removeProductFromCart = function(product) {
-        $ionicActionSheet.show({
-            destructiveText: 'ลบสินค้าออกจากตะกร้า',
-            cancelText: 'ยกเลิก',
-            cancel: function() {
-                return true;
-            },
-            destructiveButtonClicked: function() {
-                ShopService.removeProductFromCart(product);
-                $scope.products = ShopService.getCartProducts();
-                $rootScope.shakeitCart();
-                $scope.getTotal();
-                return true;
-            }
-        });
+    $scope.removeProductFromCart = function (product) {
+      $ionicActionSheet.show({
+        destructiveText: 'ลบสินค้าออกจากตะกร้า',
+        cancelText: 'ยกเลิก',
+        cancel: function () {
+          return true;
+        },
+        destructiveButtonClicked: function () {
+          ShopService.removeProductFromCart(product);
+          $scope.products = ShopService.getCartProducts();
+          $rootScope.shakeitCart();
+          $scope.getTotal();
+          return true;
+        }
+      });
     };
-    $scope.calculate = function(product) {
-        ShopService.addProductToCart(product, true);
-        $scope.products = ShopService.getCartProducts();
-        product.amount = product.qty * product.product.price;
-        $scope.getTotal();
+    $scope.calculate = function (product) {
+      ShopService.addProductToCart(product, true);
+      $scope.products = ShopService.getCartProducts();
+      product.amount = product.qty * product.product.price;
+      $scope.getTotal();
     };
 
     // $scope.getSubtotal = function () {
     //     return _.reduce($scope.products, function (memo, product) { return memo + product.price; }, 0);
     // };
 
-    $scope.getUserAndContinue = function() {
-        var user = AuthService.getUser();
-        if (user) {
-            $state.go('app.shop.checkout');
-        } else {
-            $state.go('app.shop.salelogin', { redirectUrl: 'app.shop.cart' });
-        }
+    $scope.getUserAndContinue = function () {
+      var user = AuthService.getUser();
+      if (user) {
+        $state.go('app.shop.checkout');
+      } else {
+        $state.go('app.shop.salelogin', {
+          redirectUrl: 'app.shop.cart'
+        });
+      }
     };
 
-})
+  })
 
-.controller('CheckoutCtrl', function($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, $rootScope, $ionicModal) {
+  .controller('CheckoutCtrl', function ($scope, $state, $stateParams, $ionicPopup, CheckoutService, ShopService, AuthService, config, $ionicLoading, $cordovaGeolocation, $http, $rootScope, $ionicModal) {
     //$scope.paymentDetails;
     $scope.apiUrl = config.apiUrl;
     $scope.status = true;
-    $scope.chkShippingTel = function(numID) {
-        var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        var status = false;
-        nums.forEach(function(num) {
-            if (numID.length > 1) {
-                if (numID.substr(numID.length - 1) === num) {
-                    status = true;
-                }
-            } else {
-                if (numID === num) {
-                    status = true;
-                }
-            }
-
-        });
-
-        if (!status) {
-            $scope.order.shipping.tel = $scope.order.shipping.tel.slice(0, $scope.order.shipping.tel.length - 1);
+    $scope.chkShippingTel = function (numID) {
+      var nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      var status = false;
+      nums.forEach(function (num) {
+        if (numID.length > 1) {
+          if (numID.substr(numID.length - 1) === num) {
+            status = true;
+          }
+        } else {
+          if (numID === num) {
+            status = true;
+          }
         }
+
+      });
+
+      if (!status) {
+        $scope.order.shipping.tel = $scope.order.shipping.tel.slice(0, $scope.order.shipping.tel.length - 1);
+      }
     };
     // $scope.postcode = CheckoutService.getPostcode();
-    CheckoutService.getPostcode().then(function(success) {
-        $scope.postcodes = success.postcode;
-    }, function(err) {
-        alert('unsuccess');
+    CheckoutService.getPostcode().then(function (success) {
+      $scope.postcodes = success.postcode;
+    }, function (err) {
+      alert('unsuccess');
     });
-    $scope.loadUser = function() {
-        $scope.user = AuthService.getUser();
+    $scope.loadUser = function () {
+      $scope.user = AuthService.getUser();
     };
     $scope.loadUser();
-    $scope.onPostcodeSelected = function(item) {
-        $scope.authentication.address.subdistrict = item.subdistrict;
-        $scope.authentication.address.district = item.district;
-        $scope.authentication.address.province = item.province;
+    $scope.onPostcodeSelected = function (item) {
+      $scope.authentication.address.subdistrict = item.subdistrict;
+      $scope.authentication.address.district = item.district;
+      $scope.authentication.address.province = item.province;
     };
 
-    $scope.onCheckOutPostcodeSelected = function(item) {
-        $scope.order.shipping.subdistrict = item.subdistrict;
-        $scope.order.shipping.district = item.district;
-        $scope.order.shipping.province = item.province;
+    $scope.onCheckOutPostcodeSelected = function (item) {
+      $scope.order.shipping.subdistrict = item.subdistrict;
+      $scope.order.shipping.district = item.district;
+      $scope.order.shipping.province = item.province;
     };
 
-    $scope.onCheckOutPostcodeInvalid = function() {
-        $scope.order.shipping.subdistrict = '';
-        $scope.order.shipping.district = '';
-        $scope.order.shipping.province = '';
+    $scope.onCheckOutPostcodeInvalid = function () {
+      $scope.order.shipping.subdistrict = '';
+      $scope.order.shipping.district = '';
+      $scope.order.shipping.province = '';
     };
 
-    $scope.onPostcodeInvalid = function() {
-        $scope.authentication.address.subdistrict = '';
-        $scope.authentication.address.district = '';
-        $scope.authentication.address.province = '';
+    $scope.onPostcodeInvalid = function () {
+      $scope.authentication.address.subdistrict = '';
+      $scope.authentication.address.district = '';
+      $scope.authentication.address.province = '';
     };
 
     if ($stateParams.order) {
-        $scope.completeOrder = JSON.parse($stateParams.order);
-        // alert(JSON.stringify($scope.completeOrder));
+      $scope.completeOrder = JSON.parse($stateParams.order);
+      // alert(JSON.stringify($scope.completeOrder));
     }
     $scope.order = {
-        shipping: {},
-        delivery: {
-            deliveryid: '0'
-        },
-        deliveryamount: 0,
-        discountpromotion: 0,
-        amount: 0,
-        totalamount: 0
+      shipping: {},
+      delivery: {
+        deliveryid: '0'
+      },
+      deliveryamount: 0,
+      discountpromotion: 0,
+      amount: 0,
+      totalamount: 0
 
 
     };
@@ -1138,809 +1202,813 @@ angular.module('your_app_name.app.controllers', [])
     $scope.choice = true;
     $scope.authentication = {};
     if ($scope.user) {
-        $scope.step = '3';
+      $scope.step = '3';
     }
-    $scope.calculate = function() {
-        $scope.confirmedOrder = false;
-        $scope.order.amount = 0;
-        $scope.order.totalamount = 0;
-        $scope.order.deliveryamount = 0;
-        $scope.order.discountpromotion = 0;
-        var allDeliverycost = 0;
-        var allDiscountAmount = 0;
-        $scope.order.items.forEach(function(item) {
-            $scope.order.amount += item.amount;
-            allDeliverycost += item.deliverycost;
-            allDiscountAmount += item.discountamount;
-        });
-        $scope.order.deliveryamount = allDeliverycost;
-        $scope.order.discountpromotion = allDiscountAmount;
-        $scope.order.totalamount = $scope.order.amount + $scope.order.deliveryamount - $scope.order.discountpromotion;
-        console.log($scope.order.totalamount);
+    $scope.calculate = function () {
+      $scope.confirmedOrder = false;
+      $scope.order.amount = 0;
+      $scope.order.totalamount = 0;
+      $scope.order.deliveryamount = 0;
+      $scope.order.discountpromotion = 0;
+      var allDeliverycost = 0;
+      var allDiscountAmount = 0;
+      $scope.order.items.forEach(function (item) {
+        $scope.order.amount += item.amount;
+        allDeliverycost += item.deliverycost;
+        allDiscountAmount += item.discountamount;
+      });
+      $scope.order.deliveryamount = allDeliverycost;
+      $scope.order.discountpromotion = allDiscountAmount;
+      $scope.order.totalamount = $scope.order.amount + $scope.order.deliveryamount - $scope.order.discountpromotion;
+      console.log($scope.order.totalamount);
     };
 
-    $scope.checkStatus = function(status) {
-        $scope.status = status;
+    $scope.checkStatus = function (status) {
+      $scope.status = status;
     };
 
     $ionicModal.fromTemplateUrl('templates/modal.html', {
-        scope: $scope
-    }).then(function(modal) {
-        $scope.modal = modal;
+      scope: $scope
+    }).then(function (modal) {
+      $scope.modal = modal;
     });
 
     if ($scope.user && !$scope.user.address) {
-        $scope.status = false;
+      $scope.status = false;
     }
 
-    $scope.gotoForm = function(num) {
-        if (num === '4') {
-            // alert(JSON.stringify($scope.user));
-            $state.go('app.shop.checkout');
-        }
+    $scope.gotoForm = function (num) {
+      if (num === '4') {
+        // alert(JSON.stringify($scope.user));
+        $state.go('app.shop.checkout');
+      }
     };
 
-    $scope.checkArea = function(status) {
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-        var chkPostcode = '';
-        var province = '';
-        if (status) {
-            chkPostcode = $scope.user.address.postcode ? $scope.user.address.postcode : '';
-            province = $scope.user.address.province ? $scope.user.address.province : '';
+    $scope.checkArea = function (status) {
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>'
+      });
+      var chkPostcode = '';
+      var province = '';
+      if (status) {
+        chkPostcode = $scope.user.address.postcode ? $scope.user.address.postcode : '';
+        province = $scope.user.address.province ? $scope.user.address.province : '';
+      } else {
+        chkPostcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
+        province = $scope.order.shipping.province ? $scope.order.shipping.province : '';
+      }
+      // if (province === 'กรุงเทพมหานคร') {
+      //     $scope.order.inarea = true;
+      //     $scope.confirm(status);
+      // } else {
+      ShopService.checkPostcode(chkPostcode).then(function (res) {
+        $scope.order.inarea = res.area;
+        if (res.area) {
+          $scope.confirm(status);
         } else {
-            chkPostcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
-            province = $scope.order.shipping.province ? $scope.order.shipping.province : '';
+          if ($scope.order.items.length > 0) {
+            $scope.order.items.forEach(function (itm) {
+              itm.deliverycost += (itm.qty * 150) - itm.deliverycost;
+            });
+            $scope.calculate();
+          }
+          $scope.modal.show();
+          $ionicLoading.hide();
+          // $scope.confirm(status);
         }
-        // if (province === 'กรุงเทพมหานคร') {
-        //     $scope.order.inarea = true;
-        //     $scope.confirm(status);
-        // } else {
-        ShopService.checkPostcode(chkPostcode).then(function(res) {
-            $scope.order.inarea = res.area;
-            if (res.area) {
-                $scope.confirm(status);
-            } else {
-                if ($scope.order.items.length > 0) {
-                    $scope.order.items.forEach(function(itm) {
-                        itm.deliverycost += (itm.qty * 150) - itm.deliverycost;
-                    });
-                    $scope.calculate();
-                }
-                $scope.modal.show();
-                $ionicLoading.hide();
-                // $scope.confirm(status);
-            }
-        }, function(err) {
+      }, function (err) {
+        $ionicLoading.hide();
+        alert('err : ' + err.message);
+      });
+      // }
+    };
+
+    $scope.cancelOrder = function () {
+      $scope.order = {};
+      $scope.modal.hide();
+      window.localStorage.removeItem('ionTheme1_cart');
+      $state.go('app.shop.cart');
+    };
+
+    $scope.confirm = function (status) {
+      $scope.modal.hide();
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>'
+      });
+      $scope.confirmedOrder = true;
+      $scope.order.docno = (+new Date());
+      $scope.order.docdate = new Date();
+      if (window.localStorage.platform) {
+        $scope.order.src = window.localStorage.platform;
+      }
+      $scope.order.user = AuthService.getUser();
+      $scope.order.platform = 'Mobile';
+      $scope.order.shipping.postcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
+      $scope.order.shipping.tel = $scope.order.shipping.tel ? $scope.order.shipping.tel : $scope.order.user.address.tel;
+      $scope.order.historystatus = [{
+        status: 'confirmed',
+        datestatus: new Date()
+      }];
+      if (status === true) {
+        $scope.order.shipping.sharelocation = {};
+        $scope.order.shipping = $scope.order.user.address;
+        $scope.order.shipping.firstname = $scope.order.user.firstName;
+        $scope.order.shipping.lastname = $scope.order.user.lastName;
+        if ($scope.order.user && $scope.order.user.address.sharelocation) {
+          $scope.order.shipping.sharelocation.latitude = $scope.order.user.address.sharelocation.latitude;
+          $scope.order.shipping.sharelocation.longitude = $scope.order.user.address.sharelocation.longitude;
+          CheckoutService.saveOrder($scope.order).then(function (res) {
+            // alert(JSON.stringify(res));
+            $state.go('app.complete', {
+              order: JSON.stringify(res)
+            });
             $ionicLoading.hide();
-            alert('err : ' + err.message);
-        });
-        // }
-    };
+          }, function (err) {
+            $ionicLoading.hide();
+            alert(err.data.message);
+          });
+        } else {
+          var posOptions = {
+            timeout: 10000,
+            enableHighAccuracy: true
+          };
 
-    $scope.cancelOrder = function() {
-        $scope.order = {};
-        $scope.modal.hide();
-        window.localStorage.removeItem('ionTheme1_cart');
-        $state.go('app.shop.cart');
-    };
+          $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
 
-    $scope.confirm = function(status) {
-        $scope.modal.hide();
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-        $scope.confirmedOrder = true;
-        $scope.order.docno = (+new Date());
-        $scope.order.docdate = new Date();
-        if (window.localStorage.platform) {
-            $scope.order.src = window.localStorage.platform;
-        }
-        $scope.order.user = AuthService.getUser();
-        $scope.order.platform = 'Mobile';
-        $scope.order.shipping.postcode = $scope.order.shipping.postcode ? $scope.order.shipping.postcode.toString() : '';
-        $scope.order.shipping.tel = $scope.order.shipping.tel ? $scope.order.shipping.tel : $scope.order.user.address.tel;
-        $scope.order.historystatus = [{
-            status: 'confirmed',
-            datestatus: new Date()
-        }];
-        if (status === true) {
-            $scope.order.shipping.sharelocation = {};
-            $scope.order.shipping = $scope.order.user.address;
-            $scope.order.shipping.firstname = $scope.order.user.firstName;
-            $scope.order.shipping.lastname = $scope.order.user.lastName;
-            if ($scope.order.user && $scope.order.user.address.sharelocation) {
-                $scope.order.shipping.sharelocation.latitude = $scope.order.user.address.sharelocation.latitude;
-                $scope.order.shipping.sharelocation.longitude = $scope.order.user.address.sharelocation.longitude;
-                CheckoutService.saveOrder($scope.order).then(function(res) {
+
+              var lat = position.coords.latitude;
+              var lng = position.coords.longitude;
+              $scope.order.shipping.sharelocation = {};
+              // $scope.order.shipping.sharelocation.latitude = lat;
+              // $scope.order.shipping.sharelocation.longitude = lng;
+              // เส้นทางตามถนน
+              var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+              // alert(fullAddress);
+              $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+                if (response.status.toUpperCase() === 'OK') {
+                  $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                  $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                  // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                  // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                  //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                  //     if (distance.rows[0].elements[0].distance.value) {
+                  CheckoutService.saveOrder($scope.order).then(function (res) {
                     // alert(JSON.stringify(res));
                     $state.go('app.complete', {
-                        order: JSON.stringify(res)
+                      order: JSON.stringify(res)
                     });
                     $ionicLoading.hide();
-                }, function(err) {
+                  }, function (err) {
                     $ionicLoading.hide();
                     alert(err.data.message);
-                });
-            } else {
-                var posOptions = {
-                    timeout: 10000,
-                    enableHighAccuracy: true
-                };
-
-                $cordovaGeolocation
-                    .getCurrentPosition(posOptions)
-                    .then(function(position) {
-
-
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-                        $scope.order.shipping.sharelocation = {};
-                        // $scope.order.shipping.sharelocation.latitude = lat;
-                        // $scope.order.shipping.sharelocation.longitude = lng;
-                        // เส้นทางตามถนน
-                        var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
-                        // alert(fullAddress);
-                        $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function(response) {
-                            if (response.status.toUpperCase() === 'OK') {
-                                $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                                $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                                //     if (distance.rows[0].elements[0].distance.value) {
-                                CheckoutService.saveOrder($scope.order).then(function(res) {
-                                    // alert(JSON.stringify(res));
-                                    $state.go('app.complete', {
-                                        order: JSON.stringify(res)
-                                    });
-                                    $ionicLoading.hide();
-                                }, function(err) {
-                                    $ionicLoading.hide();
-                                    alert(err.data.message);
-                                });
-                                //     } else {
-                                //         $ionicLoading.hide();
-                                //         // alert("5");
-                                //         var confirmPopup = $ionicPopup.confirm({
-                                //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
-                                //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
-                                //         });
-                                //         confirmPopup.then(function (res) {
-                                //             if (res) {
-                                //                 $scope.order.shipping.sharelocation.latitude = lat;
-                                //                 $scope.order.shipping.sharelocation.longitude = lng;
-                                //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
-                                //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+                  });
+                  //     } else {
+                  //         $ionicLoading.hide();
+                  //         // alert("5");
+                  //         var confirmPopup = $ionicPopup.confirm({
+                  //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                  //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                  //         });
+                  //         confirmPopup.then(function (res) {
+                  //             if (res) {
+                  //                 $scope.order.shipping.sharelocation.latitude = lat;
+                  //                 $scope.order.shipping.sharelocation.longitude = lng;
+                  //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                  //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
 
 
-                                //                     // alert(JSON.stringify(results));
+                  //                     // alert(JSON.stringify(results));
 
-                                //                     $scope.data = {}
-                                //                     // An elaborate, custom popup
-                                //                     var myPopup1 = $ionicPopup.show({
-                                //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
-                                //                         title: 'ยืนยันที่อยู่ใหม่',
-                                //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
-                                //                         scope: $scope,
-                                //                         buttons: [
-                                //                             { text: 'Cancel' },
-                                //                             {
-                                //                                 text: '<b>Save</b>',
-                                //                                 type: 'button-positive',
-                                //                                 onTap: function (e) {
-                                //                                     if (!$scope.data.address) {
-                                //                                         // alert(1);
-                                //                                         //don't allow the user to close unless he enters address password
-                                //                                         e.preventDefault();
+                  //                     $scope.data = {}
+                  //                     // An elaborate, custom popup
+                  //                     var myPopup1 = $ionicPopup.show({
+                  //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                  //                         title: 'ยืนยันที่อยู่ใหม่',
+                  //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                  //                         scope: $scope,
+                  //                         buttons: [
+                  //                             { text: 'Cancel' },
+                  //                             {
+                  //                                 text: '<b>Save</b>',
+                  //                                 type: 'button-positive',
+                  //                                 onTap: function (e) {
+                  //                                     if (!$scope.data.address) {
+                  //                                         // alert(1);
+                  //                                         //don't allow the user to close unless he enters address password
+                  //                                         e.preventDefault();
 
-                                //                                     } else {
-                                //                                         // alert(JSON.stringify(results.results[0]));
-                                //                                         //  alert(JSON.stringify(results[0]));
-                                //                                         $scope.order.shipping.address = $scope.data.address;
-                                //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
-                                //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
-                                //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
-                                //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
-                                //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
-                                //                                             $ionicLoading.hide();
-                                //                                             console.log(res);
-                                //                                             $state.go('app.complete', {
-                                //                                                 order: JSON.stringify(res)
-                                //                                             });
-                                //                                         }, function (err) {
-                                //                                             alert(err.data.message);
-                                //                                         });
-                                //                                         return $scope.data.address;
-                                //                                     }
-                                //                                 }
-                                //                             },
-                                //                         ]
-                                //                     });
-                                //                     // alert(JSON.stringify(results));
-                                //                     var newAdress = results;
+                  //                                     } else {
+                  //                                         // alert(JSON.stringify(results.results[0]));
+                  //                                         //  alert(JSON.stringify(results[0]));
+                  //                                         $scope.order.shipping.address = $scope.data.address;
+                  //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                  //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                  //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                  //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                  //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                  //                                             $ionicLoading.hide();
+                  //                                             console.log(res);
+                  //                                             $state.go('app.complete', {
+                  //                                                 order: JSON.stringify(res)
+                  //                                             });
+                  //                                         }, function (err) {
+                  //                                             alert(err.data.message);
+                  //                                         });
+                  //                                         return $scope.data.address;
+                  //                                     }
+                  //                                 }
+                  //                             },
+                  //                         ]
+                  //                     });
+                  //                     // alert(JSON.stringify(results));
+                  //                     var newAdress = results;
 
-                                //                     myPopup1.then(function (resp) {
-                                //                         // alert(3);
+                  //                     myPopup1.then(function (resp) {
+                  //                         // alert(3);
 
-                                //                         // postcode: String,
-                                //                         //     subdistrict: String,
-                                //                         //         province: String,
-                                //                         //             district: String,
-                                //                     });
+                  //                         // postcode: String,
+                  //                         //     subdistrict: String,
+                  //                         //         province: String,
+                  //                         //             district: String,
+                  //                     });
 
-                                //                 }).error(function (err) {
+                  //                 }).error(function (err) {
 
-                                //                 });
-                                //             } else {
-                                //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                                //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                                //                 // alert();
-                                //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-                                //                 CheckoutService.saveOrder($scope.order).then(function (res) {
-                                //                     $ionicLoading.hide();
-                                //                     console.log(res);
-                                //                     $state.go('app.complete', {
-                                //                         order: JSON.stringify(res)
-                                //                     });
-                                //                 }, function (err) {
-                                //                     alert(err.data.message);
-                                //                 });
-                                //             }
-                                //         });
-                                //     };
-                                // }).error(function (err) {
-                                //     console.log(err);
-                                // });
-                            } else {
+                  //                 });
+                  //             } else {
+                  //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                  //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                  //                 // alert();
+                  //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                  //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                  //                     $ionicLoading.hide();
+                  //                     console.log(res);
+                  //                     $state.go('app.complete', {
+                  //                         order: JSON.stringify(res)
+                  //                     });
+                  //                 }, function (err) {
+                  //                     alert(err.data.message);
+                  //                 });
+                  //             }
+                  //         });
+                  //     };
+                  // }).error(function (err) {
+                  //     console.log(err);
+                  // });
+                } else {
 
-                                $scope.order.shipping.sharelocation.latitude = lat;
-                                $scope.order.shipping.sharelocation.longitude = lng;
-                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                                //     if (distance.rows[0].elements[0].distance.value) {
-                                CheckoutService.saveOrder($scope.order).then(function(res) {
-                                    // alert(JSON.stringify(res));
-                                    console.log(res);
-                                    $state.go('app.complete', {
-                                        order: JSON.stringify(res)
-                                    });
-                                    $ionicLoading.hide();
-                                }, function(err) {
-                                    $ionicLoading.hide();
-                                    alert(err.data.message);
-                                });
-                            }
-
-                            function successCallback(res) {
-                                vm.cart.clear();
-                                $state.go('complete', {
-                                    orderId: res._id
-                                });
-                                $ionicLoading.hide();
-                            }
-
-                            function errorCallback(res) {
-                                vm.error = res.data.message;
-                            }
-                        }).error(function(err) {
-                            $ionicLoading.hide();
-                            console.log(err);
-                        });
-
-
-
-
-                    }, function(err) {
-
-                        $scope.order.shipping.sharelocation = {};
-                        // $scope.order.shipping.sharelocation.latitude = lat;
-                        // $scope.order.shipping.sharelocation.longitude = lng;
-                        // เส้นทางตามถนน
-                        var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
-                        // alert(fullAddress);
-                        $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function(response) {
-                            if (response.status.toUpperCase() === 'OK') {
-                                $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                                $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                                //     if (distance.rows[0].elements[0].distance.value) {
-                                CheckoutService.saveOrder($scope.order).then(function(res) {
-                                    // alert(JSON.stringify(res));
-                                    console.log(res);
-                                    $state.go('app.complete', {
-                                        order: JSON.stringify(res)
-                                    });
-                                    $ionicLoading.hide();
-                                }, function(err) {
-                                    $ionicLoading.hide();
-                                    alert(err.data.message);
-                                });
-                                //     } else {
-                                //         $ionicLoading.hide();
-                                //         // alert("5");
-                                //         var confirmPopup = $ionicPopup.confirm({
-                                //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
-                                //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
-                                //         });
-                                //         confirmPopup.then(function (res) {
-                                //             if (res) {
-                                //                 $scope.order.shipping.sharelocation.latitude = lat;
-                                //                 $scope.order.shipping.sharelocation.longitude = lng;
-                                //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
-                                //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
-
-
-                                //                     // alert(JSON.stringify(results));
-
-                                //                     $scope.data = {}
-                                //                     // An elaborate, custom popup
-                                //                     var myPopup1 = $ionicPopup.show({
-                                //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
-                                //                         title: 'ยืนยันที่อยู่ใหม่',
-                                //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
-                                //                         scope: $scope,
-                                //                         buttons: [
-                                //                             { text: 'Cancel' },
-                                //                             {
-                                //                                 text: '<b>Save</b>',
-                                //                                 type: 'button-positive',
-                                //                                 onTap: function (e) {
-                                //                                     if (!$scope.data.address) {
-                                //                                         // alert(1);
-                                //                                         //don't allow the user to close unless he enters address password
-                                //                                         e.preventDefault();
-
-                                //                                     } else {
-                                //                                         // alert(JSON.stringify(results.results[0]));
-                                //                                         //  alert(JSON.stringify(results[0]));
-                                //                                         $scope.order.shipping.address = $scope.data.address;
-                                //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
-                                //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
-                                //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
-                                //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
-                                //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
-                                //                                             $ionicLoading.hide();
-                                //                                             console.log(res);
-                                //                                             $state.go('app.complete', {
-                                //                                                 order: JSON.stringify(res)
-                                //                                             });
-                                //                                         }, function (err) {
-                                //                                             alert(err.data.message);
-                                //                                         });
-                                //                                         return $scope.data.address;
-                                //                                     }
-                                //                                 }
-                                //                             },
-                                //                         ]
-                                //                     });
-                                //                     // alert(JSON.stringify(results));
-                                //                     var newAdress = results;
-
-                                //                     myPopup1.then(function (resp) {
-                                //                         // alert(3);
-
-                                //                         // postcode: String,
-                                //                         //     subdistrict: String,
-                                //                         //         province: String,
-                                //                         //             district: String,
-                                //                     });
-
-                                //                 }).error(function (err) {
-
-                                //                 });
-                                //             } else {
-                                //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                                //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                                //                 // alert();
-                                //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-                                //                 CheckoutService.saveOrder($scope.order).then(function (res) {
-                                //                     $ionicLoading.hide();
-                                //                     console.log(res);
-                                //                     $state.go('app.complete', {
-                                //                         order: JSON.stringify(res)
-                                //                     });
-                                //                 }, function (err) {
-                                //                     alert(err.data.message);
-                                //                 });
-                                //             }
-                                //         });
-                                //     };
-                                // }).error(function (err) {
-                                //     console.log(err);
-                                // });
-                            } else {
-
-                                $scope.order.shipping.sharelocation.latitude = '';
-                                $scope.order.shipping.sharelocation.longitude = '';
-                                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                                //     if (distance.rows[0].elements[0].distance.value) {
-                                CheckoutService.saveOrder($scope.order).then(function(res) {
-                                    // alert(JSON.stringify(res));
-                                    console.log(res);
-                                    $state.go('app.complete', {
-                                        order: JSON.stringify(res)
-                                    });
-                                    $ionicLoading.hide();
-                                }, function(err) {
-                                    $ionicLoading.hide();
-                                    alert(err.data.message);
-                                });
-                            }
-                        });
-
-                        $ionicLoading.hide();
-
-                        if (error.code == PositionError.PERMISSION_DENIED) {
-                            alert("Permission denied. check setting");
-                        } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
-                            alert("Cannot get position. May be problem with network or can't get a satellite fix.");
-                        } else if (error.code == PositionError.TIMEOUT) {
-                            alert("Geolocation is timed out.");
-                        } else {
-                            alert(error.message);
-                        }
+                  $scope.order.shipping.sharelocation.latitude = lat;
+                  $scope.order.shipping.sharelocation.longitude = lng;
+                  // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                  // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                  //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                  //     if (distance.rows[0].elements[0].distance.value) {
+                  CheckoutService.saveOrder($scope.order).then(function (res) {
+                    // alert(JSON.stringify(res));
+                    console.log(res);
+                    $state.go('app.complete', {
+                      order: JSON.stringify(res)
                     });
-            }
-        } else {
-            var posOptions = {
-                timeout: 10000,
-                enableHighAccuracy: true
-            };
-
-            $cordovaGeolocation
-                .getCurrentPosition(posOptions)
-                .then(function(position) {
-
-
-                    var lat = position.coords.latitude;
-                    var lng = position.coords.longitude;
-
-
-                    // alert(lat + ' ' + lng);
-
-
-                    $scope.order.shipping.sharelocation = {};
-                    // $scope.order.shipping.sharelocation.latitude = lat;
-                    // $scope.order.shipping.sharelocation.longitude = lng;
-                    // เส้นทางตามถนน
-                    var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
-                    // alert(fullAddress);
-                    $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function(response) {
-                        if (response.status.toUpperCase() === 'OK') {
-                            $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function(res) {
-                                // alert(JSON.stringify(res));
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                                $ionicLoading.hide();
-                            }, function(err) {
-                                alert(err.data.message);
-                            });
-                            //     } else {
-                            //         $ionicLoading.hide();
-                            //         // alert("5");
-                            //         var confirmPopup = $ionicPopup.confirm({
-                            //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
-                            //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
-                            //         });
-                            //         confirmPopup.then(function (res) {
-                            //             if (res) {
-                            //                 $scope.order.shipping.sharelocation.latitude = lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = lng;
-                            //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
-                            //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
-
-
-                            //                     // alert(JSON.stringify(results));
-
-                            //                     $scope.data = {}
-                            //                     // An elaborate, custom popup
-                            //                     var myPopup1 = $ionicPopup.show({
-                            //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
-                            //                         title: 'ยืนยันที่อยู่ใหม่',
-                            //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
-                            //                         scope: $scope,
-                            //                         buttons: [
-                            //                             { text: 'Cancel' },
-                            //                             {
-                            //                                 text: '<b>Save</b>',
-                            //                                 type: 'button-positive',
-                            //                                 onTap: function (e) {
-                            //                                     if (!$scope.data.address) {
-                            //                                         // alert(1);
-                            //                                         //don't allow the user to close unless he enters address password
-                            //                                         e.preventDefault();
-
-                            //                                     } else {
-                            //                                         // alert(JSON.stringify(results.results[0]));
-                            //                                         //  alert(JSON.stringify(results[0]));
-                            //                                         $scope.order.shipping.address = $scope.data.address;
-                            //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
-                            //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
-                            //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
-                            //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
-                            //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                                             $ionicLoading.hide();
-                            //                                             console.log(res);
-                            //                                             $state.go('app.complete', {
-                            //                                                 order: JSON.stringify(res)
-                            //                                             });
-                            //                                         }, function (err) {
-                            //                                             alert(err.data.message);
-                            //                                         });
-                            //                                         return $scope.data.address;
-                            //                                     }
-                            //                                 }
-                            //                             },
-                            //                         ]
-                            //                     });
-                            //                     // alert(JSON.stringify(results));
-                            //                     var newAdress = results;
-
-                            //                     myPopup1.then(function (resp) {
-                            //                         // alert(3);
-
-                            //                         // postcode: String,
-                            //                         //     subdistrict: String,
-                            //                         //         province: String,
-                            //                         //             district: String,
-                            //                     });
-
-                            //                 }).error(function (err) {
-
-                            //                 });
-                            //             } else {
-                            //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            //                 // alert();
-                            //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-                            //                 CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                     $ionicLoading.hide();
-                            //                     console.log(res);
-                            //                     $state.go('app.complete', {
-                            //                         order: JSON.stringify(res)
-                            //                     });
-                            //                 }, function (err) {
-                            //                     alert(err.data.message);
-                            //                 });
-                            //             }
-                            //         });
-                            //     };
-                            // }).error(function (err) {
-                            //     console.log(err);
-                            // });
-                        } else {
-
-                            $scope.order.shipping.sharelocation.latitude = lat;
-                            $scope.order.shipping.sharelocation.longitude = lng;
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function(res) {
-                                // alert(JSON.stringify(res));
-                                console.log(res);
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                                $ionicLoading.hide();
-                            }, function(err) {
-                                alert(err.data.message);
-                            });
-                        }
-
-                        function successCallback(res) {
-                            vm.cart.clear();
-                            $state.go('complete', {
-                                orderId: res._id
-                            });
-                            $ionicLoading.hide();
-                        }
-
-                        function errorCallback(res) {
-                            $ionicLoading.hide();
-                            vm.error = res.data.message;
-                        }
-                    }).error(function(err) {
-                        $ionicLoading.hide();
-                        console.log(err);
-                    });
-
-
-
-
-                }, function(err) {
-
-                    $scope.order.shipping.sharelocation = {};
-                    // $scope.order.shipping.sharelocation.latitude = lat;
-                    // $scope.order.shipping.sharelocation.longitude = lng;
-                    // เส้นทางตามถนน
-                    var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
-                    // alert(fullAddress);
-                    $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function(response) {
-                        if (response.status.toUpperCase() === 'OK') {
-                            $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function(res) {
-                                // alert(JSON.stringify(res));
-                                console.log(res);
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                                $ionicLoading.hide();
-                            }, function(err) {
-                                $ionicLoading.hide();
-                                alert(err.data.message);
-                            });
-                            //     } else {
-                            //         $ionicLoading.hide();
-                            //         // alert("5");
-                            //         var confirmPopup = $ionicPopup.confirm({
-                            //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
-                            //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
-                            //         });
-                            //         confirmPopup.then(function (res) {
-                            //             if (res) {
-                            //                 $scope.order.shipping.sharelocation.latitude = lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = lng;
-                            //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
-                            //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
-
-
-                            //                     // alert(JSON.stringify(results));
-
-                            //                     $scope.data = {}
-                            //                     // An elaborate, custom popup
-                            //                     var myPopup1 = $ionicPopup.show({
-                            //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
-                            //                         title: 'ยืนยันที่อยู่ใหม่',
-                            //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
-                            //                         scope: $scope,
-                            //                         buttons: [
-                            //                             { text: 'Cancel' },
-                            //                             {
-                            //                                 text: '<b>Save</b>',
-                            //                                 type: 'button-positive',
-                            //                                 onTap: function (e) {
-                            //                                     if (!$scope.data.address) {
-                            //                                         // alert(1);
-                            //                                         //don't allow the user to close unless he enters address password
-                            //                                         e.preventDefault();
-
-                            //                                     } else {
-                            //                                         // alert(JSON.stringify(results.results[0]));
-                            //                                         //  alert(JSON.stringify(results[0]));
-                            //                                         $scope.order.shipping.address = $scope.data.address;
-                            //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
-                            //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
-                            //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
-                            //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
-                            //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                                             $ionicLoading.hide();
-                            //                                             console.log(res);
-                            //                                             $state.go('app.complete', {
-                            //                                                 order: JSON.stringify(res)
-                            //                                             });
-                            //                                         }, function (err) {
-                            //                                             alert(err.data.message);
-                            //                                         });
-                            //                                         return $scope.data.address;
-                            //                                     }
-                            //                                 }
-                            //                             },
-                            //                         ]
-                            //                     });
-                            //                     // alert(JSON.stringify(results));
-                            //                     var newAdress = results;
-
-                            //                     myPopup1.then(function (resp) {
-                            //                         // alert(3);
-
-                            //                         // postcode: String,
-                            //                         //     subdistrict: String,
-                            //                         //         province: String,
-                            //                         //             district: String,
-                            //                     });
-
-                            //                 }).error(function (err) {
-
-                            //                 });
-                            //             } else {
-                            //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
-                            //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
-                            //                 // alert();
-                            //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
-                            //                 CheckoutService.saveOrder($scope.order).then(function (res) {
-                            //                     $ionicLoading.hide();
-                            //                     console.log(res);
-                            //                     $state.go('app.complete', {
-                            //                         order: JSON.stringify(res)
-                            //                     });
-                            //                 }, function (err) {
-                            //                     alert(err.data.message);
-                            //                 });
-                            //             }
-                            //         });
-                            //     };
-                            // }).error(function (err) {
-                            //     console.log(err);
-                            // });
-                        } else {
-
-                            $scope.order.shipping.sharelocation.latitude = '';
-                            $scope.order.shipping.sharelocation.longitude = '';
-                            // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
-                            // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
-                            //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
-                            //     if (distance.rows[0].elements[0].distance.value) {
-                            CheckoutService.saveOrder($scope.order).then(function(res) {
-                                // alert(JSON.stringify(res));
-                                console.log(res);
-                                $state.go('app.complete', {
-                                    order: JSON.stringify(res)
-                                });
-                                $ionicLoading.hide();
-                            }, function(err) {
-                                $ionicLoading.hide();
-                                alert(err.data.message);
-                            });
-                        }
-                    });
-
                     $ionicLoading.hide();
+                  }, function (err) {
+                    $ionicLoading.hide();
+                    alert(err.data.message);
+                  });
+                }
 
-                    if (error.code == PositionError.PERMISSION_DENIED) {
-                        alert("Permission denied. check setting");
-                    } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
-                        alert("Cannot get position. May be problem with network or can't get a satellite fix.");
-                    } else if (error.code == PositionError.TIMEOUT) {
-                        alert("Geolocation is timed out.");
-                    } else {
-                        alert(error.message);
-                    }
-                });
+                function successCallback(res) {
+                  vm.cart.clear();
+                  $state.go('complete', {
+                    orderId: res._id
+                  });
+                  $ionicLoading.hide();
+                }
+
+                function errorCallback(res) {
+                  vm.error = res.data.message;
+                }
+              }).error(function (err) {
+                $ionicLoading.hide();
+                console.log(err);
+              });
+
+
+
+
+            }, function (err) {
+
+              $scope.order.shipping.sharelocation = {};
+              // $scope.order.shipping.sharelocation.latitude = lat;
+              // $scope.order.shipping.sharelocation.longitude = lng;
+              // เส้นทางตามถนน
+              var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+              // alert(fullAddress);
+              $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+                if (response.status.toUpperCase() === 'OK') {
+                  $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                  $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                  // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                  // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                  //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                  //     if (distance.rows[0].elements[0].distance.value) {
+                  CheckoutService.saveOrder($scope.order).then(function (res) {
+                    // alert(JSON.stringify(res));
+                    console.log(res);
+                    $state.go('app.complete', {
+                      order: JSON.stringify(res)
+                    });
+                    $ionicLoading.hide();
+                  }, function (err) {
+                    $ionicLoading.hide();
+                    alert(err.data.message);
+                  });
+                  //     } else {
+                  //         $ionicLoading.hide();
+                  //         // alert("5");
+                  //         var confirmPopup = $ionicPopup.confirm({
+                  //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                  //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                  //         });
+                  //         confirmPopup.then(function (res) {
+                  //             if (res) {
+                  //                 $scope.order.shipping.sharelocation.latitude = lat;
+                  //                 $scope.order.shipping.sharelocation.longitude = lng;
+                  //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                  //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+
+
+                  //                     // alert(JSON.stringify(results));
+
+                  //                     $scope.data = {}
+                  //                     // An elaborate, custom popup
+                  //                     var myPopup1 = $ionicPopup.show({
+                  //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                  //                         title: 'ยืนยันที่อยู่ใหม่',
+                  //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                  //                         scope: $scope,
+                  //                         buttons: [
+                  //                             { text: 'Cancel' },
+                  //                             {
+                  //                                 text: '<b>Save</b>',
+                  //                                 type: 'button-positive',
+                  //                                 onTap: function (e) {
+                  //                                     if (!$scope.data.address) {
+                  //                                         // alert(1);
+                  //                                         //don't allow the user to close unless he enters address password
+                  //                                         e.preventDefault();
+
+                  //                                     } else {
+                  //                                         // alert(JSON.stringify(results.results[0]));
+                  //                                         //  alert(JSON.stringify(results[0]));
+                  //                                         $scope.order.shipping.address = $scope.data.address;
+                  //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                  //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                  //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                  //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                  //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                  //                                             $ionicLoading.hide();
+                  //                                             console.log(res);
+                  //                                             $state.go('app.complete', {
+                  //                                                 order: JSON.stringify(res)
+                  //                                             });
+                  //                                         }, function (err) {
+                  //                                             alert(err.data.message);
+                  //                                         });
+                  //                                         return $scope.data.address;
+                  //                                     }
+                  //                                 }
+                  //                             },
+                  //                         ]
+                  //                     });
+                  //                     // alert(JSON.stringify(results));
+                  //                     var newAdress = results;
+
+                  //                     myPopup1.then(function (resp) {
+                  //                         // alert(3);
+
+                  //                         // postcode: String,
+                  //                         //     subdistrict: String,
+                  //                         //         province: String,
+                  //                         //             district: String,
+                  //                     });
+
+                  //                 }).error(function (err) {
+
+                  //                 });
+                  //             } else {
+                  //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                  //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                  //                 // alert();
+                  //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                  //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                  //                     $ionicLoading.hide();
+                  //                     console.log(res);
+                  //                     $state.go('app.complete', {
+                  //                         order: JSON.stringify(res)
+                  //                     });
+                  //                 }, function (err) {
+                  //                     alert(err.data.message);
+                  //                 });
+                  //             }
+                  //         });
+                  //     };
+                  // }).error(function (err) {
+                  //     console.log(err);
+                  // });
+                } else {
+
+                  $scope.order.shipping.sharelocation.latitude = '';
+                  $scope.order.shipping.sharelocation.longitude = '';
+                  // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                  // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                  //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                  //     if (distance.rows[0].elements[0].distance.value) {
+                  CheckoutService.saveOrder($scope.order).then(function (res) {
+                    // alert(JSON.stringify(res));
+                    console.log(res);
+                    $state.go('app.complete', {
+                      order: JSON.stringify(res)
+                    });
+                    $ionicLoading.hide();
+                  }, function (err) {
+                    $ionicLoading.hide();
+                    alert(err.data.message);
+                  });
+                }
+              });
+
+              $ionicLoading.hide();
+
+              if (error.code == PositionError.PERMISSION_DENIED) {
+                alert("Permission denied. check setting");
+              } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
+                alert("Cannot get position. May be problem with network or can't get a satellite fix.");
+              } else if (error.code == PositionError.TIMEOUT) {
+                alert("Geolocation is timed out.");
+              } else {
+                alert(error.message);
+              }
+            });
         }
+      } else {
+        var posOptions = {
+          timeout: 10000,
+          enableHighAccuracy: true
+        };
+
+        $cordovaGeolocation
+          .getCurrentPosition(posOptions)
+          .then(function (position) {
+
+
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+
+
+            // alert(lat + ' ' + lng);
+
+
+            $scope.order.shipping.sharelocation = {};
+            // $scope.order.shipping.sharelocation.latitude = lat;
+            // $scope.order.shipping.sharelocation.longitude = lng;
+            // เส้นทางตามถนน
+            var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+            // alert(fullAddress);
+            $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+              if (response.status.toUpperCase() === 'OK') {
+                $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                //     if (distance.rows[0].elements[0].distance.value) {
+                CheckoutService.saveOrder($scope.order).then(function (res) {
+                  // alert(JSON.stringify(res));
+                  $state.go('app.complete', {
+                    order: JSON.stringify(res)
+                  });
+                  $ionicLoading.hide();
+                }, function (err) {
+                  alert(err.data.message);
+                });
+                //     } else {
+                //         $ionicLoading.hide();
+                //         // alert("5");
+                //         var confirmPopup = $ionicPopup.confirm({
+                //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                //         });
+                //         confirmPopup.then(function (res) {
+                //             if (res) {
+                //                 $scope.order.shipping.sharelocation.latitude = lat;
+                //                 $scope.order.shipping.sharelocation.longitude = lng;
+                //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+
+
+                //                     // alert(JSON.stringify(results));
+
+                //                     $scope.data = {}
+                //                     // An elaborate, custom popup
+                //                     var myPopup1 = $ionicPopup.show({
+                //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                //                         title: 'ยืนยันที่อยู่ใหม่',
+                //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                //                         scope: $scope,
+                //                         buttons: [
+                //                             { text: 'Cancel' },
+                //                             {
+                //                                 text: '<b>Save</b>',
+                //                                 type: 'button-positive',
+                //                                 onTap: function (e) {
+                //                                     if (!$scope.data.address) {
+                //                                         // alert(1);
+                //                                         //don't allow the user to close unless he enters address password
+                //                                         e.preventDefault();
+
+                //                                     } else {
+                //                                         // alert(JSON.stringify(results.results[0]));
+                //                                         //  alert(JSON.stringify(results[0]));
+                //                                         $scope.order.shipping.address = $scope.data.address;
+                //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                //                                             $ionicLoading.hide();
+                //                                             console.log(res);
+                //                                             $state.go('app.complete', {
+                //                                                 order: JSON.stringify(res)
+                //                                             });
+                //                                         }, function (err) {
+                //                                             alert(err.data.message);
+                //                                         });
+                //                                         return $scope.data.address;
+                //                                     }
+                //                                 }
+                //                             },
+                //                         ]
+                //                     });
+                //                     // alert(JSON.stringify(results));
+                //                     var newAdress = results;
+
+                //                     myPopup1.then(function (resp) {
+                //                         // alert(3);
+
+                //                         // postcode: String,
+                //                         //     subdistrict: String,
+                //                         //         province: String,
+                //                         //             district: String,
+                //                     });
+
+                //                 }).error(function (err) {
+
+                //                 });
+                //             } else {
+                //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                //                 // alert();
+                //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                //                     $ionicLoading.hide();
+                //                     console.log(res);
+                //                     $state.go('app.complete', {
+                //                         order: JSON.stringify(res)
+                //                     });
+                //                 }, function (err) {
+                //                     alert(err.data.message);
+                //                 });
+                //             }
+                //         });
+                //     };
+                // }).error(function (err) {
+                //     console.log(err);
+                // });
+              } else {
+
+                $scope.order.shipping.sharelocation.latitude = lat;
+                $scope.order.shipping.sharelocation.longitude = lng;
+                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                //     if (distance.rows[0].elements[0].distance.value) {
+                CheckoutService.saveOrder($scope.order).then(function (res) {
+                  // alert(JSON.stringify(res));
+                  console.log(res);
+                  $state.go('app.complete', {
+                    order: JSON.stringify(res)
+                  });
+                  $ionicLoading.hide();
+                }, function (err) {
+                  alert(err.data.message);
+                });
+              }
+
+              function successCallback(res) {
+                vm.cart.clear();
+                $state.go('complete', {
+                  orderId: res._id
+                });
+                $ionicLoading.hide();
+              }
+
+              function errorCallback(res) {
+                $ionicLoading.hide();
+                vm.error = res.data.message;
+              }
+            }).error(function (err) {
+              $ionicLoading.hide();
+              console.log(err);
+            });
+
+
+
+
+          }, function (err) {
+
+            $scope.order.shipping.sharelocation = {};
+            // $scope.order.shipping.sharelocation.latitude = lat;
+            // $scope.order.shipping.sharelocation.longitude = lng;
+            // เส้นทางตามถนน
+            var fullAddress = $scope.order.shipping.address + '+' + $scope.order.shipping.subdistrict + '+' + $scope.order.shipping.district + '+' + $scope.order.shipping.province + '+' + $scope.order.shipping.postcode;
+            // alert(fullAddress);
+            $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + fullAddress + '&key=AIzaSyATqyCgkKXX1FmgzQJmBMw1olkYYEN7lzE').success(function (response) {
+              if (response.status.toUpperCase() === 'OK') {
+                $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                //     if (distance.rows[0].elements[0].distance.value) {
+                CheckoutService.saveOrder($scope.order).then(function (res) {
+                  // alert(JSON.stringify(res));
+                  console.log(res);
+                  $state.go('app.complete', {
+                    order: JSON.stringify(res)
+                  });
+                  $ionicLoading.hide();
+                }, function (err) {
+                  $ionicLoading.hide();
+                  alert(err.data.message);
+                });
+                //     } else {
+                //         $ionicLoading.hide();
+                //         // alert("5");
+                //         var confirmPopup = $ionicPopup.confirm({
+                //             title: 'ระยะห่างของที่อยู่ปัจจุบันกับที่คุณสั่งซื้อห่างกันเกิน 500 เมตร',
+                //             template: 'คุณต้องการเปลี่ยนที่อยู่ใหม่ไหม?'
+                //         });
+                //         confirmPopup.then(function (res) {
+                //             if (res) {
+                //                 $scope.order.shipping.sharelocation.latitude = lat;
+                //                 $scope.order.shipping.sharelocation.longitude = lng;
+                //                 // api เพื่อ get ข้อมูลที่อยู่ปัจจุบัน เป็นtext
+                //                 $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&sensor=false').success(function (results) {
+
+
+                //                     // alert(JSON.stringify(results));
+
+                //                     $scope.data = {}
+                //                     // An elaborate, custom popup
+                //                     var myPopup1 = $ionicPopup.show({
+                //                         template: '<input type="text" ng-model="data.address" placeholder="เลขที่ / หมู่บ้าน">',
+                //                         title: 'ยืนยันที่อยู่ใหม่',
+                //                         subTitle: 'โปรดตรวจสอบความถูกต้องของที่อยู่',
+                //                         scope: $scope,
+                //                         buttons: [
+                //                             { text: 'Cancel' },
+                //                             {
+                //                                 text: '<b>Save</b>',
+                //                                 type: 'button-positive',
+                //                                 onTap: function (e) {
+                //                                     if (!$scope.data.address) {
+                //                                         // alert(1);
+                //                                         //don't allow the user to close unless he enters address password
+                //                                         e.preventDefault();
+
+                //                                     } else {
+                //                                         // alert(JSON.stringify(results.results[0]));
+                //                                         //  alert(JSON.stringify(results[0]));
+                //                                         $scope.order.shipping.address = $scope.data.address;
+                //                                         $scope.order.shipping.postcode = results.results[0].address_components[6].short_name;
+                //                                         $scope.order.shipping.subdistrict = results.results[0].address_components[2].short_name;
+                //                                         $scope.order.shipping.province = results.results[0].address_components[4].short_name;
+                //                                         $scope.order.shipping.district = results.results[0].address_components[3].short_name;
+                //                                         CheckoutService.saveOrder($scope.order).then(function (res) {
+                //                                             $ionicLoading.hide();
+                //                                             console.log(res);
+                //                                             $state.go('app.complete', {
+                //                                                 order: JSON.stringify(res)
+                //                                             });
+                //                                         }, function (err) {
+                //                                             alert(err.data.message);
+                //                                         });
+                //                                         return $scope.data.address;
+                //                                     }
+                //                                 }
+                //                             },
+                //                         ]
+                //                     });
+                //                     // alert(JSON.stringify(results));
+                //                     var newAdress = results;
+
+                //                     myPopup1.then(function (resp) {
+                //                         // alert(3);
+
+                //                         // postcode: String,
+                //                         //     subdistrict: String,
+                //                         //         province: String,
+                //                         //             district: String,
+                //                     });
+
+                //                 }).error(function (err) {
+
+                //                 });
+                //             } else {
+                //                 $scope.order.shipping.sharelocation.latitude = response.results[0].geometry.location.lat;
+                //                 $scope.order.shipping.sharelocation.longitude = response.results[0].geometry.location.lng;
+                //                 // alert();
+                //                 $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
+                //                 CheckoutService.saveOrder($scope.order).then(function (res) {
+                //                     $ionicLoading.hide();
+                //                     console.log(res);
+                //                     $state.go('app.complete', {
+                //                         order: JSON.stringify(res)
+                //                     });
+                //                 }, function (err) {
+                //                     alert(err.data.message);
+                //                 });
+                //             }
+                //         });
+                //     };
+                // }).error(function (err) {
+                //     console.log(err);
+                // });
+              } else {
+
+                $scope.order.shipping.sharelocation.latitude = '';
+                $scope.order.shipping.sharelocation.longitude = '';
+                // alert(response.results[0].geometry.location.lat + response.results[0].geometry.location.lng);
+                // $http.get('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + lat + ',' + lng + '&destinations=' + response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng + '&key=AIzaSyBY4B67oPlLL9AdfXNTQl6JP_meTTzq8xY').success(function (distance) {
+                //     // alert(JSON.stringify(distance.rows[0].elements[0].distance.value));
+                //     if (distance.rows[0].elements[0].distance.value) {
+                CheckoutService.saveOrder($scope.order).then(function (res) {
+                  // alert(JSON.stringify(res));
+                  console.log(res);
+                  $state.go('app.complete', {
+                    order: JSON.stringify(res)
+                  });
+                  $ionicLoading.hide();
+                }, function (err) {
+                  $ionicLoading.hide();
+                  alert(err.data.message);
+                });
+              }
+            });
+
+            $ionicLoading.hide();
+
+            if (error.code == PositionError.PERMISSION_DENIED) {
+              alert("Permission denied. check setting");
+            } else if (error.code == PositionError.POSITION_UNAVAILABLE) {
+              alert("Cannot get position. May be problem with network or can't get a satellite fix.");
+            } else if (error.code == PositionError.TIMEOUT) {
+              alert("Geolocation is timed out.");
+            } else {
+              alert(error.message);
+            }
+          });
+      }
     };
 
-})
+  })
 
-.controller('SettingsCtrl', function($scope, $state, $ionicModal, AuthService, $rootScope) {
+  .controller('SettingsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope) {
 
     $ionicModal.fromTemplateUrl('views/app/legal/privacy-policy.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.privacy_policy_modal = modal;
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.privacy_policy_modal = modal;
     });
 
-    $scope.showPrivacyPolicy = function() {
-        $scope.privacy_policy_modal.show();
+    $scope.showPrivacyPolicy = function () {
+      $scope.privacy_policy_modal.show();
     };
 
-    $scope.signout = function() {
-        AuthService.signout();
+    $scope.signout = function () {
+      AuthService.signout();
     }
-    $rootScope.$on('userLoggedOut', function(e) {
+    $rootScope.$on('userLoggedOut', function (e) {
 
-        $state.go('app.shop.home');
+      $state.go('app.shop.home');
     });
 
-})
+  })
 
-.controller('ChatCtrl', function($scope, $state, $ionicModal, AuthService, $rootScope, $ionicLoading) {
+  .controller('ChatCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, $ionicLoading) {
     // $scope.listRoom = function () {
     //     $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กรุณารอสักครู่</p>' });
     //     roomService.getrooms().then(function (res) {
@@ -1963,9 +2031,9 @@ angular.module('your_app_name.app.controllers', [])
     //     });
     // };
 
-})
+  })
 
-.controller('ChatDetailCtrl', function($scope, $state, $ionicModal, AuthService, $rootScope, $stateParams, $ionicScrollDelegate, $timeout, $ionicLoading) {
+  .controller('ChatDetailCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, $stateParams, $ionicScrollDelegate, $timeout, $ionicLoading) {
     // $scope.user = AuthService.getUser();
     // $scope.messages = [];
     // $scope.chat = null;
@@ -2093,9 +2161,9 @@ angular.module('your_app_name.app.controllers', [])
 
     // $scope.data = {};
     // $scope.myId = $scope.user.displayName;
-})
+  })
 
-.controller('FriendsCtrl', function($scope, $state, $ionicModal, AuthService, $rootScope, $ionicLoading) {
+  .controller('FriendsCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope, $ionicLoading) {
     // $scope.user = AuthService.getUser();
     // $scope.listAccount = function () {
     //     $scope.listRoom = [];
@@ -2137,44 +2205,48 @@ angular.module('your_app_name.app.controllers', [])
     //     };
     //     Socket.emit('createroom', data);
     // };
-})
+  })
 
-.controller('QuizCtrl', function($scope, $stateParams, $ionicModal, AuthService, $rootScope, QuizService, $ionicLoading, $state) {
+  .controller('QuizCtrl', function ($scope, $stateParams, $ionicModal, AuthService, $rootScope, QuizService, $ionicLoading, $state) {
     $scope.user = AuthService.getUser();
-    $scope.loadWelcom = function() {
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-        QuizService.getQuizs().then(function(res) {
-            $scope.quizWelcome = res;
-            $ionicLoading.hide();
-            $scope.$broadcast('scroll.refreshComplete');
-        }, function(err) {
-            $ionicLoading.hide();
-            alert(JSON.stringify(err));
-        });
+    $scope.loadWelcom = function () {
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'
+      });
+      QuizService.getQuizs().then(function (res) {
+        $scope.quizWelcome = res;
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      }, function (err) {
+        $ionicLoading.hide();
+        alert(JSON.stringify(err));
+      });
     };
 
     $scope.loadWelcom();
 
-    $scope.chkShow = function(q) {
-        var isShow = true;
-        q.users.forEach(function(user) {
-            if (user._id === $scope.user._id) {
-                isShow = false;
-            }
-        });
-        return isShow;
+    $scope.chkShow = function (q) {
+      var isShow = true;
+      q.users.forEach(function (user) {
+        if (user._id === $scope.user._id) {
+          isShow = false;
+        }
+      });
+      return isShow;
     };
 
     if ($stateParams.quizId) {
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-        QuizService.getQuiz($stateParams.quizId).then(function(res) {
-            $scope.quiz = res;
-            console.log($scope.quiz.quizs);
-            $ionicLoading.hide();
-        }, function(err) {
-            $ionicLoading.hide();
-            alert(JSON.stringify(err));
-        });
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'
+      });
+      QuizService.getQuiz($stateParams.quizId).then(function (res) {
+        $scope.quiz = res;
+        console.log($scope.quiz.quizs);
+        $ionicLoading.hide();
+      }, function (err) {
+        $ionicLoading.hide();
+        alert(JSON.stringify(err));
+      });
     }
 
     // $scope.returnAnswer = function (ans, type) {
@@ -2192,55 +2264,57 @@ angular.module('your_app_name.app.controllers', [])
     //     });
     // };
     function arrayObjectIndexOf(myArray, searchTerm, property) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm) return i;
-        }
-        return -1;
+      for (var i = 0, len = myArray.length; i < len; i++) {
+        if (myArray[i][property] === searchTerm) return i;
+      }
+      return -1;
     }
     // $scope.loadQuiz = function () {
     //     $scope.quizParam = JSON.parse($stateParams.quiz);
     // };
-    $scope.quizrepeat = function(quiz) {
-        // alert($scope.user._id);
-        // alert(arrayObjectIndexOf($scope.quiz.users, $scope.user._id, "_id"));
-        if (arrayObjectIndexOf($scope.quiz.users, $scope.user._id, '_id') === -1) {
-            if (quiz.answers) {
-                quiz.answers.push({
-                    user: $scope.user,
-                    answer: ''
-                });
-            } else {
-                quiz.answers = [];
-                quiz.answers.push({
-                    user: $scope.user,
-                    answer: ''
-                });
-            }
+    $scope.quizrepeat = function (quiz) {
+      // alert($scope.user._id);
+      // alert(arrayObjectIndexOf($scope.quiz.users, $scope.user._id, "_id"));
+      if (arrayObjectIndexOf($scope.quiz.users, $scope.user._id, '_id') === -1) {
+        if (quiz.answers) {
+          quiz.answers.push({
+            user: $scope.user,
+            answer: ''
+          });
+        } else {
+          quiz.answers = [];
+          quiz.answers.push({
+            user: $scope.user,
+            answer: ''
+          });
         }
+      }
     };
 
-    $scope.saveQuiz = function() {
-        $scope.quiz.users = $scope.quiz.users ? $scope.quiz.users : [];
-        $scope.quiz.users.push($scope.user);
-        $ionicLoading.show({ template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>' });
-        QuizService.saveQuiz($scope.quiz).then(function(res) {
-            $ionicLoading.hide();
-            $state.go('app.shop.quiz');
-        }, function(err) {
-            $ionicLoading.hide();
-            alert(JSON.stringify(err));
-        });
+    $scope.saveQuiz = function () {
+      $scope.quiz.users = $scope.quiz.users ? $scope.quiz.users : [];
+      $scope.quiz.users.push($scope.user);
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner><p style="margin: 5px 0 0 0;">กำลังโหลดข้อมูล</p>'
+      });
+      QuizService.saveQuiz($scope.quiz).then(function (res) {
+        $ionicLoading.hide();
+        $state.go('app.shop.quiz');
+      }, function (err) {
+        $ionicLoading.hide();
+        alert(JSON.stringify(err));
+      });
     };
 
-})
+  })
 
-.controller('PolicyCtrl', function($scope, $state, $ionicModal, AuthService, $rootScope) {
+  .controller('PolicyCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope) {
 
-})
+  })
 
-.controller('PushNotiCtrl', function($scope, $state, $ionicModal, AuthService, $rootScope) {
+  .controller('PushNotiCtrl', function ($scope, $state, $ionicModal, AuthService, $rootScope) {
     $scope.welcome = "PushNotification Comingsoon";
-});
+  });
 
 
 //  .controller('PostCardCtrl', function ($scope, PostService, $ionicPopup, $state) {
